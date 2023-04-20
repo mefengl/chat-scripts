@@ -17,18 +17,20 @@ jobs:
 
     steps:
     - name: Checkout chat-scripts repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         path: chat-scripts
+        fetch-depth: 2
 
     - name: Checkout chat-play repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         repository: mefengl/chat-play
         path: chat-play
+        fetch-depth: 2
 
     - name: Setup Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: 16
 
