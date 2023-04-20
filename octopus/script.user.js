@@ -61,6 +61,33 @@
   };
 
   // ../../packages/chatkit/dist/index.mjs
+  var __defProp = Object.defineProperty;
+  var __export = (target, all) => {
+    for (var name in all)
+      __defProp(target, name, { get: all[name], enumerable: true });
+  };
+  var chatgpt_exports = {};
+  __export(chatgpt_exports, {
+    getConversation: () => getConversation,
+    getLastResponse: () => getLastResponse,
+    getLastResponseElement: () => getLastResponseElement,
+    getModelSelectButton: () => getModelSelectButton,
+    getRegenerateButton: () => getRegenerateButton,
+    getStopGeneratingButton: () => getStopGeneratingButton,
+    getSubmitButton: () => getSubmitButton,
+    getTextareaValue: () => getTextareaValue,
+    isConversationStarted: () => isConversationStarted,
+    isGenerating: () => isGenerating,
+    isHorizontalConversation: () => isHorizontalConversation,
+    onSend: () => onSend,
+    regenerate: () => regenerate,
+    send: () => send,
+    setHorizontalConversation: () => setHorizontalConversation,
+    setPromptListener: () => setPromptListener,
+    setPureConversation: () => setPureConversation,
+    setTextarea: () => setTextarea,
+    waitForIdle: () => waitForIdle
+  });
   function getTextarea() {
     const form = document.querySelector("form");
     if (!form)
@@ -176,12 +203,12 @@
               if (!firstTime) {
                 yield new Promise((resolve) => setTimeout(resolve, 2e3));
               }
-              if (!firstTime && chatgpt.isGenerating()) {
+              if (!firstTime && isGenerating()) {
                 continue;
               }
               firstTime = false;
               const prompt_text = prompt_texts.shift() || "";
-              chatgpt.send(prompt_text);
+              send(prompt_text);
             }
           }
         }), 0);
@@ -233,29 +260,17 @@
     conversation.classList.remove("flex", "flex-col", "items-center");
     conversation.classList.add("grid", "grid-cols-2", "place-items-center");
   }
-  var chatgpt = {
-    getTextarea,
-    getSubmitButton,
-    getRegenerateButton,
-    getStopGeneratingButton,
-    getLastResponseElement,
-    getLastResponse,
-    getTextareaValue,
-    setTextarea,
-    send,
-    regenerate,
-    onSend,
-    isGenerating,
-    waitForIdle,
-    setPromptListener,
-    getConversation,
-    getModelSelectButton,
-    isConversationStarted,
-    setPureConversation,
-    isHorizontalConversation,
-    setHorizontalConversation
-  };
-  var chatgpt_default = chatgpt;
+  var bard_exports = {};
+  __export(bard_exports, {
+    getInputArea: () => getInputArea,
+    getLastPrompt: () => getLastPrompt,
+    getLatestPromptText: () => getLatestPromptText,
+    getRegenerateButton: () => getRegenerateButton2,
+    getSubmitButton: () => getSubmitButton2,
+    getTextarea: () => getTextarea2,
+    onSend: () => onSend2,
+    send: () => send2
+  });
   function getSubmitButton2() {
     return document.querySelector('button[aria-label="Send message"]');
   }
@@ -306,17 +321,24 @@
       return;
     sendButton.addEventListener("mousedown", callback);
   }
-  var bard = {
-    getSubmitButton: getSubmitButton2,
-    getInputArea,
-    getTextarea: getTextarea2,
-    getRegenerateButton: getRegenerateButton2,
-    getLastPrompt,
-    getLatestPromptText,
-    send: send2,
-    onSend: onSend2
-  };
-  var bard_default = bard;
+  var bingchat_exports = {};
+  __export(bingchat_exports, {
+    getActionBar: () => getActionBar,
+    getChatTurns: () => getChatTurns,
+    getConversation: () => getConversation2,
+    getLastChatTurn: () => getLastChatTurn,
+    getLastResponse: () => getLastResponse2,
+    getLastResponseText: () => getLastResponseText,
+    getNewChatButton: () => getNewChatButton,
+    getRegenerateButton: () => getRegenerateButton3,
+    getStopGeneratingButton: () => getStopGeneratingButton2,
+    getSubmitButton: () => getSubmitButton3,
+    getSuggestionBar: () => getSuggestionBar,
+    getSuggestionBarButtons: () => getSuggestionBarButtons,
+    getTextarea: () => getTextarea3,
+    onSend: () => onSend3,
+    send: () => send3
+  });
   function getActionBar() {
     var _a, _b, _c;
     return ((_c = (_b = (_a = document.querySelector("cib-serp")) == null ? void 0 : _a.shadowRoot) == null ? void 0 : _b.querySelector("cib-action-bar")) == null ? void 0 : _c.shadowRoot) || null;
@@ -367,6 +389,32 @@
       return null;
     }
     return Array.from(conversation.querySelectorAll("cib-chat-turn")).map((t) => t.shadowRoot);
+  }
+  function getSuggestionBar() {
+    var _a;
+    const conversation = getConversation2();
+    if (!conversation) {
+      return null;
+    }
+    return ((_a = conversation.querySelector("cib-suggestion-bar")) == null ? void 0 : _a.shadowRoot) || null;
+  }
+  function getSuggestionBarButtons() {
+    const suggestionBar = getSuggestionBar();
+    if (!suggestionBar) {
+      return [];
+    }
+    const suggestionItems = Array.from(suggestionBar.querySelectorAll("cib-suggestion-item"));
+    return suggestionItems.map((i) => {
+      var _a;
+      return (_a = i.shadowRoot) == null ? void 0 : _a.querySelector("button");
+    });
+  }
+  function getRegenerateButton3() {
+    const suggestionBarButtons = getSuggestionBarButtons();
+    if (!suggestionBarButtons.length) {
+      return null;
+    }
+    return suggestionBarButtons[0];
   }
   function getLastChatTurn() {
     const chatTurns = getChatTurns();
@@ -419,21 +467,6 @@
       return;
     sendButton.addEventListener("mousedown", callback);
   }
-  var bingchat = {
-    getActionBar,
-    getSubmitButton: getSubmitButton3,
-    getTextarea: getTextarea3,
-    getStopGeneratingButton: getStopGeneratingButton2,
-    getNewChatButton,
-    getConversation: getConversation2,
-    getChatTurns,
-    getLastChatTurn,
-    getLastResponse: getLastResponse2,
-    getLastResponseText,
-    send: send3,
-    onSend: onSend3
-  };
-  var bingchat_default = bingchat;
 
   // src/index.js
   (function() {
@@ -481,8 +514,8 @@
     let chatgpt_last_prompt = "";
     $(() => {
       if (menu_all.openai && location.href.includes("chat.openai")) {
-        chatgpt_default.onSend(() => {
-          const textarea = chatgpt_default.getTextarea();
+        chatgpt_exports.onSend(() => {
+          const textarea = chatgpt_exports.getTextarea();
           const prompt = textarea.value;
           chatgpt_last_prompt = prompt;
           GM_setValue("bard_prompt_texts", [prompt]);
@@ -506,7 +539,7 @@
                 if (!firstTime) {
                   yield new Promise((resolve) => setTimeout(resolve, 2e3));
                 }
-                if (!firstTime && chatgpt_default.getRegenerateButton() == void 0) {
+                if (!firstTime && chatgpt_exports.getRegenerateButton() == void 0) {
                   continue;
                 }
                 firstTime = false;
@@ -514,7 +547,7 @@
                 if (prompt_text === chatgpt_last_prompt) {
                   continue;
                 }
-                chatgpt_default.send(prompt_text);
+                chatgpt_exports.send(prompt_text);
               }
             }
           }), 0);
@@ -525,14 +558,14 @@
     let bard_last_prompt = "";
     $(() => __async(this, null, function* () {
       if (menu_all.bard && location.href.includes("bard.google")) {
-        while (!bard_default.getSubmitButton()) {
+        while (!bard_exports.getSubmitButton()) {
           yield new Promise((resolve) => setTimeout(resolve, 500));
         }
-        bard_default.onSend(() => {
-          const textarea = bard_default.getTextarea();
+        bard_exports.onSend(() => {
+          const textarea = bard_exports.getTextarea();
           let prompt = textarea.value;
           if (!prompt) {
-            prompt = bard_default.getLatestPromptText();
+            prompt = bard_exports.getLatestPromptText();
           }
           bard_last_prompt = prompt;
           GM_setValue("chatgpt_prompt_texts", [prompt]);
@@ -555,7 +588,7 @@
               if (!firstTime) {
                 yield new Promise((resolve) => setTimeout(resolve, 2e3));
               }
-              if (!firstTime && bard_default.getRegenerateButton() == void 0) {
+              if (!firstTime && bard_exports.getRegenerateButton() == void 0) {
                 continue;
               }
               firstTime = false;
@@ -563,7 +596,7 @@
               if (promptText === bard_last_prompt) {
                 continue;
               }
-              bard_default.send(promptText);
+              bard_exports.send(promptText);
             }
           }
         }), 0);
@@ -573,11 +606,11 @@
     let bing_last_prompt = "";
     $(() => __async(this, null, function* () {
       if (menu_all.bing && location.href.includes("Bing+AI")) {
-        while (!bingchat_default.getSubmitButton()) {
+        while (!bingchat_exports.getSubmitButton()) {
           yield new Promise((resolve) => setTimeout(resolve, 500));
         }
-        bingchat_default.onSend(() => {
-          const textarea = bingchat_default.getTextarea();
+        bingchat_exports.onSend(() => {
+          const textarea = bingchat_exports.getTextarea();
           const prompt = textarea.value;
           bing_last_prompt = prompt;
           GM_setValue("chatgpt_prompt_texts", [prompt]);
@@ -600,7 +633,7 @@
               if (!firstTime) {
                 yield new Promise((resolve) => setTimeout(resolve, 2e3));
               }
-              if (!firstTime && bingchat_default.getStopGeneratingButton() != void 0) {
+              if (!firstTime && bingchat_exports.getStopGeneratingButton() != void 0) {
                 continue;
               }
               firstTime = false;
@@ -608,7 +641,7 @@
               if (prompt_text === bing_last_prompt) {
                 continue;
               }
-              bingchat_default.send(prompt_text);
+              bingchat_exports.send(prompt_text);
             }
           }
         }), 0);

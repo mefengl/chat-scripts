@@ -1,14 +1,15 @@
 // ==UserScript==
-// @name chatgpt-hello
+// @name chatgpt-init
 // @namespace https://github.com/mefengl
-// @version 0.0.0
-// @description A template for userscript use chat-kit
-// @author chat-kit
+// @version 0.0.1
+// @description Init ChatGPT with prompt from internet
+// @author mefengl
 // @match https://chat.openai.com/*
 // @icon https://www.google.com/s2/favicons?sz=64&domain=openai.com
-// @grant none
+// @grant GM_xmlhttpRequest
 // @license MIT
 // ==/UserScript==
+"use strict";
 (() => {
   var __async = (__this, __arguments, generator) => {
     return new Promise((resolve, reject) => {
@@ -446,10 +447,39 @@
       yield new Promise((resolve) => setTimeout(resolve, 1e3));
     });
   }
+  function fetchTextFromUrl(url) {
+    return __async(this, null, function* () {
+      return new Promise((resolve, reject) => {
+        GM_xmlhttpRequest({
+          method: "GET",
+          url,
+          onload: (response) => {
+            if (response.status >= 200 && response.status < 300) {
+              resolve(response.responseText);
+            } else {
+              reject(new Error(`Failed to load the URL. Status: ${response.status}`));
+            }
+          },
+          onerror: (error) => {
+            reject(error);
+          }
+        });
+      });
+    });
+  }
   function main() {
     return __async(this, null, function* () {
       yield initialize();
-      chatgpt_exports.send("hello!");
+      try {
+        if (chatgpt_exports.isConversationStarted()) {
+          return;
+        }
+        const url = "https://pastebin.com/raw/TR3fNcGa";
+        const text = yield fetchTextFromUrl(url);
+        chatgpt_exports.send(text);
+      } catch (error) {
+        console.error("Failed to fetch the text:", error);
+      }
     });
   }
   (function() {
