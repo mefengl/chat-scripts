@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         chat-octopus
 // @namespace    https://github.com/mefengl
-// @version      0.2.12
+// @version      0.2.13
 // @description  🐙 let octopus send multiple messages for you
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @author       mefengl
@@ -38,6 +38,7 @@
 // @name:fr      Chat Poulpe
 // @description:fr 🐙 laissez la pieuvre envoyer plusieurs messages pour vous
 // ==/UserScript==
+"use strict";
 (() => {
   var __async = (__this, __arguments, generator) => {
     return new Promise((resolve, reject) => {
@@ -60,12 +61,14 @@
     });
   };
 
-  // ../../packages/chatkit/dist/index.mjs
+  // ../../packages/chatkit/dist/chunk-QXAXOUZS.mjs
   var __defProp = Object.defineProperty;
   var __export = (target, all) => {
     for (var name in all)
       __defProp(target, name, { get: all[name], enumerable: true });
   };
+
+  // ../../packages/chatkit/dist/chunk-RKGOWDBQ.mjs
   var chatgpt_exports = {};
   __export(chatgpt_exports, {
     getConversation: () => getConversation,
@@ -75,6 +78,7 @@
     getRegenerateButton: () => getRegenerateButton,
     getStopGeneratingButton: () => getStopGeneratingButton,
     getSubmitButton: () => getSubmitButton,
+    getTextarea: () => getTextarea,
     getTextareaValue: () => getTextareaValue,
     isConversationStarted: () => isConversationStarted,
     isGenerating: () => isGenerating,
@@ -260,69 +264,10 @@
     conversation.classList.remove("flex", "flex-col", "items-center");
     conversation.classList.add("grid", "grid-cols-2", "place-items-center");
   }
-  var bard_exports = {};
-  __export(bard_exports, {
-    getInputArea: () => getInputArea,
-    getLastPrompt: () => getLastPrompt,
-    getLatestPromptText: () => getLatestPromptText,
-    getRegenerateButton: () => getRegenerateButton2,
-    getSubmitButton: () => getSubmitButton2,
-    getTextarea: () => getTextarea2,
-    onSend: () => onSend2,
-    send: () => send2
-  });
-  function getSubmitButton2() {
-    return document.querySelector('button[aria-label="Send message"]');
-  }
-  function getInputArea() {
-    return document.querySelector(".input-area");
-  }
-  function getTextarea2() {
-    const inputArea = getInputArea();
-    return inputArea ? inputArea.querySelector("textarea") : null;
-  }
-  function getRegenerateButton2() {
-    return document.querySelector('button[aria-label="Retry"]');
-  }
-  function getLastPrompt() {
-    const promptElements = document.querySelectorAll(".query-text");
-    const lastPrompt = promptElements[promptElements.length - 1];
-    return lastPrompt;
-  }
-  function getLatestPromptText() {
-    const lastPrompt = getLastPrompt();
-    if (!lastPrompt)
-      return "";
-    const lastPromptText = lastPrompt.textContent;
-    return lastPromptText || "";
-  }
-  function send2(text) {
-    const textarea = getTextarea2();
-    if (!textarea)
-      return;
-    textarea.value = text;
-    textarea.dispatchEvent(new Event("input"));
-    const submitButton = getSubmitButton2();
-    if (!submitButton)
-      return;
-    submitButton.click();
-  }
-  function onSend2(callback) {
-    const textarea = getTextarea2();
-    if (!textarea)
-      return;
-    textarea.addEventListener("keydown", function(event) {
-      if (event.key === "Enter" && !event.shiftKey) {
-        callback();
-      }
-    });
-    const sendButton = getSubmitButton2();
-    if (!sendButton)
-      return;
-    sendButton.addEventListener("mousedown", callback);
-  }
-  var bingchat_exports = {};
-  __export(bingchat_exports, {
+
+  // ../../packages/chatkit/dist/chunk-SIBHE5N3.mjs
+  var bing_exports = {};
+  __export(bing_exports, {
     getActionBar: () => getActionBar,
     getChatTurns: () => getChatTurns,
     getConversation: () => getConversation2,
@@ -330,27 +275,27 @@
     getLastResponse: () => getLastResponse2,
     getLastResponseText: () => getLastResponseText,
     getNewChatButton: () => getNewChatButton,
-    getRegenerateButton: () => getRegenerateButton3,
+    getRegenerateButton: () => getRegenerateButton2,
     getStopGeneratingButton: () => getStopGeneratingButton2,
-    getSubmitButton: () => getSubmitButton3,
+    getSubmitButton: () => getSubmitButton2,
     getSuggestionBar: () => getSuggestionBar,
     getSuggestionBarButtons: () => getSuggestionBarButtons,
-    getTextarea: () => getTextarea3,
-    onSend: () => onSend3,
-    send: () => send3
+    getTextarea: () => getTextarea2,
+    onSend: () => onSend2,
+    send: () => send2
   });
   function getActionBar() {
     var _a, _b, _c;
     return ((_c = (_b = (_a = document.querySelector("cib-serp")) == null ? void 0 : _a.shadowRoot) == null ? void 0 : _b.querySelector("cib-action-bar")) == null ? void 0 : _c.shadowRoot) || null;
   }
-  function getSubmitButton3() {
+  function getSubmitButton2() {
     const actionBar = getActionBar();
     if (!actionBar) {
       return null;
     }
     return actionBar.querySelector('button[aria-label="Submit"]');
   }
-  function getTextarea3() {
+  function getTextarea2() {
     const actionBar = getActionBar();
     if (!actionBar) {
       return null;
@@ -409,7 +354,7 @@
       return (_a = i.shadowRoot) == null ? void 0 : _a.querySelector("button");
     });
   }
-  function getRegenerateButton3() {
+  function getRegenerateButton2() {
     const suggestionBarButtons = getSuggestionBarButtons();
     if (!suggestionBarButtons.length) {
       return null;
@@ -440,17 +385,80 @@
     const message = Array.from(lastResponse.querySelectorAll("cib-message")).map((m) => m.shadowRoot).find((m) => m == null ? void 0 : m.querySelector("cib-shared"));
     return ((_a = message == null ? void 0 : message.textContent) == null ? void 0 : _a.trim()) || null;
   }
-  function send3(text) {
-    const textarea = getTextarea3();
+  function send2(text) {
+    const textarea = getTextarea2();
     if (!textarea) {
       return;
     }
     textarea.value = text;
     textarea.dispatchEvent(new Event("input"));
-    const submitButton = getSubmitButton3();
+    const submitButton = getSubmitButton2();
     if (!submitButton) {
       return;
     }
+    submitButton.click();
+  }
+  function onSend2(callback) {
+    const textarea = getTextarea2();
+    if (!textarea)
+      return;
+    textarea.addEventListener("keydown", function(event) {
+      if (event.key === "Enter" && !event.shiftKey) {
+        callback();
+      }
+    });
+    const sendButton = getSubmitButton2();
+    if (!sendButton)
+      return;
+    sendButton.addEventListener("mousedown", callback);
+  }
+
+  // ../../packages/chatkit/dist/chunk-ABU253YF.mjs
+  var bard_exports = {};
+  __export(bard_exports, {
+    getInputArea: () => getInputArea,
+    getLastPrompt: () => getLastPrompt,
+    getLatestPromptText: () => getLatestPromptText,
+    getRegenerateButton: () => getRegenerateButton3,
+    getSubmitButton: () => getSubmitButton3,
+    getTextarea: () => getTextarea3,
+    onSend: () => onSend3,
+    send: () => send3
+  });
+  function getSubmitButton3() {
+    return document.querySelector('button[aria-label="Send message"]');
+  }
+  function getInputArea() {
+    return document.querySelector(".input-area");
+  }
+  function getTextarea3() {
+    const inputArea = getInputArea();
+    return inputArea ? inputArea.querySelector("textarea") : null;
+  }
+  function getRegenerateButton3() {
+    return document.querySelector('button[aria-label="Retry"]');
+  }
+  function getLastPrompt() {
+    const promptElements = document.querySelectorAll(".query-text");
+    const lastPrompt = promptElements[promptElements.length - 1];
+    return lastPrompt;
+  }
+  function getLatestPromptText() {
+    const lastPrompt = getLastPrompt();
+    if (!lastPrompt)
+      return "";
+    const lastPromptText = lastPrompt.textContent;
+    return lastPromptText || "";
+  }
+  function send3(text) {
+    const textarea = getTextarea3();
+    if (!textarea)
+      return;
+    textarea.value = text;
+    textarea.dispatchEvent(new Event("input"));
+    const submitButton = getSubmitButton3();
+    if (!submitButton)
+      return;
     submitButton.click();
   }
   function onSend3(callback) {
@@ -516,6 +524,9 @@
       if (menu_all.openai && location.href.includes("chat.openai")) {
         chatgpt_exports.onSend(() => {
           const textarea = chatgpt_exports.getTextarea();
+          if (!textarea) {
+            return;
+          }
           const prompt = textarea.value;
           chatgpt_last_prompt = prompt;
           GM_setValue("bard_prompt_texts", [prompt]);
@@ -563,6 +574,9 @@
         }
         bard_exports.onSend(() => {
           const textarea = bard_exports.getTextarea();
+          if (!textarea) {
+            return;
+          }
           let prompt = textarea.value;
           if (!prompt) {
             prompt = bard_exports.getLatestPromptText();
@@ -606,11 +620,14 @@
     let bing_last_prompt = "";
     $(() => __async(this, null, function* () {
       if (menu_all.bing && location.href.includes("Bing+AI")) {
-        while (!bingchat_exports.getSubmitButton()) {
+        while (!bing_exports.getSubmitButton()) {
           yield new Promise((resolve) => setTimeout(resolve, 500));
         }
-        bingchat_exports.onSend(() => {
-          const textarea = bingchat_exports.getTextarea();
+        bing_exports.onSend(() => {
+          const textarea = bing_exports.getTextarea();
+          if (!textarea) {
+            return;
+          }
           const prompt = textarea.value;
           bing_last_prompt = prompt;
           GM_setValue("chatgpt_prompt_texts", [prompt]);
@@ -624,7 +641,7 @@
         if (+/* @__PURE__ */ new Date() - last_trigger_time_bing < 500) {
           return;
         }
-        last_trigger_time_bing = /* @__PURE__ */ new Date();
+        last_trigger_time_bing = +/* @__PURE__ */ new Date();
         setTimeout(() => __async(this, null, function* () {
           const prompt_texts = new_value;
           if (prompt_texts.length > 0) {
@@ -633,7 +650,7 @@
               if (!firstTime) {
                 yield new Promise((resolve) => setTimeout(resolve, 2e3));
               }
-              if (!firstTime && bingchat_exports.getStopGeneratingButton() != void 0) {
+              if (!firstTime && bing_exports.getStopGeneratingButton() != void 0) {
                 continue;
               }
               firstTime = false;
@@ -641,7 +658,7 @@
               if (prompt_text === bing_last_prompt) {
                 continue;
               }
-              bingchat_exports.send(prompt_text);
+              bing_exports.send(prompt_text);
             }
           }
         }), 0);
