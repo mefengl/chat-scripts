@@ -7,6 +7,7 @@
 // @author       mefengl
 // @match        https://chat.openai.com/*
 // @grant        none
+// @license      MIT
 
 // @name:en      ChatGPT Sensible
 // @description:en Sensible to me
