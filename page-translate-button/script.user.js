@@ -2,7 +2,7 @@
 // @name         chatgpt-page-translate-button
 // @description  🍓 let ChatGPT translate the web page you are reading in one click
 // @author       mefengl
-// @version      0.4.0
+// @version      0.4.2
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -457,14 +457,13 @@
   };
   var MenuManger_default = MenuManager;
 
-  // src/getLocalLanguage/index.ts
+  // ../../packages/monkit/dist/index.mjs
   function getLocalLanguage() {
     const userLanguage = navigator.language;
     const languageNames = new Intl.DisplayNames([userLanguage], { type: "language" });
     const readableLanguage = languageNames.of(userLanguage);
     return readableLanguage;
   }
-  var getLocalLanguage_default = getLocalLanguage;
 
   // src/index.ts
   function initialize() {
@@ -477,7 +476,7 @@
     return __async(this, null, function* () {
       yield initialize();
       const defaultMenu = {
-        "chat_language": getLocalLanguage_default() || "Chinese"
+        "chat_language": getLocalLanguage() || "Chinese"
       };
       const menuManager = new MenuManger_default(defaultMenu);
       const chatLanguage = menuManager.getMenuValue("chat_language");
