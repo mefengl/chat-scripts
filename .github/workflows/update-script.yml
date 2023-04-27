@@ -10,7 +10,8 @@ on:
 
 jobs:
   update-script:
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest
+    runs-on: macos-13-xl
 
     permissions:
       contents: write
