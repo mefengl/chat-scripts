@@ -4,7 +4,6 @@
 // @author       mefengl
 // @version      0.0.5
 // @namespace    https://github.com/mefengl
-// @require      
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=midjourney.com
 // @license      MIT
 // @match        https://discord.com/channels/*
