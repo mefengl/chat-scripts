@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name chatgpt-hello
 // @namespace https://github.com/mefengl
-// @version 0.0.1
+// @version 0.0.2
 // @description A template for userscript use chat-kit
 // @author chat-kit
 // @match https://chat.openai.com/*
@@ -80,6 +80,7 @@
       var __toCommonJS = (mod) => __copyProps2(__defProp3({}, "__esModule", { value: true }), mod);
       var chatgpt_exports2 = {};
       __export2(chatgpt_exports2, {
+        getContinueGeneratingButton: () => getContinueGeneratingButton2,
         getConversation: () => getConversation2,
         getLastResponse: () => getLastResponse2,
         getLastResponseElement: () => getLastResponseElement2,
@@ -124,6 +125,17 @@
         const result = Array.from(buttons).find((button) => {
           var _a;
           return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("regenerate");
+        });
+        return result;
+      }
+      function getContinueGeneratingButton2() {
+        const form = document.querySelector("form");
+        if (!form)
+          return;
+        const buttons = form.querySelectorAll("button");
+        const result = Array.from(buttons).find((button) => {
+          var _a;
+          return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("continue generating");
         });
         return result;
       }
@@ -291,9 +303,10 @@
       __defProp2(target, name, { get: all[name], enumerable: true });
   };
 
-  // ../../packages/chatkit/dist/chunk-RKGOWDBQ.mjs
+  // ../../packages/chatkit/dist/chunk-Q2GISCON.mjs
   var chatgpt_exports = {};
   __export(chatgpt_exports, {
+    getContinueGeneratingButton: () => getContinueGeneratingButton,
     getConversation: () => getConversation,
     getLastResponse: () => getLastResponse,
     getLastResponseElement: () => getLastResponseElement,
@@ -337,6 +350,17 @@
     const result = Array.from(buttons).find((button) => {
       var _a;
       return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("regenerate");
+    });
+    return result;
+  }
+  function getContinueGeneratingButton() {
+    const form = document.querySelector("form");
+    if (!form)
+      return;
+    const buttons = form.querySelectorAll("button");
+    const result = Array.from(buttons).find((button) => {
+      var _a;
+      return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("continue generating");
     });
     return result;
   }

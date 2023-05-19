@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         chat-octopus
 // @namespace    https://github.com/mefengl
-// @version      0.2.14
+// @version      0.2.15
 // @description  🐙 let octopus send multiple messages for you
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @author       mefengl
@@ -68,9 +68,10 @@
       __defProp(target, name, { get: all[name], enumerable: true });
   };
 
-  // ../../packages/chatkit/dist/chunk-RKGOWDBQ.mjs
+  // ../../packages/chatkit/dist/chunk-Q2GISCON.mjs
   var chatgpt_exports = {};
   __export(chatgpt_exports, {
+    getContinueGeneratingButton: () => getContinueGeneratingButton,
     getConversation: () => getConversation,
     getLastResponse: () => getLastResponse,
     getLastResponseElement: () => getLastResponseElement,
@@ -114,6 +115,17 @@
     const result = Array.from(buttons).find((button) => {
       var _a;
       return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("regenerate");
+    });
+    return result;
+  }
+  function getContinueGeneratingButton() {
+    const form = document.querySelector("form");
+    if (!form)
+      return;
+    const buttons = form.querySelectorAll("button");
+    const result = Array.from(buttons).find((button) => {
+      var _a;
+      return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("continue generating");
     });
     return result;
   }

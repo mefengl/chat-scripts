@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Doozy
 // @namespace    https://github.com/mefengl
-// @version      0.8.1
+// @version      0.8.2
 // @description  A wonderful day spent with ChatGPT
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @author       mefengl
@@ -109,6 +109,7 @@
       var __toCommonJS = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
       var chatgpt_exports = {};
       __export(chatgpt_exports, {
+        getContinueGeneratingButton: () => getContinueGeneratingButton,
         getConversation: () => getConversation,
         getLastResponse: () => getLastResponse,
         getLastResponseElement: () => getLastResponseElement,
@@ -153,6 +154,17 @@
         const result = Array.from(buttons).find((button) => {
           var _a;
           return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("regenerate");
+        });
+        return result;
+      }
+      function getContinueGeneratingButton() {
+        const form = document.querySelector("form");
+        if (!form)
+          return;
+        const buttons = form.querySelectorAll("button");
+        const result = Array.from(buttons).find((button) => {
+          var _a;
+          return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("continue generating");
         });
         return result;
       }

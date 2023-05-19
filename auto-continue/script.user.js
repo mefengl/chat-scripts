@@ -1,13 +1,34 @@
 // ==UserScript==
-// @name chat-smart
-// @namespace https://github.com/mefengl
-// @version 0.0.2
-// @description Just an implementation of an Idea of "SmartGPT"
-// @author mefengl
-// @match https://chat.openai.com/*
-// @icon https://www.google.com/s2/favicons?sz=64&domain=openai.com
-// @grant none
-// @license MIT
+// @name         ChatGPT Auto-Continue 🔄
+// @description  ⚡ Automatically click the 'Continue Generating' button in ChatGPT!
+// @author       mefengl
+// @version      0.0.2
+// @namespace    https://github.com/mefengl
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
+// @license      MIT
+// @match        https://chat.openai.com/*
+// @grant        none
+
+// @name:en      ChatGPT Auto-Continue 🔄
+// @description:en ⚡ Automatically click the 'Continue Generating' button in ChatGPT!
+// @name:zh-CN   ChatGPT 自动继续 🔄
+// @description:zh-CN ⚡ 自动点击ChatGPT中的“继续生成”按钮！
+// @name:es      ChatGPT Auto-Continuar 🔄
+// @description:es ⚡ ¡Haz clic automáticamente en el botón 'Continuar generando' en ChatGPT!
+// @name:hi      ChatGPT स्वचालित जारी रखें 🔄
+// @description:hi ⚡ ChatGPT में 'जारी रखने' बटन पर स्वचालित रूप से क्लिक करें!
+// @name:ar      ChatGPT التكميل الآلي 🔄
+// @description:ar ⚡ انقر تلقائيًا على زر 'متابعة التوليد' في ChatGPT!
+// @name:pt      ChatGPT Auto-Continuar 🔄
+// @description:pt ⚡ Clique automaticamente no botão 'Continuar Gerando' no ChatGPT!
+// @name:ru      ChatGPT Авто-Продолжение 🔄
+// @description:ru ⚡ Автоматически нажимайте на кнопку "Продолжить генерацию" в ChatGPT!
+// @name:ja      ChatGPT 自動続行 🔄
+// @description:ja ⚡ ChatGPTの「続けて生成」ボタンを自動的にクリックします！
+// @name:de      ChatGPT Auto-Fortsetzen 🔄
+// @description:de ⚡ Klicken Sie automatisch auf die Schaltfläche "Generierung fortsetzen" in ChatGPT!
+// @name:fr      ChatGPT Auto-Continuer 🔄
+// @description:fr ⚡ Cliquez automatiquement sur le bouton 'Continuer à générer' dans ChatGPT!
 // ==/UserScript==
 "use strict";
 (() => {
@@ -80,7 +101,7 @@
       var __toCommonJS = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
       var chatgpt_exports = {};
       __export(chatgpt_exports, {
-        getContinueGeneratingButton: () => getContinueGeneratingButton,
+        getContinueGeneratingButton: () => getContinueGeneratingButton2,
         getConversation: () => getConversation,
         getLastResponse: () => getLastResponse,
         getLastResponseElement: () => getLastResponseElement,
@@ -89,17 +110,17 @@
         getStopGeneratingButton: () => getStopGeneratingButton,
         getSubmitButton: () => getSubmitButton,
         getTextarea: () => getTextarea,
-        getTextareaValue: () => getTextareaValue2,
+        getTextareaValue: () => getTextareaValue,
         isConversationStarted: () => isConversationStarted,
         isGenerating: () => isGenerating,
         isHorizontalConversation: () => isHorizontalConversation,
-        onSend: () => onSend2,
+        onSend: () => onSend,
         regenerate: () => regenerate,
         send: () => send,
         setHorizontalConversation: () => setHorizontalConversation,
         setPromptListener: () => setPromptListener,
         setPureConversation: () => setPureConversation,
-        setTextarea: () => setTextarea2,
+        setTextarea: () => setTextarea,
         waitForIdle: () => waitForIdle
       });
       module.exports = __toCommonJS(chatgpt_exports);
@@ -128,7 +149,7 @@
         });
         return result;
       }
-      function getContinueGeneratingButton() {
+      function getContinueGeneratingButton2() {
         const form = document.querySelector("form");
         if (!form)
           return;
@@ -161,11 +182,11 @@
         const lastResponse = lastResponseElement.textContent;
         return lastResponse;
       }
-      function getTextareaValue2() {
+      function getTextareaValue() {
         var _a;
         return ((_a = getTextarea()) == null ? void 0 : _a.value) || "";
       }
-      function setTextarea2(message) {
+      function setTextarea(message) {
         const textarea = getTextarea();
         if (!textarea)
           return;
@@ -173,7 +194,7 @@
         textarea.dispatchEvent(new Event("input"));
       }
       function send(message) {
-        setTextarea2(message);
+        setTextarea(message);
         const textarea = getTextarea();
         if (!textarea)
           return;
@@ -185,7 +206,7 @@
           return;
         regenerateButton.click();
       }
-      function onSend2(callback) {
+      function onSend(callback) {
         const textarea = getTextarea();
         if (!textarea)
           return;
@@ -307,13 +328,12 @@
   function main() {
     return __async(this, null, function* () {
       yield initialize();
-      (0, import_chatgpt.onSend)(() => {
-        const textareaValue = (0, import_chatgpt.getTextareaValue)();
-        const smartPrompt = `Question:${textareaValue}
-
-Answer: Let's work this out in a step by step way to be sure we have the right answer`;
-        (0, import_chatgpt.setTextarea)(smartPrompt);
-      });
+      setInterval(() => __async(this, null, function* () {
+        const continueGeneratingButton = (0, import_chatgpt.getContinueGeneratingButton)();
+        if (continueGeneratingButton) {
+          continueGeneratingButton.click();
+        }
+      }), 1e3);
     });
   }
   (function() {

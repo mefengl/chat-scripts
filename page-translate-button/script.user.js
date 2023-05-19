@@ -2,7 +2,7 @@
 // @name         chatgpt-page-translate-button
 // @description  🍓 let ChatGPT translate the web page you are reading in one click
 // @author       mefengl
-// @version      0.4.3
+// @version      0.4.4
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -106,6 +106,7 @@
       var __toCommonJS = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
       var chatgpt_exports = {};
       __export(chatgpt_exports, {
+        getContinueGeneratingButton: () => getContinueGeneratingButton,
         getConversation: () => getConversation,
         getLastResponse: () => getLastResponse,
         getLastResponseElement: () => getLastResponseElement,
@@ -150,6 +151,17 @@
         const result = Array.from(buttons).find((button) => {
           var _a;
           return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("regenerate");
+        });
+        return result;
+      }
+      function getContinueGeneratingButton() {
+        const form = document.querySelector("form");
+        if (!form)
+          return;
+        const buttons = form.querySelectorAll("button");
+        const result = Array.from(buttons).find((button) => {
+          var _a;
+          return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("continue generating");
         });
         return result;
       }

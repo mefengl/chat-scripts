@@ -2,7 +2,7 @@
 // @name         chatgpt-horizon
 // @description  Horizontal the conversation in ChatGPT
 // @author       mefengl
-// @version      0.2.1
+// @version      0.2.2
 // @namespace    https://github.com/mefengl
 // @require
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -102,6 +102,7 @@
       var __toCommonJS = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
       var chatgpt_exports = {};
       __export(chatgpt_exports, {
+        getContinueGeneratingButton: () => getContinueGeneratingButton,
         getConversation: () => getConversation,
         getLastResponse: () => getLastResponse,
         getLastResponseElement: () => getLastResponseElement,
@@ -146,6 +147,17 @@
         const result = Array.from(buttons).find((button) => {
           var _a;
           return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("regenerate");
+        });
+        return result;
+      }
+      function getContinueGeneratingButton() {
+        const form = document.querySelector("form");
+        if (!form)
+          return;
+        const buttons = form.querySelectorAll("button");
+        const result = Array.from(buttons).find((button) => {
+          var _a;
+          return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("continue generating");
         });
         return result;
       }
