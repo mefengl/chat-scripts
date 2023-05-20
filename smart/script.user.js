@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name chat-smart
 // @namespace https://github.com/mefengl
-// @version 0.0.2
+// @version 0.0.3
 // @description Just an implementation of an Idea of "SmartGPT"
 // @author mefengl
 // @match https://chat.openai.com/*
@@ -85,11 +85,13 @@
         getLastResponse: () => getLastResponse,
         getLastResponseElement: () => getLastResponseElement,
         getModelSelectButton: () => getModelSelectButton,
+        getNewModelSelectButtons: () => getNewModelSelectButtons,
         getRegenerateButton: () => getRegenerateButton,
         getStopGeneratingButton: () => getStopGeneratingButton,
         getSubmitButton: () => getSubmitButton,
         getTextarea: () => getTextarea,
         getTextareaValue: () => getTextareaValue2,
+        hasNewModelSelectButtons: () => hasNewModelSelectButtons,
         isConversationStarted: () => isConversationStarted,
         isGenerating: () => isGenerating,
         isHorizontalConversation: () => isHorizontalConversation,
@@ -254,6 +256,12 @@
           var _a;
           return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("model");
         });
+      }
+      function getNewModelSelectButtons() {
+        return Array.from(document.querySelectorAll("[class^='group/button']"));
+      }
+      function hasNewModelSelectButtons() {
+        return getNewModelSelectButtons().length > 0;
       }
       function isConversationStarted() {
         return !getModelSelectButton();

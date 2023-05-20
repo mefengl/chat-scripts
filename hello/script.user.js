@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name chatgpt-hello
 // @namespace https://github.com/mefengl
-// @version 0.0.2
+// @version 0.0.3
 // @description A template for userscript use chat-kit
 // @author chat-kit
 // @match https://chat.openai.com/*
@@ -85,11 +85,13 @@
         getLastResponse: () => getLastResponse2,
         getLastResponseElement: () => getLastResponseElement2,
         getModelSelectButton: () => getModelSelectButton2,
+        getNewModelSelectButtons: () => getNewModelSelectButtons2,
         getRegenerateButton: () => getRegenerateButton2,
         getStopGeneratingButton: () => getStopGeneratingButton2,
         getSubmitButton: () => getSubmitButton2,
         getTextarea: () => getTextarea2,
         getTextareaValue: () => getTextareaValue2,
+        hasNewModelSelectButtons: () => hasNewModelSelectButtons2,
         isConversationStarted: () => isConversationStarted2,
         isGenerating: () => isGenerating2,
         isHorizontalConversation: () => isHorizontalConversation2,
@@ -255,6 +257,12 @@
           return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("model");
         });
       }
+      function getNewModelSelectButtons2() {
+        return Array.from(document.querySelectorAll("[class^='group/button']"));
+      }
+      function hasNewModelSelectButtons2() {
+        return getNewModelSelectButtons2().length > 0;
+      }
       function isConversationStarted2() {
         return !getModelSelectButton2();
       }
@@ -303,7 +311,7 @@
       __defProp2(target, name, { get: all[name], enumerable: true });
   };
 
-  // ../../packages/chatkit/dist/chunk-Q2GISCON.mjs
+  // ../../packages/chatkit/dist/chunk-75IWQF6O.mjs
   var chatgpt_exports = {};
   __export(chatgpt_exports, {
     getContinueGeneratingButton: () => getContinueGeneratingButton,
@@ -311,11 +319,13 @@
     getLastResponse: () => getLastResponse,
     getLastResponseElement: () => getLastResponseElement,
     getModelSelectButton: () => getModelSelectButton,
+    getNewModelSelectButtons: () => getNewModelSelectButtons,
     getRegenerateButton: () => getRegenerateButton,
     getStopGeneratingButton: () => getStopGeneratingButton,
     getSubmitButton: () => getSubmitButton,
     getTextarea: () => getTextarea,
     getTextareaValue: () => getTextareaValue,
+    hasNewModelSelectButtons: () => hasNewModelSelectButtons,
     isConversationStarted: () => isConversationStarted,
     isGenerating: () => isGenerating,
     isHorizontalConversation: () => isHorizontalConversation,
@@ -479,6 +489,12 @@
       var _a;
       return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("model");
     });
+  }
+  function getNewModelSelectButtons() {
+    return Array.from(document.querySelectorAll("[class^='group/button']"));
+  }
+  function hasNewModelSelectButtons() {
+    return getNewModelSelectButtons().length > 0;
   }
   function isConversationStarted() {
     return !getModelSelectButton();

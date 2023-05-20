@@ -2,7 +2,7 @@
 // @name         chatgpt-horizon
 // @description  Horizontal the conversation in ChatGPT
 // @author       mefengl
-// @version      0.2.2
+// @version      0.2.3
 // @namespace    https://github.com/mefengl
 // @require
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -107,11 +107,13 @@
         getLastResponse: () => getLastResponse,
         getLastResponseElement: () => getLastResponseElement,
         getModelSelectButton: () => getModelSelectButton,
+        getNewModelSelectButtons: () => getNewModelSelectButtons,
         getRegenerateButton: () => getRegenerateButton,
         getStopGeneratingButton: () => getStopGeneratingButton,
         getSubmitButton: () => getSubmitButton,
         getTextarea: () => getTextarea,
         getTextareaValue: () => getTextareaValue,
+        hasNewModelSelectButtons: () => hasNewModelSelectButtons,
         isConversationStarted: () => isConversationStarted,
         isGenerating: () => isGenerating,
         isHorizontalConversation: () => isHorizontalConversation2,
@@ -276,6 +278,12 @@
           var _a;
           return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("model");
         });
+      }
+      function getNewModelSelectButtons() {
+        return Array.from(document.querySelectorAll("[class^='group/button']"));
+      }
+      function hasNewModelSelectButtons() {
+        return getNewModelSelectButtons().length > 0;
       }
       function isConversationStarted() {
         return !getModelSelectButton();

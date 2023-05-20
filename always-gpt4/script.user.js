@@ -1,34 +1,34 @@
 // ==UserScript==
-// @name         chatgpt sensible
-// @namespace    https://github.com/mefengl
-// @version      0.6.3
-// @description  sensible to me
-// @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
+// @name         ChatGPT Always GPT-4 ✨
+// @description  🔄 Automatically select the 'GPT-4' mode when it appears in ChatGPT!
 // @author       mefengl
+// @version      0.0.2
+// @namespace    https://github.com/mefengl
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
+// @license      MIT
 // @match        https://chat.openai.com/*
 // @grant        none
-// @license      MIT
 
-// @name:en      ChatGPT Sensible
-// @description:en Sensible to me
-// @name:zh-CN   聊天GPT明智
-// @description:zh-CN 对我来说明智
-// @name:es      ChatGPT Sensato
-// @description:es Sensato para mí
-// @name:hi      चैटजीपीटी संवेदनशील
-// @description:hi मेरे लिए संवेदनशील
-// @name:ar      ChatGPT حساس
-// @description:ar حساس بالنسبة لي
-// @name:pt      ChatGPT Sensato
-// @description:pt Sensato para mim
-// @name:ru      ChatGPT Разумный
-// @description:ru Разумно для меня
-// @name:ja      ChatGPTセンシブル
-// @description:ja 私にとって感覚的
-// @name:de      ChatGPT Sinnvoll
-// @description:de Sinnvoll für mich
-// @name:fr      ChatGPT Sensible
-// @description:fr Sensible pour moi
+// @name:en      ChatGPT Always GPT-4 ✨
+// @description:en 🔄 Automatically select the 'GPT-4' mode when it appears in ChatGPT!
+// @name:zh-CN   ChatGPT 总是选择 GPT-4 ✨
+// @description:zh-CN 🔄 当 GPT-4 模式在 ChatGPT 中出现时，自动选择！
+// @name:es      ChatGPT Siempre GPT-4 ✨
+// @description:es 🔄 ¡Selecciona automáticamente el modo 'GPT-4' cuando aparece en ChatGPT!
+// @name:hi      ChatGPT हमेशा GPT-4 ✨
+// @description:hi 🔄 ChatGPT में 'GPT-4' मोड के दिखने पर स्वचालित रूप से चुनें!
+// @name:ar      ChatGPT دائماً GPT-4 ✨
+// @description:ar 🔄 حدد وضع 'GPT-4' تلقائياً عندما يظهر في ChatGPT!
+// @name:pt      ChatGPT Sempre GPT-4 ✨
+// @description:pt 🔄 Selecione automaticamente o modo 'GPT-4' quando ele aparecer no ChatGPT!
+// @name:ru      ChatGPT Всегда GPT-4 ✨
+// @description:ru 🔄 Автоматически выбирает режим 'GPT-4', когда он появляется в ChatGPT!
+// @name:ja      ChatGPT いつも GPT-4 ✨
+// @description:ja 🔄 ChatGPTで'GPT-4'モードが表示されたら、自動的に選択します！
+// @name:de      ChatGPT Immer GPT-4 ✨
+// @description:de 🔄 Wählen Sie automatisch den 'GPT-4' Modus aus, wenn er in ChatGPT erscheint!
+// @name:fr      ChatGPT Toujours GPT-4 ✨
+// @description:fr 🔄 Sélectionnez automatiquement le mode 'GPT-4' lorsqu'il apparaît dans ChatGPT!
 // ==/UserScript==
 "use strict";
 (() => {
@@ -106,17 +106,17 @@
         getLastResponse: () => getLastResponse,
         getLastResponseElement: () => getLastResponseElement,
         getModelSelectButton: () => getModelSelectButton,
-        getNewModelSelectButtons: () => getNewModelSelectButtons,
+        getNewModelSelectButtons: () => getNewModelSelectButtons2,
         getRegenerateButton: () => getRegenerateButton,
         getStopGeneratingButton: () => getStopGeneratingButton,
         getSubmitButton: () => getSubmitButton,
         getTextarea: () => getTextarea,
-        getTextareaValue: () => getTextareaValue2,
-        hasNewModelSelectButtons: () => hasNewModelSelectButtons,
+        getTextareaValue: () => getTextareaValue,
+        hasNewModelSelectButtons: () => hasNewModelSelectButtons2,
         isConversationStarted: () => isConversationStarted,
         isGenerating: () => isGenerating,
         isHorizontalConversation: () => isHorizontalConversation,
-        onSend: () => onSend2,
+        onSend: () => onSend,
         regenerate: () => regenerate,
         send: () => send,
         setHorizontalConversation: () => setHorizontalConversation,
@@ -184,7 +184,7 @@
         const lastResponse = lastResponseElement.textContent;
         return lastResponse;
       }
-      function getTextareaValue2() {
+      function getTextareaValue() {
         var _a;
         return ((_a = getTextarea()) == null ? void 0 : _a.value) || "";
       }
@@ -208,7 +208,7 @@
           return;
         regenerateButton.click();
       }
-      function onSend2(callback) {
+      function onSend(callback) {
         const textarea = getTextarea();
         if (!textarea)
           return;
@@ -278,11 +278,11 @@
           return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("model");
         });
       }
-      function getNewModelSelectButtons() {
+      function getNewModelSelectButtons2() {
         return Array.from(document.querySelectorAll("[class^='group/button']"));
       }
-      function hasNewModelSelectButtons() {
-        return getNewModelSelectButtons().length > 0;
+      function hasNewModelSelectButtons2() {
+        return getNewModelSelectButtons2().length > 0;
       }
       function isConversationStarted() {
         return !getModelSelectButton();
@@ -325,15 +325,8 @@
     }
   });
 
-  // src/autoCopyWhenSend/index.ts
-  var import_chatgpt = __toESM(require_chatgpt2(), 1);
-  function autoCopyWhenSend() {
-    (0, import_chatgpt.onSend)(() => {
-      navigator.clipboard.writeText((0, import_chatgpt.getTextareaValue)());
-    });
-  }
-
   // src/index.ts
+  var import_chatgpt = __toESM(require_chatgpt2(), 1);
   function initialize() {
     return __async(this, null, function* () {
       yield new Promise((resolve) => window.addEventListener("load", resolve));
@@ -343,7 +336,9 @@
   function main() {
     return __async(this, null, function* () {
       yield initialize();
-      autoCopyWhenSend();
+      setInterval(() => __async(this, null, function* () {
+        (0, import_chatgpt.hasNewModelSelectButtons)() && (0, import_chatgpt.getNewModelSelectButtons)()[1].click();
+      }), 1e3);
     });
   }
   (function() {

@@ -2,7 +2,7 @@
 // @name         chatgpt-page-summary-button
 // @description  🍓 let ChatGPT summary the web page you are reading in one click
 // @author       mefengl
-// @version      0.1.2
+// @version      0.1.3
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -109,11 +109,13 @@
         getLastResponse: () => getLastResponse,
         getLastResponseElement: () => getLastResponseElement,
         getModelSelectButton: () => getModelSelectButton,
+        getNewModelSelectButtons: () => getNewModelSelectButtons,
         getRegenerateButton: () => getRegenerateButton,
         getStopGeneratingButton: () => getStopGeneratingButton,
         getSubmitButton: () => getSubmitButton,
         getTextarea: () => getTextarea,
         getTextareaValue: () => getTextareaValue,
+        hasNewModelSelectButtons: () => hasNewModelSelectButtons,
         isConversationStarted: () => isConversationStarted,
         isGenerating: () => isGenerating,
         isHorizontalConversation: () => isHorizontalConversation,
@@ -278,6 +280,12 @@
           var _a;
           return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("model");
         });
+      }
+      function getNewModelSelectButtons() {
+        return Array.from(document.querySelectorAll("[class^='group/button']"));
+      }
+      function hasNewModelSelectButtons() {
+        return getNewModelSelectButtons().length > 0;
       }
       function isConversationStarted() {
         return !getModelSelectButton();

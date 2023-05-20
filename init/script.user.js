@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name chatgpt-init
 // @namespace https://github.com/mefengl
-// @version 0.1.2
+// @version 0.1.3
 // @description Init ChatGPT with prompt from internet
 // @author mefengl
 // @match https://chat.openai.com/*
@@ -85,11 +85,13 @@
         getLastResponse: () => getLastResponse,
         getLastResponseElement: () => getLastResponseElement,
         getModelSelectButton: () => getModelSelectButton,
+        getNewModelSelectButtons: () => getNewModelSelectButtons,
         getRegenerateButton: () => getRegenerateButton,
         getStopGeneratingButton: () => getStopGeneratingButton,
         getSubmitButton: () => getSubmitButton,
         getTextarea: () => getTextarea,
         getTextareaValue: () => getTextareaValue,
+        hasNewModelSelectButtons: () => hasNewModelSelectButtons,
         isConversationStarted: () => isConversationStarted2,
         isGenerating: () => isGenerating,
         isHorizontalConversation: () => isHorizontalConversation,
@@ -254,6 +256,12 @@
           var _a;
           return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("model");
         });
+      }
+      function getNewModelSelectButtons() {
+        return Array.from(document.querySelectorAll("[class^='group/button']"));
+      }
+      function hasNewModelSelectButtons() {
+        return getNewModelSelectButtons().length > 0;
       }
       function isConversationStarted2() {
         return !getModelSelectButton();
