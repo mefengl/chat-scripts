@@ -2,7 +2,7 @@
 // @name         Midjourney Click All
 // @description  Click all the buttons in a row at once when you're in Discord with Midjourney bot open! 😊
 // @author       mefengl
-// @version      0.0.5
+// @version      0.1.0
 // @namespace    https://github.com/mefengl
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=midjourney.com
 // @license      MIT
@@ -57,8 +57,8 @@
   function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
-  function getButtonContainers() {
-    return Array.from(document.querySelectorAll("[id^='message-accessorie'] [class^='children']"));
+  function getButtonContainers(container = document.body) {
+    return Array.from(container.querySelectorAll("[id^='message-accessorie'] [class^='children']"));
   }
   var CLONE_BUTTON_CLASS = "cloned-button";
   function getButtons(temp) {
@@ -139,25 +139,49 @@
       }
     });
   }
+  function getScrollerInner() {
+    return document.querySelector("[data-list-id='chat-messages']");
+  }
+  function onScrollerInnerChange(callback) {
+    let observer = new MutationObserver((mutations) => {
+      for (let mutation of mutations) {
+        for (let node of Array.from(mutation.addedNodes)) {
+          if (node.nodeName.toLowerCase() === "li" && node instanceof Element)
+            callback(node);
+        }
+      }
+    });
+    const scrollerInner = getScrollerInner();
+    if (!scrollerInner)
+      return null;
+    observer.observe(scrollerInner, { childList: true });
+    return observer;
+  }
 
   // src/index.ts
   function initialize() {
     return __async(this, null, function* () {
       yield new Promise((resolve) => window.addEventListener("load", resolve));
-      yield new Promise((resolve) => setTimeout(resolve, 1e4));
+      yield new Promise((resolve) => setTimeout(resolve, 6e3));
     });
+  }
+  function addClickAllButton(root) {
+    const buttonContainers = getButtonContainers(root);
+    for (const buttonContainer of buttonContainers) {
+      if (getButtons(buttonContainer).length < 4)
+        continue;
+      const clickAllButton = oneMoreButton(buttonContainer);
+      clickAllButton.textContent = "ALL";
+      clickAllButton.addEventListener("click", () => {
+        smartClickAllButtons(buttonContainer);
+      });
+    }
   }
   function main() {
     return __async(this, null, function* () {
       yield initialize();
-      const buttonContainers = getButtonContainers();
-      for (const buttonContainer of buttonContainers) {
-        const clickAllButton = oneMoreButton(buttonContainer);
-        clickAllButton.textContent = "ALL";
-        clickAllButton.addEventListener("click", () => {
-          smartClickAllButtons(buttonContainer);
-        });
-      }
+      addClickAllButton(void 0);
+      onScrollerInnerChange(addClickAllButton);
     });
   }
   (function() {
