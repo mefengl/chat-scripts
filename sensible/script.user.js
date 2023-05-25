@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         chatgpt sensible
 // @namespace    https://github.com/mefengl
-// @version      0.6.3
+// @version      0.7.2
 // @description  sensible to me
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @author       mefengl
@@ -342,8 +342,10 @@
   }
   function main() {
     return __async(this, null, function* () {
+      var _a, _b;
       yield initialize();
       autoCopyWhenSend();
+      (_b = (_a = document.querySelector("a.underline[href$='release-notes']")) == null ? void 0 : _a.parentElement) == null ? void 0 : _b.remove();
     });
   }
   (function() {
