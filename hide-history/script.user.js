@@ -2,7 +2,7 @@
 // @name         chatgpt-hide-history
 // @description  🙈 Seletively hide chat history in sidebar such as "Today", "Yesterday", "Previous 7 Days", etc.
 // @author       mefengl
-// @version      0.2.3
+// @version      0.2.4
 // @namespace    https://github.com/mefengl
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @license      MIT
@@ -14,7 +14,7 @@
 
 // @name:en      chatgpt-hide-history
 // @description:en 🙈 Seletively hide chat history in sidebar such as "Today", "Yesterday", "Previous 7 Days", etc.
-// @name:zh-CN   隐藏聊天历史
+// @name:zh-CN   chatgpt-隐藏聊天历史
 // @description:zh-CN 🙈 选择性地隐藏边栏中的聊天历史，如 "今天"，"昨天"，"前7天" 等等.
 // @name:es      ocultar-historial-chatgpt
 // @description:es 🙈 Ocultar selectivamente el historial de chat en la barra lateral como "Hoy", "Ayer", "Últimos 7 días", etc.

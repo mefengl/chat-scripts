@@ -2,7 +2,7 @@
 // @name         ChatGPT Always GPT-4 ✨
 // @description  🔄 Automatically select the 'GPT-4' mode when it appears in ChatGPT!
 // @author       mefengl
-// @version      0.0.2
+// @version      0.0.3
 // @namespace    https://github.com/mefengl
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @license      MIT
