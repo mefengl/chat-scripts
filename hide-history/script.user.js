@@ -1,34 +1,37 @@
 // ==UserScript==
-// @name         ChatGPT Always GPT-4 ✨
-// @description  🔄 Automatically select the 'GPT-4' mode when it appears in ChatGPT!
+// @name         chatgpt-hide-history
+// @description  🙈 Seletively hide chat history in sidebar such as "Today", "Yesterday", "Previous 7 Days", etc.
 // @author       mefengl
-// @version      0.0.2
+// @version      0.2.3
 // @namespace    https://github.com/mefengl
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @license      MIT
 // @match        https://chat.openai.com/*
-// @grant        none
+// @grant        GM_getValue
+// @grant        GM_setValue
+// @grant        GM_registerMenuCommand
+// @grant        GM_unregisterMenuCommand
 
-// @name:en      ChatGPT Always GPT-4 ✨
-// @description:en 🔄 Automatically select the 'GPT-4' mode when it appears in ChatGPT!
-// @name:zh-CN   ChatGPT 总是选择 GPT-4 ✨
-// @description:zh-CN 🔄 当 GPT-4 模式在 ChatGPT 中出现时，自动选择！
-// @name:es      ChatGPT Siempre GPT-4 ✨
-// @description:es 🔄 ¡Selecciona automáticamente el modo 'GPT-4' cuando aparece en ChatGPT!
-// @name:hi      ChatGPT हमेशा GPT-4 ✨
-// @description:hi 🔄 ChatGPT में 'GPT-4' मोड के दिखने पर स्वचालित रूप से चुनें!
-// @name:ar      ChatGPT دائماً GPT-4 ✨
-// @description:ar 🔄 حدد وضع 'GPT-4' تلقائياً عندما يظهر في ChatGPT!
-// @name:pt      ChatGPT Sempre GPT-4 ✨
-// @description:pt 🔄 Selecione automaticamente o modo 'GPT-4' quando ele aparecer no ChatGPT!
-// @name:ru      ChatGPT Всегда GPT-4 ✨
-// @description:ru 🔄 Автоматически выбирает режим 'GPT-4', когда он появляется в ChatGPT!
-// @name:ja      ChatGPT いつも GPT-4 ✨
-// @description:ja 🔄 ChatGPTで'GPT-4'モードが表示されたら、自動的に選択します！
-// @name:de      ChatGPT Immer GPT-4 ✨
-// @description:de 🔄 Wählen Sie automatisch den 'GPT-4' Modus aus, wenn er in ChatGPT erscheint!
-// @name:fr      ChatGPT Toujours GPT-4 ✨
-// @description:fr 🔄 Sélectionnez automatiquement le mode 'GPT-4' lorsqu'il apparaît dans ChatGPT!
+// @name:en      chatgpt-hide-history
+// @description:en 🙈 Seletively hide chat history in sidebar such as "Today", "Yesterday", "Previous 7 Days", etc.
+// @name:zh-CN   隐藏聊天历史
+// @description:zh-CN 🙈 选择性地隐藏边栏中的聊天历史，如 "今天"，"昨天"，"前7天" 等等.
+// @name:es      ocultar-historial-chatgpt
+// @description:es 🙈 Ocultar selectivamente el historial de chat en la barra lateral como "Hoy", "Ayer", "Últimos 7 días", etc.
+// @name:hi      चैटगप्ट-इतिहास-छुपाएं
+// @description:hi 🙈 "आज", "कल", "पिछले 7 दिन" आदि के रूप में साइडबार में चैट इतिहास को चयनतः छिपाएं.
+// @name:ar      إخفاء-تاريخ-الدردشة-gpt
+// @description:ar 🙈 إخفاء تاريخ الدردشة بشكل انتقائي في الشريط الجانبي مثل "اليوم"، "أمس"، "السابق 7 أيام"، الخ.
+// @name:pt      ocultar-histórico-chatgpt
+// @description:pt 🙈 Ocultar seletivamente o histórico de chat na barra lateral como "Hoje", "Ontem", "Últimos 7 dias", etc.
+// @name:ru      скрыть-историю-чата-gpt
+// @description:ru 🙈 Выборочно скрыть историю чата в боковой панели, такую как "Сегодня", "Вчера", "Предыдущие 7 дней" и т.д.
+// @name:ja      chatgpt-履歴を隠す
+// @description:ja 🙈 サイドバーのチャット履歴を選択的に非表示にする、例えば "今日"、"昨日"、"過去7日間" など.
+// @name:de      chatgpt-Verlauf-verbergen
+// @description:de 🙈 Wählen Sie aus, welche Chatverläufe in der Seitenleiste ausgeblendet werden sollen, wie zum Beispiel "Heute", "Gestern", "Letzte 7 Tage", usw.
+// @name:fr      cacher-historique-chatgpt
+// @description:fr 🙈 Masquer sélectivement l'historique des discussions dans la barre latérale comme "Aujourd'hui", "Hier", "Les 7 derniers jours", etc.
 // ==/UserScript==
 "use strict";
 (() => {
@@ -105,18 +108,18 @@
         getConversation: () => getConversation,
         getHistoryBlockTitle: () => getHistoryBlockTitle,
         getHistoryBlocks: () => getHistoryBlocks,
-        getHistoryBlocksWithTitle: () => getHistoryBlocksWithTitle,
+        getHistoryBlocksWithTitle: () => getHistoryBlocksWithTitle2,
         getLastResponse: () => getLastResponse,
         getLastResponseElement: () => getLastResponseElement,
         getModelSelectButton: () => getModelSelectButton,
         getNav: () => getNav,
-        getNewModelSelectButtons: () => getNewModelSelectButtons2,
+        getNewModelSelectButtons: () => getNewModelSelectButtons,
         getRegenerateButton: () => getRegenerateButton,
         getStopGeneratingButton: () => getStopGeneratingButton,
         getSubmitButton: () => getSubmitButton,
         getTextarea: () => getTextarea,
         getTextareaValue: () => getTextareaValue,
-        hasNewModelSelectButtons: () => hasNewModelSelectButtons2,
+        hasNewModelSelectButtons: () => hasNewModelSelectButtons,
         isConversationStarted: () => isConversationStarted,
         isGenerating: () => isGenerating,
         isHorizontalConversation: () => isHorizontalConversation,
@@ -144,7 +147,7 @@
         var _a;
         return ((_a = historyBlock.querySelector("h3")) == null ? void 0 : _a.textContent) || "";
       }
-      function getHistoryBlocksWithTitle() {
+      function getHistoryBlocksWithTitle2() {
         const historyBlocks = getHistoryBlocks();
         const result = historyBlocks.map((historyBlock) => ({
           block: historyBlock,
@@ -304,11 +307,11 @@
           return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("model");
         });
       }
-      function getNewModelSelectButtons2() {
+      function getNewModelSelectButtons() {
         return Array.from(document.querySelectorAll("[class^='group/button']"));
       }
-      function hasNewModelSelectButtons2() {
-        return getNewModelSelectButtons2().length > 0;
+      function hasNewModelSelectButtons() {
+        return getNewModelSelectButtons().length > 0;
       }
       function isConversationStarted() {
         return !getModelSelectButton();
@@ -353,6 +356,32 @@
 
   // src/index.ts
   var import_chatgpt = __toESM(require_chatgpt2(), 1);
+
+  // src/useOption/index.ts
+  function useOption(key, title, defaultValue) {
+    if (typeof GM_getValue === "undefined") {
+      return {
+        value: defaultValue
+      };
+    }
+    let value = GM_getValue(key, defaultValue);
+    const ref = {
+      get value() {
+        return value;
+      },
+      set value(v) {
+        value = v;
+        GM_setValue(key, v);
+        location.reload();
+      }
+    };
+    GM_registerMenuCommand(`${title}: ${value ? "\u2705" : "\u274C"}`, () => {
+      ref.value = !value;
+    });
+    return ref;
+  }
+
+  // src/index.ts
   function initialize() {
     return __async(this, null, function* () {
       yield new Promise((resolve) => window.addEventListener("load", resolve));
@@ -362,9 +391,27 @@
   function main() {
     return __async(this, null, function* () {
       yield initialize();
-      setInterval(() => __async(this, null, function* () {
-        (0, import_chatgpt.hasNewModelSelectButtons)() && (0, import_chatgpt.getNewModelSelectButtons)()[1].click();
-      }), 1e3);
+      const hideToday = useOption("hide_today", "Hide Today", false);
+      const hideYesterday = useOption("hide_yesterday", "Hide Yesterday", false);
+      const hidePrevious7Days = useOption("hide_previous_7_days", "Hide Previous 7 Days", true);
+      const hidePrevious30Days = useOption("hide_previous_30_days", "Hide Previous 30 Days", true);
+      const hideMap = new Proxy({
+        "Today": hideToday.value,
+        "Yesterday": hideYesterday.value,
+        "Previous 7 Days": hidePrevious7Days.value,
+        "Previous 30 Days": hidePrevious30Days.value
+      }, {
+        get: (target, name) => {
+          var _a;
+          return (_a = target[name]) != null ? _a : true;
+        }
+      });
+      while (true) {
+        if ((0, import_chatgpt.getHistoryBlocksWithTitle)().length > 1)
+          break;
+        yield new Promise((resolve) => setTimeout(resolve, 1e3));
+      }
+      (0, import_chatgpt.getHistoryBlocksWithTitle)().filter((block) => hideMap[block.title]).forEach((historyBlock) => historyBlock.block.style.display = "none");
     });
   }
   (function() {

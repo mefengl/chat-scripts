@@ -68,14 +68,18 @@
       __defProp(target, name, { get: all[name], enumerable: true });
   };
 
-  // ../../packages/chatkit/dist/chunk-75IWQF6O.mjs
+  // ../../packages/chatkit/dist/chunk-4HXFAWD7.mjs
   var chatgpt_exports = {};
   __export(chatgpt_exports, {
     getContinueGeneratingButton: () => getContinueGeneratingButton,
     getConversation: () => getConversation,
+    getHistoryBlockTitle: () => getHistoryBlockTitle,
+    getHistoryBlocks: () => getHistoryBlocks,
+    getHistoryBlocksWithTitle: () => getHistoryBlocksWithTitle,
     getLastResponse: () => getLastResponse,
     getLastResponseElement: () => getLastResponseElement,
     getModelSelectButton: () => getModelSelectButton,
+    getNav: () => getNav,
     getNewModelSelectButtons: () => getNewModelSelectButtons,
     getRegenerateButton: () => getRegenerateButton,
     getStopGeneratingButton: () => getStopGeneratingButton,
@@ -95,6 +99,28 @@
     setTextarea: () => setTextarea,
     waitForIdle: () => waitForIdle
   });
+  function getNav() {
+    return document.querySelector("nav");
+  }
+  function getHistoryBlocks() {
+    const nav = getNav();
+    if (!nav)
+      return [];
+    const result = Array.from(nav.querySelectorAll("ol")).map((ol) => ol.parentElement);
+    return result;
+  }
+  function getHistoryBlockTitle(historyBlock) {
+    var _a;
+    return ((_a = historyBlock.querySelector("h3")) == null ? void 0 : _a.textContent) || "";
+  }
+  function getHistoryBlocksWithTitle() {
+    const historyBlocks = getHistoryBlocks();
+    const result = historyBlocks.map((historyBlock) => ({
+      block: historyBlock,
+      title: getHistoryBlockTitle(historyBlock)
+    }));
+    return result;
+  }
   function getTextarea() {
     const form = document.querySelector("form");
     if (!form)
