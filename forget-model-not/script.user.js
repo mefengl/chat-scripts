@@ -422,7 +422,6 @@
       (0, import_chatgpt.getNewModelSelectButtons)().forEach(
         (button, index) => button.addEventListener("click", () => {
           defaultModelIndex.value = index;
-          console.log(`defaultModelIndex: ${defaultModelIndex.value}`);
         })
       );
       setInterval(() => __async(this, null, function* () {
