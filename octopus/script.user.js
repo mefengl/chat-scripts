@@ -61,14 +61,14 @@
     });
   };
 
-  // ../../packages/chatkit/dist/chunk-QXAXOUZS.mjs
+  // ../../packages/chatkit/dist/chunk-XT4TKGC2.mjs
   var __defProp = Object.defineProperty;
   var __export = (target, all) => {
     for (var name in all)
       __defProp(target, name, { get: all[name], enumerable: true });
   };
 
-  // ../../packages/chatkit/dist/chunk-4HXFAWD7.mjs
+  // ../../packages/chatkit/dist/chunk-PFMB2SRX.mjs
   var chatgpt_exports = {};
   __export(chatgpt_exports, {
     getContinueGeneratingButton: () => getContinueGeneratingButton,
@@ -311,7 +311,7 @@
     conversation.classList.add("grid", "grid-cols-2", "place-items-center");
   }
 
-  // ../../packages/chatkit/dist/chunk-SIBHE5N3.mjs
+  // ../../packages/chatkit/dist/chunk-GUZZYTGI.mjs
   var bing_exports = {};
   __export(bing_exports, {
     getActionBar: () => getActionBar,
@@ -459,7 +459,7 @@
     sendButton.addEventListener("mousedown", callback);
   }
 
-  // ../../packages/chatkit/dist/chunk-ABU253YF.mjs
+  // ../../packages/chatkit/dist/chunk-Q66VHVYQ.mjs
   var bard_exports = {};
   __export(bard_exports, {
     getInputArea: () => getInputArea,

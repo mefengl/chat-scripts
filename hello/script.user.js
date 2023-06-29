@@ -330,14 +330,14 @@
     }
   });
 
-  // ../../packages/chatkit/dist/chunk-QXAXOUZS.mjs
+  // ../../packages/chatkit/dist/chunk-XT4TKGC2.mjs
   var __defProp2 = Object.defineProperty;
   var __export = (target, all) => {
     for (var name in all)
       __defProp2(target, name, { get: all[name], enumerable: true });
   };
 
-  // ../../packages/chatkit/dist/chunk-4HXFAWD7.mjs
+  // ../../packages/chatkit/dist/chunk-PFMB2SRX.mjs
   var chatgpt_exports = {};
   __export(chatgpt_exports, {
     getContinueGeneratingButton: () => getContinueGeneratingButton,
