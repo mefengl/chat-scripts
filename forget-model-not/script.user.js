@@ -2,7 +2,7 @@
 // @name         ChatGPT Forget-Model-Not ✨
 // @description  🔄 Automatically select the last model used when it appears in ChatGPT!
 // @author       mefengl
-// @version      0.0.5
+// @version      0.0.6
 // @namespace    https://github.com/mefengl
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @license      MIT
@@ -416,9 +416,12 @@
       }
       update_menu();
       const defaultModelIndex = useLocalStorage("defaultModelIndex", "1");
+      if (menu_all.always_gpt4) {
+        defaultModelIndex.value = 1;
+      }
       setInterval(() => __async(this, null, function* () {
         if ((0, import_chatgpt.hasNewModelSelectButtons)()) {
-          (0, import_chatgpt.getNewModelSelectButtons)()[menu_all.always_gpt4 ? 1 : defaultModelIndex.value].click();
+          (0, import_chatgpt.getNewModelSelectButtons)()[defaultModelIndex.value].click();
         }
         (0, import_chatgpt.getNewModelSelectButtons)().forEach((button, index) => {
           if (button.getAttribute("listener") !== "true") {
