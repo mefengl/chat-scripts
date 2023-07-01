@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name chatgpt-hello
 // @namespace https://github.com/mefengl
-// @version 0.0.4
+// @version 0.0.5
 // @description A template for userscript use chat-kit
 // @author chat-kit
 // @match https://chat.openai.com/*
@@ -198,14 +198,19 @@
         if (!textarea)
           return;
         textarea.value = message;
-        textarea.dispatchEvent(new Event("input"));
+        textarea.dispatchEvent(new Event("input", { bubbles: true }));
       }
       function send3(message) {
-        setTextarea2(message);
-        const textarea = getTextarea2();
-        if (!textarea)
-          return;
-        textarea.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+        return __async(this, null, function* () {
+          setTextarea2(message);
+          const textarea = getTextarea2();
+          if (!textarea)
+            return;
+          while (textarea.value === message) {
+            textarea.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+            yield new Promise((resolve) => setTimeout(resolve, 100));
+          }
+        });
       }
       function regenerate2() {
         const regenerateButton = getRegenerateButton2();
@@ -262,7 +267,7 @@
                   }
                   firstTime = false;
                   const prompt_text = prompt_texts.shift() || "";
-                  send3(prompt_text);
+                  yield send3(prompt_text);
                 }
               }
             }), 0);
@@ -337,7 +342,7 @@
       __defProp2(target, name, { get: all[name], enumerable: true });
   };
 
-  // ../../packages/chatkit/dist/chunk-PFMB2SRX.mjs
+  // ../../packages/chatkit/dist/chunk-AEUEOGOY.mjs
   var chatgpt_exports = {};
   __export(chatgpt_exports, {
     getContinueGeneratingButton: () => getContinueGeneratingButton,
@@ -457,14 +462,19 @@
     if (!textarea)
       return;
     textarea.value = message;
-    textarea.dispatchEvent(new Event("input"));
+    textarea.dispatchEvent(new Event("input", { bubbles: true }));
   }
   function send(message) {
-    setTextarea(message);
-    const textarea = getTextarea();
-    if (!textarea)
-      return;
-    textarea.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    return __async(this, null, function* () {
+      setTextarea(message);
+      const textarea = getTextarea();
+      if (!textarea)
+        return;
+      while (textarea.value === message) {
+        textarea.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+        yield new Promise((resolve) => setTimeout(resolve, 100));
+      }
+    });
   }
   function regenerate() {
     const regenerateButton = getRegenerateButton();
@@ -521,7 +531,7 @@
               }
               firstTime = false;
               const prompt_text = prompt_texts.shift() || "";
-              send(prompt_text);
+              yield send(prompt_text);
             }
           }
         }), 0);

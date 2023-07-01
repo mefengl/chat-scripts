@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Doozy
 // @namespace    https://github.com/mefengl
-// @version      0.8.4
+// @version      0.8.5
 // @description  A wonderful day spent with ChatGPT
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @author       mefengl
@@ -227,14 +227,19 @@
         if (!textarea)
           return;
         textarea.value = message;
-        textarea.dispatchEvent(new Event("input"));
+        textarea.dispatchEvent(new Event("input", { bubbles: true }));
       }
       function send2(message) {
-        setTextarea(message);
-        const textarea = getTextarea();
-        if (!textarea)
-          return;
-        textarea.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+        return __async(this, null, function* () {
+          setTextarea(message);
+          const textarea = getTextarea();
+          if (!textarea)
+            return;
+          while (textarea.value === message) {
+            textarea.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+            yield new Promise((resolve) => setTimeout(resolve, 100));
+          }
+        });
       }
       function regenerate() {
         const regenerateButton = getRegenerateButton2();
@@ -291,7 +296,7 @@
                   }
                   firstTime = false;
                   const prompt_text = prompt_texts.shift() || "";
-                  send2(prompt_text);
+                  yield send2(prompt_text);
                 }
               }
             }), 0);

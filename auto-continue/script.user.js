@@ -2,7 +2,7 @@
 // @name         ChatGPT Auto-Continue 🔄
 // @description  ⚡ Automatically click the 'Continue Generating' button in ChatGPT!
 // @author       mefengl
-// @version      0.0.4
+// @version      0.0.5
 // @namespace    https://github.com/mefengl
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @license      MIT
@@ -219,14 +219,19 @@
         if (!textarea)
           return;
         textarea.value = message;
-        textarea.dispatchEvent(new Event("input"));
+        textarea.dispatchEvent(new Event("input", { bubbles: true }));
       }
       function send(message) {
-        setTextarea(message);
-        const textarea = getTextarea();
-        if (!textarea)
-          return;
-        textarea.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+        return __async(this, null, function* () {
+          setTextarea(message);
+          const textarea = getTextarea();
+          if (!textarea)
+            return;
+          while (textarea.value === message) {
+            textarea.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+            yield new Promise((resolve) => setTimeout(resolve, 100));
+          }
+        });
       }
       function regenerate() {
         const regenerateButton = getRegenerateButton();
@@ -283,7 +288,7 @@
                   }
                   firstTime = false;
                   const prompt_text = prompt_texts.shift() || "";
-                  send(prompt_text);
+                  yield send(prompt_text);
                 }
               }
             }), 0);

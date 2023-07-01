@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name chat-smart
 // @namespace https://github.com/mefengl
-// @version 0.0.4
+// @version 0.0.5
 // @description Just an implementation of an Idea of "SmartGPT"
 // @author mefengl
 // @match https://chat.openai.com/*
@@ -198,14 +198,19 @@
         if (!textarea)
           return;
         textarea.value = message;
-        textarea.dispatchEvent(new Event("input"));
+        textarea.dispatchEvent(new Event("input", { bubbles: true }));
       }
       function send(message) {
-        setTextarea2(message);
-        const textarea = getTextarea();
-        if (!textarea)
-          return;
-        textarea.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+        return __async(this, null, function* () {
+          setTextarea2(message);
+          const textarea = getTextarea();
+          if (!textarea)
+            return;
+          while (textarea.value === message) {
+            textarea.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+            yield new Promise((resolve) => setTimeout(resolve, 100));
+          }
+        });
       }
       function regenerate() {
         const regenerateButton = getRegenerateButton();
@@ -262,7 +267,7 @@
                   }
                   firstTime = false;
                   const prompt_text = prompt_texts.shift() || "";
-                  send(prompt_text);
+                  yield send(prompt_text);
                 }
               }
             }), 0);
