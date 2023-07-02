@@ -2,7 +2,7 @@
 // @name         chatgpt-page-summary-button
 // @description  🍓 let ChatGPT summary the web page you are reading in one click
 // @author       mefengl
-// @version      0.1.6
+// @version      0.1.7
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -369,7 +369,7 @@
     }
     const hideRight = document.title.match(/[\u4e00-\u9fa5]/) ? "-130px" : "-120px";
     const button = document.createElement("button");
-    button.innerHTML = "\u7F51\u9875\u603B\u7ED3";
+    button.innerHTML = "TL;DR";
     button.style.position = "fixed";
     button.style.width = "140px";
     button.style.top = "180px";
