@@ -2,7 +2,7 @@
 // @name         chatgpt-page-summary-button
 // @description  🍓 let ChatGPT summary the web page you are reading in one click
 // @author       mefengl
-// @version      0.1.7
+// @version      0.2.0
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -10,6 +10,8 @@
 // @match        *://*/*
 // @grant        GM_setValue
 // @grant        GM_getValue
+// @grant        GM_registerMenuCommand
+// @grant        GM_unregisterMenuCommand
 // @grant        GM_addValueChangeListener
 
 // @name:en      ChatGPT Page Summary Button
@@ -456,6 +458,64 @@
   }
   var getParagraphs_default = getParagraphs;
 
+  // src/MenuManger/index.ts
+  var MenuManager = class {
+    constructor(default_menu_all) {
+      this.default_menu_all = default_menu_all;
+      this.menu_all = GM_getValue("menu_all", this.default_menu_all);
+      for (const name in this.default_menu_all) {
+        if (!(name in this.menu_all)) {
+          this.menu_all[name] = this.default_menu_all[name];
+        }
+      }
+      this.menu_id = GM_getValue("menu_id", {});
+      this.update_menu();
+    }
+    registerMenuCommand(name, value) {
+      if (name === "chat_language") {
+        return GM_registerMenuCommand(`${name}\uFF1A${value}`, () => {
+          const language = prompt("Please input the language you want to use", value.toString());
+          if (language) {
+            this.menu_all[name] = language;
+            GM_setValue("menu_all", this.menu_all);
+            this.update_menu();
+            location.reload();
+          }
+        });
+      }
+      const menuText = ` ${name}\uFF1A${value ? "\u2705" : "\u274C"}`;
+      const commandCallback = () => {
+        this.menu_all[name] = !this.menu_all[name];
+        GM_setValue("menu_all", this.menu_all);
+        this.update_menu();
+        location.reload();
+      };
+      return GM_registerMenuCommand(menuText, commandCallback);
+    }
+    update_menu() {
+      for (const name in this.menu_all) {
+        const value = this.menu_all[name];
+        if (this.menu_id[name]) {
+          GM_unregisterMenuCommand(this.menu_id[name]);
+        }
+        this.menu_id[name] = this.registerMenuCommand(name, value);
+      }
+      GM_setValue("menu_id", this.menu_id);
+    }
+    getMenuValue(name) {
+      return this.menu_all[name];
+    }
+  };
+  var MenuManger_default = MenuManager;
+
+  // ../../packages/monkit/dist/index.mjs
+  function getLocalLanguage() {
+    const userLanguage = navigator.language;
+    const languageNames = new Intl.DisplayNames([userLanguage], { type: "language" });
+    const readableLanguage = languageNames.of(userLanguage);
+    return readableLanguage;
+  }
+
   // src/index.ts
   function initialize() {
     return __async(this, null, function* () {
@@ -466,6 +526,11 @@
   function main() {
     return __async(this, null, function* () {
       yield initialize();
+      const defaultMenu = {
+        "chat_language": getLocalLanguage() || "Chinese"
+      };
+      const menuManager = new MenuManger_default(defaultMenu);
+      const chatLanguage = menuManager.getMenuValue("chat_language");
       const key = "prompt_texts";
       (0, import_chatgpt.setPromptListener)(key);
       const summaryWeb = () => __async(this, null, function* () {
@@ -475,7 +540,7 @@
           return `"""
 ${paragraph}
 """
-Summarize this paragraph into a bulleted list of the most important information, prefix with emoji. Use Markdown syntax to optimize the display format:`;
+Summarize this paragraph into a bulleted list of the most important information, prefix with emoji, in ${chatLanguage} language. Use Markdown syntax to optimize the display format:`;
         });
         console.log(prompt_texts);
         GM_setValue(key, prompt_texts);
