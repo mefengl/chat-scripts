@@ -2,7 +2,7 @@
 // @name         chatgpt-page-translate-button
 // @description  🍓 let ChatGPT translate the web page you are reading in one click
 // @author       mefengl
-// @version      0.4.8
+// @version      0.4.10
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -365,13 +365,13 @@
   var import_chatgpt = __toESM(require_chatgpt2(), 1);
 
   // src/createButton/index.ts
-  function createButton(callback) {
+  function createButton(callback, buttonText) {
     if (window.location.href.includes("chat.openai")) {
       return;
     }
     const hideRight = document.title.match(/[\u4e00-\u9fa5]/) ? "-130px" : "-120px";
     const button = document.createElement("button");
-    button.innerHTML = "\u7F51\u9875\u7FFB\u8BD1";
+    button.innerHTML = buttonText;
     button.style.position = "fixed";
     button.style.width = "140px";
     button.style.top = "120px";
@@ -458,7 +458,7 @@
   }
   var getParagraphs_default = getParagraphs;
 
-  // src/MenuManger/index.ts
+  // ../../packages/monkit/dist/index.mjs
   var MenuManager = class {
     constructor(default_menu_all) {
       this.default_menu_all = default_menu_all;
@@ -506,9 +506,6 @@
       return this.menu_all[name];
     }
   };
-  var MenuManger_default = MenuManager;
-
-  // ../../packages/monkit/dist/index.mjs
   function getLocalLanguage() {
     const userLanguage = navigator.language;
     const languageNames = new Intl.DisplayNames([userLanguage], { type: "language" });
@@ -529,7 +526,7 @@
       const defaultMenu = {
         "chat_language": getLocalLanguage() || "Chinese"
       };
-      const menuManager = new MenuManger_default(defaultMenu);
+      const menuManager = new MenuManager(defaultMenu);
       const chatLanguage = menuManager.getMenuValue("chat_language");
       const key = "prompt_texts";
       (0, import_chatgpt.setPromptListener)(key);
@@ -543,7 +540,11 @@ translate above paragraphs in """ to ${chatLanguage} with compact and intuitive 
         });
         GM_setValue(key, prompt_texts);
       });
-      createButton_default(translateWeb);
+      let buttonText = "Page Translate";
+      if (navigator.language.startsWith("zh")) {
+        buttonText = "\u9875\u9762\u7FFB\u8BD1";
+      }
+      createButton_default(translateWeb, buttonText);
     });
   }
   (function() {

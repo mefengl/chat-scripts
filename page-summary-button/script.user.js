@@ -2,7 +2,7 @@
 // @name         chatgpt-page-summary-button
 // @description  🍓 let ChatGPT summary the web page you are reading in one click
 // @author       mefengl
-// @version      0.2.0
+// @version      0.2.2
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -365,13 +365,13 @@
   var import_chatgpt = __toESM(require_chatgpt2(), 1);
 
   // src/createButton/index.ts
-  function createButton(callback) {
+  function createButton(callback, buttonText) {
     if (window.location.href.includes("chat.openai")) {
       return;
     }
     const hideRight = document.title.match(/[\u4e00-\u9fa5]/) ? "-130px" : "-120px";
     const button = document.createElement("button");
-    button.innerHTML = "TL;DR";
+    button.innerHTML = buttonText;
     button.style.position = "fixed";
     button.style.width = "140px";
     button.style.top = "180px";
@@ -458,7 +458,7 @@
   }
   var getParagraphs_default = getParagraphs;
 
-  // src/MenuManger/index.ts
+  // ../../packages/monkit/dist/index.mjs
   var MenuManager = class {
     constructor(default_menu_all) {
       this.default_menu_all = default_menu_all;
@@ -506,9 +506,6 @@
       return this.menu_all[name];
     }
   };
-  var MenuManger_default = MenuManager;
-
-  // ../../packages/monkit/dist/index.mjs
   function getLocalLanguage() {
     const userLanguage = navigator.language;
     const languageNames = new Intl.DisplayNames([userLanguage], { type: "language" });
@@ -529,7 +526,7 @@
       const defaultMenu = {
         "chat_language": getLocalLanguage() || "Chinese"
       };
-      const menuManager = new MenuManger_default(defaultMenu);
+      const menuManager = new MenuManager(defaultMenu);
       const chatLanguage = menuManager.getMenuValue("chat_language");
       const key = "prompt_texts";
       (0, import_chatgpt.setPromptListener)(key);
@@ -545,7 +542,11 @@ Summarize this paragraph into a bulleted list of the most important information,
         console.log(prompt_texts);
         GM_setValue(key, prompt_texts);
       });
-      createButton_default(summaryWeb);
+      let buttonText = "Page Summary";
+      if (navigator.language.startsWith("zh")) {
+        buttonText = "\u9875\u9762\u6458\u8981";
+      }
+      createButton_default(summaryWeb, buttonText);
     });
   }
   (function() {
