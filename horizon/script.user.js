@@ -8,7 +8,10 @@
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @license      MIT
 // @match        https://chat.openai.com/*
-// @grant        none
+// @grant        GM_setValue
+// @grant        GM_getValue
+// @grant        GM_registerMenuCommand
+// @grant        GM_unregisterMenuCommand
 
 // @name:en      chatgpt-horizon
 // @description:en Horizontal the conversation in ChatGPT
@@ -359,6 +362,57 @@
 
   // src/index.ts
   var import_chatgpt = __toESM(require_chatgpt2(), 1);
+
+  // ../../packages/monkit/dist/index.mjs
+  var MenuManager = class {
+    constructor(default_menu_all) {
+      this.default_menu_all = default_menu_all;
+      this.menu_all = GM_getValue("menu_all", this.default_menu_all);
+      for (const name in this.default_menu_all) {
+        if (!(name in this.menu_all)) {
+          this.menu_all[name] = this.default_menu_all[name];
+        }
+      }
+      this.menu_id = GM_getValue("menu_id", {});
+      this.update_menu();
+    }
+    registerMenuCommand(name, value) {
+      if (name === "chat_language") {
+        return GM_registerMenuCommand(`${name}\uFF1A${value}`, () => {
+          const language = prompt("Please input the language you want to use", value.toString());
+          if (language) {
+            this.menu_all[name] = language;
+            GM_setValue("menu_all", this.menu_all);
+            this.update_menu();
+            location.reload();
+          }
+        });
+      }
+      const menuText = ` ${name}\uFF1A${value ? "\u2705" : "\u274C"}`;
+      const commandCallback = () => {
+        this.menu_all[name] = !this.menu_all[name];
+        GM_setValue("menu_all", this.menu_all);
+        this.update_menu();
+        location.reload();
+      };
+      return GM_registerMenuCommand(menuText, commandCallback);
+    }
+    update_menu() {
+      for (const name in this.menu_all) {
+        const value = this.menu_all[name];
+        if (this.menu_id[name]) {
+          GM_unregisterMenuCommand(this.menu_id[name]);
+        }
+        this.menu_id[name] = this.registerMenuCommand(name, value);
+      }
+      GM_setValue("menu_id", this.menu_id);
+    }
+    getMenuValue(name) {
+      return this.menu_all[name];
+    }
+  };
+
+  // src/index.ts
   function initialize() {
     return __async(this, null, function* () {
       yield new Promise((resolve) => window.addEventListener("load", resolve));
@@ -368,6 +422,13 @@
   function main() {
     return __async(this, null, function* () {
       yield initialize();
+      const defaultMenu = {
+        "Horizontal": false,
+        "Vertical": true
+      };
+      const menuManager = new MenuManager(defaultMenu);
+      const horizontal = menuManager.getMenuValue("Horizontal");
+      const vertical = menuManager.getMenuValue("Vertical");
       const checkAndUpdateConversation = () => {
         if (!(0, import_chatgpt.isHorizontalConversation)()) {
           (0, import_chatgpt.setHorizontalConversation)();

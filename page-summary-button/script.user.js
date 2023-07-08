@@ -2,7 +2,7 @@
 // @name         chatgpt-page-summary-button
 // @description  🍓 let ChatGPT summary the web page you are reading in one click
 // @author       mefengl
-// @version      0.2.2
+// @version      0.2.3
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -533,9 +533,11 @@
       const summaryWeb = () => __async(this, null, function* () {
         const paragraphs = getParagraphs_default();
         console.log(paragraphs);
-        const prompt_texts = paragraphs.map((paragraph) => {
+        const lenParagraphs = paragraphs.length;
+        const prompt_texts = paragraphs.map((paragraph, index) => {
           return `"""
 ${paragraph}
+${index + 1}/${lenParagraphs}
 """
 Summarize this paragraph into a bulleted list of the most important information, prefix with emoji, in ${chatLanguage} language. Use Markdown syntax to optimize the display format:`;
         });

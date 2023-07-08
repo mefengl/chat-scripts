@@ -2,7 +2,7 @@
 // @name         chatgpt-page-translate-button
 // @description  🍓 let ChatGPT translate the web page you are reading in one click
 // @author       mefengl
-// @version      0.4.10
+// @version      0.4.11
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -532,9 +532,12 @@
       (0, import_chatgpt.setPromptListener)(key);
       const translateWeb = () => __async(this, null, function* () {
         const paragraphs = getParagraphs_default();
-        const prompt_texts = paragraphs.map((paragraph) => {
+        console.log(paragraphs);
+        const lenParagraphs = paragraphs.length;
+        const prompt_texts = paragraphs.map((paragraph, index) => {
           return `"""
 ${paragraph}
+${index + 1}/${lenParagraphs}
 """
 translate above paragraphs in """ to ${chatLanguage} with compact and intuitive format (use Markdown syntax to optimize the display format):`;
         });
