@@ -541,7 +541,6 @@ ${index + 1}/${lenParagraphs}
 """
 Summarize this paragraph into a bulleted list of the most important information, prefix with emoji, in ${chatLanguage} language. Use Markdown syntax to optimize the display format:`;
         });
-        console.log(prompt_texts);
         GM_setValue(key, prompt_texts);
       });
       let buttonText = "Page Summary";
