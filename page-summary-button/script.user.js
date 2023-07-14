@@ -2,7 +2,7 @@
 // @name         chatgpt-page-summary-button
 // @description  🍓 let ChatGPT summary the web page you are reading in one click
 // @author       mefengl
-// @version      0.2.3
+// @version      0.3.0
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -405,30 +405,45 @@
   var createButton_default = createButton;
 
   // src/SimpleArticleSegmentation/index.ts
-  var MIN_PARAGRAPH_LENGTH = 1600;
-  var MAX_PARAGRAPH_LENGTH = 1800;
+  var MIN_PARAGRAPH_LENGTH = 3200;
+  var MAX_PARAGRAPH_LENGTH = 3600;
+  var TOKEN_LETTER_TO_CHARACTER_RATIO = 0.6;
   var SimpleArticleSegmentation = class {
     constructor(text) {
       this.text = text;
     }
+    containsAsianCharacters(str) {
+      const regex = /[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}\p{Script=Hangul}]/gu;
+      return regex.test(str);
+    }
     segment() {
       const paragraphs = [];
-      const sentences = this.text.split(new RegExp("(?<=[.!?])\\s+"));
-      let paragraph = "";
-      for (const sentence of sentences) {
-        if (paragraph.length + sentence.length + 1 <= MAX_PARAGRAPH_LENGTH) {
-          paragraph += (paragraph.length > 0 ? " " : "") + sentence;
-        } else {
-          if (paragraph.length >= MIN_PARAGRAPH_LENGTH) {
-            paragraphs.push(paragraph);
-            paragraph = sentence;
+      if (this.containsAsianCharacters(this.text)) {
+        let i = 0;
+        const maxParagraphLength = Math.floor(MAX_PARAGRAPH_LENGTH * TOKEN_LETTER_TO_CHARACTER_RATIO);
+        while (i < this.text.length) {
+          const paragraph = this.text.substring(i, i + maxParagraphLength);
+          paragraphs.push(paragraph);
+          i += maxParagraphLength;
+        }
+      } else {
+        const sentences = this.text.split(new RegExp("(?<=[.!?])\\s+"));
+        let paragraph = "";
+        for (const sentence of sentences) {
+          if (paragraph.length + sentence.length + 1 <= MAX_PARAGRAPH_LENGTH) {
+            paragraph += (paragraph.length > 0 ? " " : "") + sentence;
           } else {
-            paragraph += " " + sentence;
+            if (paragraph.length >= MIN_PARAGRAPH_LENGTH) {
+              paragraphs.push(paragraph);
+              paragraph = sentence;
+            } else {
+              paragraph += " " + sentence;
+            }
           }
         }
-      }
-      if (paragraph.length >= MIN_PARAGRAPH_LENGTH) {
-        paragraphs.push(paragraph);
+        if (paragraph.length >= MIN_PARAGRAPH_LENGTH) {
+          paragraphs.push(paragraph);
+        }
       }
       return paragraphs;
     }
