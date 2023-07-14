@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         chatgpt-infinite
 // @namespace    https://github.com/mefengl
-// @version      0.4.5
+// @version      0.5.0
 // @description  Infinite auto ask for chatgpt
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @author       mefengl
@@ -375,7 +375,7 @@
       while (true) {
         const lastResponse = (0, import_chatgpt.getLastResponse)();
         const question = extractQuestion(lastResponse);
-        yield (0, import_chatgpt.send)(question + "\nanswer above question, and show me one more further question I can ask in the end prefixed with Q:");
+        yield (0, import_chatgpt.send)(question + "\nanswer above question in 1000 words, and show me one more further question I can ask in the end prefixed with Q:");
         yield (0, import_chatgpt.waitForIdle)();
         yield sleep(1e4);
       }
