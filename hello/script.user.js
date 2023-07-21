@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name chatgpt-hello
 // @namespace https://github.com/mefengl
-// @version 0.0.5
+// @version 0.0.6
 // @description A template for userscript use chat-kit
 // @author chat-kit
 // @match https://chat.openai.com/*
@@ -255,19 +255,24 @@
             }
             last_trigger_time = +/* @__PURE__ */ new Date();
             setTimeout(() => __async(this, null, function* () {
+              var _a;
               const prompt_texts = new_value;
+              const isLong = prompt_texts.length > 60;
               if (prompt_texts.length > 0) {
                 let firstTime = true;
                 while (prompt_texts.length > 0) {
+                  const waitTime = isLong && !document.hasFocus() ? 30 * 1e3 : 2e3;
                   if (!firstTime) {
-                    yield new Promise((resolve) => setTimeout(resolve, 2e3));
+                    yield new Promise((resolve) => setTimeout(resolve, waitTime));
                   }
                   if (!firstTime && isGenerating2()) {
                     continue;
+                  } else if (getContinueGeneratingButton2()) {
+                    (_a = getContinueGeneratingButton2()) == null ? void 0 : _a.click();
+                    continue;
                   }
                   firstTime = false;
-                  const prompt_text = prompt_texts.shift() || "";
-                  yield send3(prompt_text);
+                  yield send3(prompt_texts.shift() || "");
                 }
               }
             }), 0);
@@ -342,7 +347,7 @@
       __defProp2(target, name, { get: all[name], enumerable: true });
   };
 
-  // ../../packages/chatkit/dist/chunk-AEUEOGOY.mjs
+  // ../../packages/chatkit/dist/chunk-WHDI4UMN.mjs
   var chatgpt_exports = {};
   __export(chatgpt_exports, {
     getContinueGeneratingButton: () => getContinueGeneratingButton,
@@ -519,19 +524,24 @@
         }
         last_trigger_time = +/* @__PURE__ */ new Date();
         setTimeout(() => __async(this, null, function* () {
+          var _a;
           const prompt_texts = new_value;
+          const isLong = prompt_texts.length > 60;
           if (prompt_texts.length > 0) {
             let firstTime = true;
             while (prompt_texts.length > 0) {
+              const waitTime = isLong && !document.hasFocus() ? 30 * 1e3 : 2e3;
               if (!firstTime) {
-                yield new Promise((resolve) => setTimeout(resolve, 2e3));
+                yield new Promise((resolve) => setTimeout(resolve, waitTime));
               }
               if (!firstTime && isGenerating()) {
                 continue;
+              } else if (getContinueGeneratingButton()) {
+                (_a = getContinueGeneratingButton()) == null ? void 0 : _a.click();
+                continue;
               }
               firstTime = false;
-              const prompt_text = prompt_texts.shift() || "";
-              yield send(prompt_text);
+              yield send(prompt_texts.shift() || "");
             }
           }
         }), 0);

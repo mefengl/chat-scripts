@@ -2,7 +2,7 @@
 // @name         chatgpt-horizon
 // @description  Horizontal the conversation in ChatGPT
 // @author       mefengl
-// @version      0.2.5
+// @version      0.2.6
 // @namespace    https://github.com/mefengl
 // @require
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -280,19 +280,24 @@
             }
             last_trigger_time = +/* @__PURE__ */ new Date();
             setTimeout(() => __async(this, null, function* () {
+              var _a;
               const prompt_texts = new_value;
+              const isLong = prompt_texts.length > 60;
               if (prompt_texts.length > 0) {
                 let firstTime = true;
                 while (prompt_texts.length > 0) {
+                  const waitTime = isLong && !document.hasFocus() ? 30 * 1e3 : 2e3;
                   if (!firstTime) {
-                    yield new Promise((resolve) => setTimeout(resolve, 2e3));
+                    yield new Promise((resolve) => setTimeout(resolve, waitTime));
                   }
                   if (!firstTime && isGenerating()) {
                     continue;
+                  } else if (getContinueGeneratingButton()) {
+                    (_a = getContinueGeneratingButton()) == null ? void 0 : _a.click();
+                    continue;
                   }
                   firstTime = false;
-                  const prompt_text = prompt_texts.shift() || "";
-                  yield send(prompt_text);
+                  yield send(prompt_texts.shift() || "");
                 }
               }
             }), 0);

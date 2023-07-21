@@ -2,7 +2,7 @@
 // @name         chatgpt-page-translate-button
 // @description  🍓 let ChatGPT translate the web page you are reading in one click
 // @author       mefengl
-// @version      0.6.0
+// @version      0.6.1
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -281,19 +281,24 @@
             }
             last_trigger_time = +/* @__PURE__ */ new Date();
             setTimeout(() => __async(this, null, function* () {
+              var _a;
               const prompt_texts = new_value;
+              const isLong = prompt_texts.length > 60;
               if (prompt_texts.length > 0) {
                 let firstTime = true;
                 while (prompt_texts.length > 0) {
+                  const waitTime = isLong && !document.hasFocus() ? 30 * 1e3 : 2e3;
                   if (!firstTime) {
-                    yield new Promise((resolve) => setTimeout(resolve, 2e3));
+                    yield new Promise((resolve) => setTimeout(resolve, waitTime));
                   }
                   if (!firstTime && isGenerating()) {
                     continue;
+                  } else if (getContinueGeneratingButton()) {
+                    (_a = getContinueGeneratingButton()) == null ? void 0 : _a.click();
+                    continue;
                   }
                   firstTime = false;
-                  const prompt_text = prompt_texts.shift() || "";
-                  yield send(prompt_text);
+                  yield send(prompt_texts.shift() || "");
                 }
               }
             }), 0);
@@ -3230,79 +3235,31 @@
   var import_sweetalert2 = __toESM(require_sweetalert2_all(), 1);
   function initialize() {
     return __async(this, null, function* () {
-      yield new Promise((resolve) => window.addEventListener("load", resolve));
-      yield new Promise((resolve) => setTimeout(resolve, 1e3));
+      yield new Promise((r) => window.addEventListener("load", r));
+      yield new Promise((r) => setTimeout(r, 1e3));
     });
   }
-  function main() {
-    return __async(this, null, function* () {
-      yield initialize();
-      const defaultMenu = {
-        "chat_language": getLocalLanguage() || "Chinese"
-      };
-      const menuManager = new MenuManager(defaultMenu);
-      const chatLanguage = menuManager.getMenuValue("chat_language");
-      GM_registerMenuCommand("\u{1F4DD} Input", () => {
-        import_sweetalert2.default.fire({
-          title: "Please input the text you want to deal with",
-          input: "text",
-          inputPlaceholder: "Enter your text here"
-        }).then((result) => {
-          if (result.value) {
-            const text = result.value;
-            const segmenter = new SimpleArticleSegmentation_default(text);
-            const paragraphs = segmenter.segment();
-            console.log(paragraphs);
-            const lenParagraphs = paragraphs.length;
-            const prompt_texts = paragraphs.map((paragraph, index) => {
-              return `"""
-${paragraph}
-${index + 1}/${lenParagraphs}
-"""`;
-            });
-            GM_setValue("prompt_texts", prompt_texts.map(
-              (p) => `Answer me in ${chatLanguage} language with good segmentation,
-translate above paragraphs:
+  (() => __async(void 0, null, function* () {
+    yield initialize();
+    const menu = new MenuManager({ "chat_language": getLocalLanguage() || "Chinese" });
+    const lang = menu.getMenuValue("chat_language");
+    const setPrompts = (paras) => GM_setValue("prompt_texts", paras.map((p, i) => `Answer me in ${lang} language with good segmentation,
+Translate below paragraphs:
 
-${p}
+"""${p}${i + 1}/${paras.length}"""
 
-ps: answer in ${chatLanguage} language`
-            ));
-          }
-        });
+ps: answer in ${lang} language`));
+    GM_registerMenuCommand("\u{1F4DD} Input", () => {
+      import_sweetalert2.default.fire({ title: "Please input the text you want to deal with", input: "text", inputPlaceholder: "Enter your text here" }).then((result) => {
+        if (result.value)
+          setPrompts(new SimpleArticleSegmentation_default(result.value).segment());
       });
-      const key = "prompt_texts";
-      (0, import_chatgpt.setPromptListener)(key);
-      const translateWeb = () => __async(this, null, function* () {
-        const paragraphs = getParagraphs_default();
-        console.log(paragraphs);
-        const lenParagraphs = paragraphs.length;
-        const prompt_texts = paragraphs.map((paragraph, index) => {
-          return `"""
-${paragraph}
-${index + 1}/${lenParagraphs}
-"""
-translate above paragraphs:`;
-        });
-        GM_setValue("prompt_texts", prompt_texts.map(
-          (p) => `Answer me in ${chatLanguage} language with good segmentation,
-translate above paragraphs:
-
-${p}
-
-ps: answer in ${chatLanguage} language`
-        ));
-      });
-      let buttonText = "Page Translate";
-      if (navigator.language.startsWith("zh")) {
-        buttonText = "\u9875\u9762\u7FFB\u8BD1";
-      }
-      createButton_default(translateWeb, buttonText);
     });
-  }
-  (function() {
-    main();
-  })();
+    (0, import_chatgpt.setPromptListener)("prompt_texts");
+    createButton_default(() => __async(void 0, null, function* () {
+      return setPrompts(getParagraphs_default());
+    }), navigator.language.startsWith("zh") ? "\u9875\u9762\u7FFB\u8BD1" : "Page Translate");
+  }))();
 })();
 /*! Bundled license information:
 
