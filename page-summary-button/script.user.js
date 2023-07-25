@@ -2,7 +2,7 @@
 // @name         chatgpt-page-summary-button
 // @description  🍓 let ChatGPT summary the web page you are reading in one click
 // @author       mefengl
-// @version      0.4.2
+// @version      0.5.0
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -281,7 +281,7 @@
             }
             last_trigger_time = +/* @__PURE__ */ new Date();
             setTimeout(() => __async(this, null, function* () {
-              var _a;
+              var _a, _b;
               const prompt_texts = new_value;
               const isLong = prompt_texts.length > 60;
               if (prompt_texts.length > 0) {
@@ -295,6 +295,10 @@
                     continue;
                   } else if (getContinueGeneratingButton()) {
                     (_a = getContinueGeneratingButton()) == null ? void 0 : _a.click();
+                    continue;
+                  } else if (getRegenerateButton() && !getTextarea()) {
+                    yield new Promise((resolve) => setTimeout(resolve, 10 * 1e3));
+                    (_b = getRegenerateButton()) == null ? void 0 : _b.click();
                     continue;
                   }
                   firstTime = false;
@@ -3243,12 +3247,12 @@
     yield initialize();
     const menu = new MenuManager({ "chat_language": getLocalLanguage() || "Chinese" });
     const lang = menu.getMenuValue("chat_language");
-    const setPrompts = (paras) => GM_setValue("prompt_texts", paras.map((p, i) => `Answer me in ${lang} language with good segmentation,
+    const setPrompts = (paras) => GM_setValue("prompt_texts", paras.map((p, i) => `Answer me in several paragraphs in ${lang} language,
 Summarize below paragraph into a bulleted list of the most important information, prefix with emoji:
 
 """${p}${i + 1}/${paras.length}"""
 
-ps: answer in ${lang} language`));
+ps: answer in several paragraphs in ${lang} language`));
     GM_registerMenuCommand("\u{1F4DD} Input", () => {
       import_sweetalert2.default.fire({ title: "Please input the text you want to deal with", input: "text", inputPlaceholder: "Enter your text here" }).then((result) => {
         if (result.value)

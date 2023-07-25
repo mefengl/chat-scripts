@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         chatgpt sensible
 // @namespace    https://github.com/mefengl
-// @version      0.7.6
+// @version      0.7.7
 // @description  sensible to me
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @author       mefengl
@@ -276,7 +276,7 @@
             }
             last_trigger_time = +/* @__PURE__ */ new Date();
             setTimeout(() => __async(this, null, function* () {
-              var _a;
+              var _a, _b;
               const prompt_texts = new_value;
               const isLong = prompt_texts.length > 60;
               if (prompt_texts.length > 0) {
@@ -290,6 +290,10 @@
                     continue;
                   } else if (getContinueGeneratingButton()) {
                     (_a = getContinueGeneratingButton()) == null ? void 0 : _a.click();
+                    continue;
+                  } else if (getRegenerateButton() && !getTextarea()) {
+                    yield new Promise((resolve) => setTimeout(resolve, 10 * 1e3));
+                    (_b = getRegenerateButton()) == null ? void 0 : _b.click();
                     continue;
                   }
                   firstTime = false;

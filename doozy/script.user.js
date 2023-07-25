@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Doozy
 // @namespace    https://github.com/mefengl
-// @version      0.8.7
+// @version      0.8.8
 // @description  A wonderful day spent with ChatGPT
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @author       mefengl
@@ -284,7 +284,7 @@
             }
             last_trigger_time = +/* @__PURE__ */ new Date();
             setTimeout(() => __async(this, null, function* () {
-              var _a;
+              var _a, _b;
               const prompt_texts = new_value;
               const isLong = prompt_texts.length > 60;
               if (prompt_texts.length > 0) {
@@ -298,6 +298,10 @@
                     continue;
                   } else if (getContinueGeneratingButton()) {
                     (_a = getContinueGeneratingButton()) == null ? void 0 : _a.click();
+                    continue;
+                  } else if (getRegenerateButton2() && !getTextarea()) {
+                    yield new Promise((resolve) => setTimeout(resolve, 10 * 1e3));
+                    (_b = getRegenerateButton2()) == null ? void 0 : _b.click();
                     continue;
                   }
                   firstTime = false;
