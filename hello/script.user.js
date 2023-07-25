@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name chatgpt-hello
 // @namespace https://github.com/mefengl
-// @version 0.0.8
+// @version 0.0.9
 // @description A template for userscript use chat-kit
 // @author chat-kit
 // @match https://chat.openai.com/*
@@ -91,6 +91,7 @@
         getNav: () => getNav2,
         getNewModelSelectButtons: () => getNewModelSelectButtons2,
         getRegenerateButton: () => getRegenerateButton2,
+        getResponseElementHTMLs: () => getResponseElementHTMLs2,
         getStopGeneratingButton: () => getStopGeneratingButton2,
         getSubmitButton: () => getSubmitButton2,
         getTextarea: () => getTextarea2,
@@ -177,6 +178,9 @@
           return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("stop generating");
         });
         return result;
+      }
+      function getResponseElementHTMLs2() {
+        return Array.from(document.querySelectorAll(".markdown")).map((m) => m.innerHTML);
       }
       function getLastResponseElement2() {
         const responseElements = document.querySelectorAll(".group.w-full");
@@ -351,7 +355,7 @@
       __defProp2(target, name, { get: all[name], enumerable: true });
   };
 
-  // ../../packages/chatkit/dist/chunk-C6TRL3AT.mjs
+  // ../../packages/chatkit/dist/chunk-APRDSJFS.mjs
   var chatgpt_exports = {};
   __export(chatgpt_exports, {
     getContinueGeneratingButton: () => getContinueGeneratingButton,
@@ -365,6 +369,7 @@
     getNav: () => getNav,
     getNewModelSelectButtons: () => getNewModelSelectButtons,
     getRegenerateButton: () => getRegenerateButton,
+    getResponseElementHTMLs: () => getResponseElementHTMLs,
     getStopGeneratingButton: () => getStopGeneratingButton,
     getSubmitButton: () => getSubmitButton,
     getTextarea: () => getTextarea,
@@ -450,6 +455,9 @@
       return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("stop generating");
     });
     return result;
+  }
+  function getResponseElementHTMLs() {
+    return Array.from(document.querySelectorAll(".markdown")).map((m) => m.innerHTML);
   }
   function getLastResponseElement() {
     const responseElements = document.querySelectorAll(".group.w-full");

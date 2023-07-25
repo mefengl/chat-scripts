@@ -2,7 +2,7 @@
 // @name         ChatGPT Forget-Model-Not 🌺
 // @description  See you again~
 // @author       mefengl
-// @version      0.0.12
+// @version      0.0.13
 // @namespace    https://github.com/mefengl
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @license      MIT
@@ -129,6 +129,7 @@
         getNav: () => getNav,
         getNewModelSelectButtons: () => getNewModelSelectButtons2,
         getRegenerateButton: () => getRegenerateButton,
+        getResponseElementHTMLs: () => getResponseElementHTMLs,
         getStopGeneratingButton: () => getStopGeneratingButton,
         getSubmitButton: () => getSubmitButton,
         getTextarea: () => getTextarea,
@@ -215,6 +216,9 @@
           return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("stop generating");
         });
         return result;
+      }
+      function getResponseElementHTMLs() {
+        return Array.from(document.querySelectorAll(".markdown")).map((m) => m.innerHTML);
       }
       function getLastResponseElement() {
         const responseElements = document.querySelectorAll(".group.w-full");

@@ -2,7 +2,7 @@
 // @name         chatgpt-page-translate-button
 // @description  🍓 let ChatGPT translate the web page you are reading in one click
 // @author       mefengl
-// @version      0.7.0
+// @version      0.8.0
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -117,6 +117,7 @@
         getNav: () => getNav,
         getNewModelSelectButtons: () => getNewModelSelectButtons,
         getRegenerateButton: () => getRegenerateButton,
+        getResponseElementHTMLs: () => getResponseElementHTMLs2,
         getStopGeneratingButton: () => getStopGeneratingButton,
         getSubmitButton: () => getSubmitButton,
         getTextarea: () => getTextarea,
@@ -203,6 +204,9 @@
           return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("stop generating");
         });
         return result;
+      }
+      function getResponseElementHTMLs2() {
+        return Array.from(document.querySelectorAll(".markdown")).map((m) => m.innerHTML);
       }
       function getLastResponseElement() {
         const responseElements = document.querySelectorAll(".group.w-full");
@@ -1722,7 +1726,7 @@
         const showLoading = (buttonToReplace) => {
           let popup = getPopup();
           if (!popup) {
-            new Swal2();
+            new Swal3();
           }
           popup = getPopup();
           const loader = getLoader();
@@ -2413,11 +2417,11 @@
           return params;
         };
         function fire() {
-          const Swal3 = this;
+          const Swal4 = this;
           for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
             args[_key] = arguments[_key];
           }
-          return new Swal3(...args);
+          return new Swal4(...args);
         }
         function mixin(mixinParams) {
           class MixinSwal extends this {
@@ -3047,9 +3051,9 @@
         });
         SweetAlert.DismissReason = DismissReason;
         SweetAlert.version = "11.7.18";
-        const Swal2 = SweetAlert;
-        Swal2.default = Swal2;
-        return Swal2;
+        const Swal3 = SweetAlert;
+        Swal3.default = Swal3;
+        return Swal3;
       });
       if (typeof exports !== "undefined" && exports.Sweetalert2) {
         exports.swal = exports.sweetAlert = exports.Swal = exports.SweetAlert = exports.Sweetalert2;
@@ -3070,6 +3074,104 @@
 
   // src/index.ts
   var import_chatgpt = __toESM(require_chatgpt2(), 1);
+
+  // ../../packages/monkit/dist/index.mjs
+  var MenuManager = class {
+    constructor(default_menu_all) {
+      this.default_menu_all = default_menu_all;
+      this.menu_all = GM_getValue("menu_all", this.default_menu_all);
+      for (const name in this.default_menu_all) {
+        if (!(name in this.menu_all)) {
+          this.menu_all[name] = this.default_menu_all[name];
+        }
+      }
+      this.menu_id = GM_getValue("menu_id", {});
+      this.update_menu();
+    }
+    registerMenuCommand(name, value) {
+      if (name === "chat_language") {
+        return GM_registerMenuCommand(`${name}\uFF1A${value}`, () => {
+          const language = prompt("Please input the language you want to use", value.toString());
+          if (language) {
+            this.menu_all[name] = language;
+            GM_setValue("menu_all", this.menu_all);
+            this.update_menu();
+            location.reload();
+          }
+        });
+      }
+      const menuText = ` ${name}\uFF1A${value ? "\u2705" : "\u274C"}`;
+      const commandCallback = () => {
+        this.menu_all[name] = !this.menu_all[name];
+        GM_setValue("menu_all", this.menu_all);
+        this.update_menu();
+        location.reload();
+      };
+      return GM_registerMenuCommand(menuText, commandCallback);
+    }
+    update_menu() {
+      for (const name in this.menu_all) {
+        const value = this.menu_all[name];
+        if (this.menu_id[name]) {
+          GM_unregisterMenuCommand(this.menu_id[name]);
+        }
+        this.menu_id[name] = this.registerMenuCommand(name, value);
+      }
+      GM_setValue("menu_id", this.menu_id);
+    }
+    getMenuValue(name) {
+      return this.menu_all[name];
+    }
+  };
+  function getLocalLanguage() {
+    const userLanguage = navigator.language;
+    const languageNames = new Intl.DisplayNames([userLanguage], { type: "language" });
+    const readableLanguage = languageNames.of(userLanguage);
+    return readableLanguage;
+  }
+
+  // ../../packages/page-button/dist/index.mjs
+  var import_sweetalert2 = __toESM(require_sweetalert2_all(), 1);
+  function displayHTML(html) {
+    let screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    let swalWidth = screenWidth < 800 ? "100%" : "800px";
+    import_sweetalert2.default.fire({
+      title: "",
+      html: html.join("<br />"),
+      width: swalWidth,
+      padding: "3em",
+      background: "#fff",
+      backdrop: "rgba(128,128,128,0.4)",
+      showConfirmButton: false,
+      showClass: { popup: "", backdrop: "" },
+      customClass: { htmlContainer: "text-left scrollable" },
+      willClose: () => {
+        const scrollable = document.querySelector(".scrollable");
+        if (scrollable) {
+          localStorage.setItem("scrollPos", `${scrollable.scrollTop}`);
+        }
+      },
+      didOpen: () => {
+        const scrollable = document.querySelector(".scrollable");
+        if (scrollable) {
+          scrollable.scrollTop = parseInt(localStorage.getItem("scrollPos") || "0");
+        }
+      }
+    });
+    if (!document.head.querySelector("#readModeStyle")) {
+      let style = document.createElement("style");
+      style.type = "text/css";
+      style.id = "readModeStyle";
+      style.innerHTML = `
+      .text-left { text-align: left !important; }
+      .scrollable { max-height: 80vh; overflow-y: auto; }
+  `;
+      document.head.appendChild(style);
+    }
+  }
+
+  // src/index.ts
+  var import_sweetalert22 = __toESM(require_sweetalert2_all(), 1);
 
   // src/createButton/index.ts
   function createButton(callback, buttonText) {
@@ -3180,63 +3282,7 @@
   }
   var getParagraphs_default = getParagraphs;
 
-  // ../../packages/monkit/dist/index.mjs
-  var MenuManager = class {
-    constructor(default_menu_all) {
-      this.default_menu_all = default_menu_all;
-      this.menu_all = GM_getValue("menu_all", this.default_menu_all);
-      for (const name in this.default_menu_all) {
-        if (!(name in this.menu_all)) {
-          this.menu_all[name] = this.default_menu_all[name];
-        }
-      }
-      this.menu_id = GM_getValue("menu_id", {});
-      this.update_menu();
-    }
-    registerMenuCommand(name, value) {
-      if (name === "chat_language") {
-        return GM_registerMenuCommand(`${name}\uFF1A${value}`, () => {
-          const language = prompt("Please input the language you want to use", value.toString());
-          if (language) {
-            this.menu_all[name] = language;
-            GM_setValue("menu_all", this.menu_all);
-            this.update_menu();
-            location.reload();
-          }
-        });
-      }
-      const menuText = ` ${name}\uFF1A${value ? "\u2705" : "\u274C"}`;
-      const commandCallback = () => {
-        this.menu_all[name] = !this.menu_all[name];
-        GM_setValue("menu_all", this.menu_all);
-        this.update_menu();
-        location.reload();
-      };
-      return GM_registerMenuCommand(menuText, commandCallback);
-    }
-    update_menu() {
-      for (const name in this.menu_all) {
-        const value = this.menu_all[name];
-        if (this.menu_id[name]) {
-          GM_unregisterMenuCommand(this.menu_id[name]);
-        }
-        this.menu_id[name] = this.registerMenuCommand(name, value);
-      }
-      GM_setValue("menu_id", this.menu_id);
-    }
-    getMenuValue(name) {
-      return this.menu_all[name];
-    }
-  };
-  function getLocalLanguage() {
-    const userLanguage = navigator.language;
-    const languageNames = new Intl.DisplayNames([userLanguage], { type: "language" });
-    const readableLanguage = languageNames.of(userLanguage);
-    return readableLanguage;
-  }
-
   // src/index.ts
-  var import_sweetalert2 = __toESM(require_sweetalert2_all(), 1);
   function initialize() {
     return __async(this, null, function* () {
       yield new Promise((r) => window.addEventListener("load", r));
@@ -3254,7 +3300,7 @@ Translate below paragraphs:
 
 ps: answer in several paragraphs in ${lang} language`));
     GM_registerMenuCommand("\u{1F4DD} Input", () => {
-      import_sweetalert2.default.fire({ title: "Please input the text you want to deal with", input: "text", inputPlaceholder: "Enter your text here" }).then((result) => {
+      import_sweetalert22.default.fire({ title: "Please input the text you want to deal with", input: "text", inputPlaceholder: "Enter your text here" }).then((result) => {
         if (result.value)
           setPrompts(new SimpleArticleSegmentation_default(result.value).segment());
       });
@@ -3263,6 +3309,14 @@ ps: answer in several paragraphs in ${lang} language`));
     createButton_default(() => __async(void 0, null, function* () {
       return setPrompts(getParagraphs_default());
     }), navigator.language.startsWith("zh") ? "\u9875\u9762\u7FFB\u8BD1" : "Page Translate");
+    function displayReadMode() {
+      let html = (0, import_chatgpt.getResponseElementHTMLs)();
+      if (html.length === 0) {
+        html = ["<p>No responses available.</p>"];
+      }
+      displayHTML(html);
+    }
+    GM_registerMenuCommand("\u{1F4D6} Read Mode", displayReadMode);
   }))();
 })();
 /*! Bundled license information:

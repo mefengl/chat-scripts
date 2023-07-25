@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         chatgpt twice
 // @namespace    https://github.com/mefengl
-// @version      0.1.8
+// @version      0.1.9
 // @description  ask question twice!
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @author       mefengl
@@ -112,6 +112,7 @@
         getNav: () => getNav,
         getNewModelSelectButtons: () => getNewModelSelectButtons,
         getRegenerateButton: () => getRegenerateButton,
+        getResponseElementHTMLs: () => getResponseElementHTMLs,
         getStopGeneratingButton: () => getStopGeneratingButton,
         getSubmitButton: () => getSubmitButton,
         getTextarea: () => getTextarea,
@@ -198,6 +199,9 @@
           return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("stop generating");
         });
         return result;
+      }
+      function getResponseElementHTMLs() {
+        return Array.from(document.querySelectorAll(".markdown")).map((m) => m.innerHTML);
       }
       function getLastResponseElement2() {
         const responseElements = document.querySelectorAll(".group.w-full");
