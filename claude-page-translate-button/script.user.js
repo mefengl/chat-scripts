@@ -2,7 +2,7 @@
 // @name         claude-page-translate-button
 // @description  🍓 let Claude translate the web page you are reading in one click
 // @author       mefengl
-// @version      0.2.1
+// @version      0.2.4
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=claude.ai
@@ -135,6 +135,10 @@
         const fieldset = getFieldset();
         return fieldset.querySelector("button");
       }
+      function isGenerating() {
+        var _a;
+        return (_a = getSubmitButton()) == null ? void 0 : _a.hasAttribute("disabled");
+      }
       function send(message) {
         return __async(this, null, function* () {
           var _a;
@@ -153,10 +157,6 @@
             yield new Promise((resolve) => setTimeout(resolve, 1e3));
           }
         });
-      }
-      function isGenerating() {
-        var _a;
-        return (_a = getSubmitButton()) == null ? void 0 : _a.hasAttribute("disabled");
       }
       function setPromptListener2(key = "prompt_texts") {
         let last_trigger_time = +/* @__PURE__ */ new Date();
@@ -3077,7 +3077,7 @@
     const setPrompts = (paras) => GM_setValue("prompt_texts", paras.map((p, i) => `Answer me in several paragraphs in ${lang} language,
 Translate below paragraphs:
 
-"""${p}${i + 1}/${paras.length}"""
+${p}${i + 1}/${paras.length}
 
 ps: answer in several paragraphs in ${lang} language`));
     GM_registerMenuCommand("\u{1F4DD} Input", () => {

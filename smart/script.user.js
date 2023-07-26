@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name chat-smart
 // @namespace https://github.com/mefengl
-// @version 0.0.9
+// @version 0.0.11
 // @description Just an implementation of an Idea of "SmartGPT"
 // @author mefengl
 // @match https://chat.openai.com/*

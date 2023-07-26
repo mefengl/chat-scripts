@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name chatgpt-hello
 // @namespace https://github.com/mefengl
-// @version 0.0.9
+// @version 0.0.11
 // @description A template for userscript use chat-kit
 // @author chat-kit
 // @match https://chat.openai.com/*

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         chat-octopus
 // @namespace    https://github.com/mefengl
-// @version      0.2.22
+// @version      0.2.24
 // @description  🐙 let octopus send multiple messages for you
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @author       mefengl
@@ -477,18 +477,29 @@
     sendButton.addEventListener("mousedown", callback);
   }
 
-  // ../../packages/chatkit/dist/chunk-Q66VHVYQ.mjs
+  // ../../packages/chatkit/dist/chunk-DNYYKX24.mjs
   var bard_exports = {};
   __export(bard_exports, {
     getInputArea: () => getInputArea,
     getLastPrompt: () => getLastPrompt,
     getLatestPromptText: () => getLatestPromptText,
     getRegenerateButton: () => getRegenerateButton3,
+    getSparkleResting: () => getSparkleResting,
+    getSparkleThinking: () => getSparkleThinking,
     getSubmitButton: () => getSubmitButton3,
     getTextarea: () => getTextarea3,
+    isGenerating: () => isGenerating2,
     onSend: () => onSend3,
-    send: () => send3
+    send: () => send3,
+    setPromptListener: () => setPromptListener2,
+    setTextarea: () => setTextarea2
   });
+  function getSparkleResting() {
+    return document.querySelector("img[src*=sparkle_resting]");
+  }
+  function getSparkleThinking() {
+    return document.querySelector("img[src*=sparkle_thinking]");
+  }
   function getSubmitButton3() {
     return document.querySelector('button[aria-label="Send message"]');
   }
@@ -498,6 +509,13 @@
   function getTextarea3() {
     const inputArea = getInputArea();
     return inputArea ? inputArea.querySelector("textarea") : null;
+  }
+  function setTextarea2(message) {
+    const textarea = getTextarea3();
+    if (!textarea)
+      return;
+    textarea.value = message;
+    textarea.dispatchEvent(new Event("input", { bubbles: true }));
   }
   function getRegenerateButton3() {
     return document.querySelector('button[aria-label="Retry"]');
@@ -514,16 +532,27 @@
     const lastPromptText = lastPrompt.textContent;
     return lastPromptText || "";
   }
-  function send3(text) {
-    const textarea = getTextarea3();
-    if (!textarea)
-      return;
-    textarea.value = text;
-    textarea.dispatchEvent(new Event("input"));
-    const submitButton = getSubmitButton3();
-    if (!submitButton)
-      return;
-    submitButton.click();
+  function isGenerating2() {
+    return getSparkleThinking() !== null;
+  }
+  function send3(message) {
+    return __async(this, null, function* () {
+      var _a;
+      setTextarea2(message);
+      const textarea = getTextarea3();
+      if (!textarea)
+        return;
+      while (textarea.value === message) {
+        yield new Promise((resolve) => setTimeout(resolve, 100));
+        (_a = getSubmitButton3()) == null ? void 0 : _a.click();
+      }
+      for (let i = 0; i < 10; i++) {
+        if (isGenerating2()) {
+          return;
+        }
+        yield new Promise((resolve) => setTimeout(resolve, 1e3));
+      }
+    });
   }
   function onSend3(callback) {
     const textarea = getTextarea3();
@@ -538,6 +567,36 @@
     if (!sendButton)
       return;
     sendButton.addEventListener("mousedown", callback);
+  }
+  function setPromptListener2(key = "prompt_texts") {
+    let last_trigger_time = +/* @__PURE__ */ new Date();
+    if (location.href.includes("bard.google")) {
+      GM_addValueChangeListener(key, (name, old_value, new_value) => __async(this, null, function* () {
+        if (+/* @__PURE__ */ new Date() - last_trigger_time < 500) {
+          return;
+        }
+        last_trigger_time = +/* @__PURE__ */ new Date();
+        setTimeout(() => __async(this, null, function* () {
+          const prompt_texts = new_value;
+          const isLong = prompt_texts.length > 60;
+          if (prompt_texts.length > 0) {
+            let firstTime = true;
+            while (prompt_texts.length > 0) {
+              const waitTime = isLong && !document.hasFocus() ? 30 * 1e3 : 2e3;
+              if (!firstTime) {
+                yield new Promise((resolve) => setTimeout(resolve, waitTime));
+              }
+              if (!firstTime && isGenerating2()) {
+                continue;
+              }
+              firstTime = false;
+              yield send3(prompt_texts.shift() || "");
+            }
+          }
+        }), 0);
+        GM_setValue(key, []);
+      }));
+    }
   }
 
   // src/index.js
