@@ -2,7 +2,7 @@
 // @name         chatgpt-page-translate-button
 // @description  🍓 let ChatGPT translate the web page you are reading in one click
 // @author       mefengl
-// @version      0.8.0
+// @version      0.8.2
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -3133,41 +3133,51 @@
   // ../../packages/page-button/dist/index.mjs
   var import_sweetalert2 = __toESM(require_sweetalert2_all(), 1);
   function displayHTML(html) {
-    let screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-    let swalWidth = screenWidth < 800 ? "100%" : "800px";
-    import_sweetalert2.default.fire({
-      title: "",
-      html: html.join("<br />"),
-      width: swalWidth,
-      padding: "3em",
-      background: "#fff",
-      backdrop: "rgba(128,128,128,0.4)",
-      showConfirmButton: false,
-      showClass: { popup: "", backdrop: "" },
-      customClass: { htmlContainer: "text-left scrollable" },
-      willClose: () => {
-        const scrollable = document.querySelector(".scrollable");
-        if (scrollable) {
-          localStorage.setItem("scrollPos", `${scrollable.scrollTop}`);
-        }
-      },
-      didOpen: () => {
-        const scrollable = document.querySelector(".scrollable");
-        if (scrollable) {
-          scrollable.scrollTop = parseInt(localStorage.getItem("scrollPos") || "0");
-        }
+    return __async(this, null, function* () {
+      let screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+      let swalWidth = screenWidth < 800 ? "80%" : "800px";
+      if (!document.head.querySelector("#LXGWStyle")) {
+        let link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = "https://cdnjs.cloudflare.com/ajax/libs/lxgw-wenkai-screen-webfont/1.7.0/style.css";
+        link.id = "LXGWStyle";
+        document.head.appendChild(link);
       }
-    });
-    if (!document.head.querySelector("#readModeStyle")) {
-      let style = document.createElement("style");
-      style.type = "text/css";
-      style.id = "readModeStyle";
-      style.innerHTML = `
+      if (!document.head.querySelector("#readModeStyle")) {
+        let style = document.createElement("style");
+        style.type = "text/css";
+        style.id = "readModeStyle";
+        style.innerHTML = `
       .text-left { text-align: left !important; }
-      .scrollable { max-height: 80vh; overflow-y: auto; }
+      .scrollable { max-height: 90vh; overflow-y: auto; }
+      .swal-font { font-family: "LXGW WenKai Screen", sans-serif; }
   `;
-      document.head.appendChild(style);
-    }
+        document.head.appendChild(style);
+      }
+      import_sweetalert2.default.fire({
+        title: "",
+        html: html.join("<br />"),
+        width: swalWidth,
+        padding: "0em",
+        background: "#fff",
+        backdrop: "rgba(128,128,128,0.4)",
+        showConfirmButton: false,
+        showClass: { popup: "", backdrop: "" },
+        customClass: { htmlContainer: "text-left scrollable swal-font" },
+        willClose: () => {
+          const scrollable = document.querySelector(".scrollable");
+          if (scrollable) {
+            localStorage.setItem("scrollPos", `${scrollable.scrollTop}`);
+          }
+        },
+        didOpen: () => {
+          const scrollable = document.querySelector(".scrollable");
+          if (scrollable) {
+            scrollable.scrollTop = parseInt(localStorage.getItem("scrollPos") || "0");
+          }
+        }
+      });
+    });
   }
 
   // src/index.ts
