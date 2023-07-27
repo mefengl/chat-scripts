@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         chat-octopus
 // @namespace    https://github.com/mefengl
-// @version      0.2.24
+// @version      0.2.25
 // @description  🐙 let octopus send multiple messages for you
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @author       mefengl
@@ -477,13 +477,14 @@
     sendButton.addEventListener("mousedown", callback);
   }
 
-  // ../../packages/chatkit/dist/chunk-DNYYKX24.mjs
+  // ../../packages/chatkit/dist/chunk-C57HXSKL.mjs
   var bard_exports = {};
   __export(bard_exports, {
     getInputArea: () => getInputArea,
     getLastPrompt: () => getLastPrompt,
     getLatestPromptText: () => getLatestPromptText,
     getRegenerateButton: () => getRegenerateButton3,
+    getResponseElementHTMLs: () => getResponseElementHTMLs2,
     getSparkleResting: () => getSparkleResting,
     getSparkleThinking: () => getSparkleThinking,
     getSubmitButton: () => getSubmitButton3,
@@ -519,6 +520,9 @@
   }
   function getRegenerateButton3() {
     return document.querySelector('button[aria-label="Retry"]');
+  }
+  function getResponseElementHTMLs2() {
+    return Array.from(document.querySelectorAll(".model-response-text .markdown")).map((m) => m.innerHTML);
   }
   function getLastPrompt() {
     const promptElements = document.querySelectorAll(".query-text");

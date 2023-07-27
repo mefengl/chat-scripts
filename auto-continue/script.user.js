@@ -2,7 +2,7 @@
 // @name         ChatGPT Auto-Continue 🔄
 // @description  ⚡ Automatically click the 'Continue Generating' button in ChatGPT!
 // @author       mefengl
-// @version      0.0.11
+// @version      0.0.12
 // @namespace    https://github.com/mefengl
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @license      MIT

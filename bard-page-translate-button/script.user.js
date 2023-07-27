@@ -2,7 +2,7 @@
 // @name         bard-page-translate-button
 // @description  🍓 let Bard translate the web page you are reading in one click
 // @author       mefengl
-// @version      0.1.2
+// @version      0.1.3
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=bard.google.com
@@ -110,6 +110,7 @@
         getLastPrompt: () => getLastPrompt,
         getLatestPromptText: () => getLatestPromptText,
         getRegenerateButton: () => getRegenerateButton,
+        getResponseElementHTMLs: () => getResponseElementHTMLs,
         getSparkleResting: () => getSparkleResting,
         getSparkleThinking: () => getSparkleThinking,
         getSubmitButton: () => getSubmitButton,
@@ -146,6 +147,9 @@
       }
       function getRegenerateButton() {
         return document.querySelector('button[aria-label="Retry"]');
+      }
+      function getResponseElementHTMLs() {
+        return Array.from(document.querySelectorAll(".model-response-text .markdown")).map((m) => m.innerHTML);
       }
       function getLastPrompt() {
         const promptElements = document.querySelectorAll(".query-text");
@@ -238,6 +242,61 @@
   // src/index.ts
   var import_bard = __toESM(require_bard2(), 1);
 
+  // ../../packages/monkit/dist/index.mjs
+  var MenuManager = class {
+    constructor(default_menu_all) {
+      this.default_menu_all = default_menu_all;
+      this.menu_all = GM_getValue("menu_all", this.default_menu_all);
+      for (const name in this.default_menu_all) {
+        if (!(name in this.menu_all)) {
+          this.menu_all[name] = this.default_menu_all[name];
+        }
+      }
+      this.menu_id = GM_getValue("menu_id", {});
+      this.update_menu();
+    }
+    registerMenuCommand(name, value) {
+      if (name === "chat_language") {
+        return GM_registerMenuCommand(`${name}\uFF1A${value}`, () => {
+          const language = prompt("Please input the language you want to use", value.toString());
+          if (language) {
+            this.menu_all[name] = language;
+            GM_setValue("menu_all", this.menu_all);
+            this.update_menu();
+            location.reload();
+          }
+        });
+      }
+      const menuText = ` ${name}\uFF1A${value ? "\u2705" : "\u274C"}`;
+      const commandCallback = () => {
+        this.menu_all[name] = !this.menu_all[name];
+        GM_setValue("menu_all", this.menu_all);
+        this.update_menu();
+        location.reload();
+      };
+      return GM_registerMenuCommand(menuText, commandCallback);
+    }
+    update_menu() {
+      for (const name in this.menu_all) {
+        const value = this.menu_all[name];
+        if (this.menu_id[name]) {
+          GM_unregisterMenuCommand(this.menu_id[name]);
+        }
+        this.menu_id[name] = this.registerMenuCommand(name, value);
+      }
+      GM_setValue("menu_id", this.menu_id);
+    }
+    getMenuValue(name) {
+      return this.menu_all[name];
+    }
+  };
+  function getLocalLanguage() {
+    const userLanguage = navigator.language;
+    const languageNames = new Intl.DisplayNames([userLanguage], { type: "language" });
+    const readableLanguage = languageNames.of(userLanguage);
+    return readableLanguage;
+  }
+
   // src/createButton/index.ts
   function createButton(callback, buttonText) {
     if (window.location.href.includes("bard.google"))
@@ -250,7 +309,7 @@
     button.style.top = "300px";
     button.style.right = hideRight;
     button.style.zIndex = "999999";
-    button.style.backgroundColor = "#F3F6FC";
+    button.style.background = "linear-gradient(45deg, #C275B7, #907FDB, #29A5E8)";
     button.style.color = "#fff";
     button.style.opacity = "0.8";
     button.style.border = "none";
@@ -345,61 +404,6 @@
     }
   }
   var getParagraphs_default = getParagraphs;
-
-  // ../../packages/monkit/dist/index.mjs
-  var MenuManager = class {
-    constructor(default_menu_all) {
-      this.default_menu_all = default_menu_all;
-      this.menu_all = GM_getValue("menu_all", this.default_menu_all);
-      for (const name in this.default_menu_all) {
-        if (!(name in this.menu_all)) {
-          this.menu_all[name] = this.default_menu_all[name];
-        }
-      }
-      this.menu_id = GM_getValue("menu_id", {});
-      this.update_menu();
-    }
-    registerMenuCommand(name, value) {
-      if (name === "chat_language") {
-        return GM_registerMenuCommand(`${name}\uFF1A${value}`, () => {
-          const language = prompt("Please input the language you want to use", value.toString());
-          if (language) {
-            this.menu_all[name] = language;
-            GM_setValue("menu_all", this.menu_all);
-            this.update_menu();
-            location.reload();
-          }
-        });
-      }
-      const menuText = ` ${name}\uFF1A${value ? "\u2705" : "\u274C"}`;
-      const commandCallback = () => {
-        this.menu_all[name] = !this.menu_all[name];
-        GM_setValue("menu_all", this.menu_all);
-        this.update_menu();
-        location.reload();
-      };
-      return GM_registerMenuCommand(menuText, commandCallback);
-    }
-    update_menu() {
-      for (const name in this.menu_all) {
-        const value = this.menu_all[name];
-        if (this.menu_id[name]) {
-          GM_unregisterMenuCommand(this.menu_id[name]);
-        }
-        this.menu_id[name] = this.registerMenuCommand(name, value);
-      }
-      GM_setValue("menu_id", this.menu_id);
-    }
-    getMenuValue(name) {
-      return this.menu_all[name];
-    }
-  };
-  function getLocalLanguage() {
-    const userLanguage = navigator.language;
-    const languageNames = new Intl.DisplayNames([userLanguage], { type: "language" });
-    const readableLanguage = languageNames.of(userLanguage);
-    return readableLanguage;
-  }
 
   // src/index.ts
   function initialize() {

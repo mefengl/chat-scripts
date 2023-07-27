@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name chatgpt-init
 // @namespace https://github.com/mefengl
-// @version 0.1.11
+// @version 0.1.12
 // @description Init ChatGPT with prompt from internet
 // @author mefengl
 // @match https://chat.openai.com/*

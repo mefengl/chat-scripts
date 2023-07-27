@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         chatgpt twice
 // @namespace    https://github.com/mefengl
-// @version      0.1.11
+// @version      0.1.12
 // @description  ask question twice!
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @author       mefengl
