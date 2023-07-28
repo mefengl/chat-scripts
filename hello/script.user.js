@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name chatgpt-hello
 // @namespace https://github.com/mefengl
-// @version 0.0.12
+// @version 0.0.13
 // @description A template for userscript use chat-kit
 // @author chat-kit
 // @match https://chat.openai.com/*
@@ -80,8 +80,10 @@
       var __toCommonJS = (mod) => __copyProps2(__defProp3({}, "__esModule", { value: true }), mod);
       var chatgpt_exports2 = {};
       __export2(chatgpt_exports2, {
+        getButton: () => getButton2,
         getContinueGeneratingButton: () => getContinueGeneratingButton2,
         getConversation: () => getConversation2,
+        getCopyLinkButton: () => getCopyLinkButton2,
         getHistoryBlockTitle: () => getHistoryBlockTitle2,
         getHistoryBlocks: () => getHistoryBlocks2,
         getHistoryBlocksWithTitle: () => getHistoryBlocksWithTitle2,
@@ -92,6 +94,7 @@
         getNewModelSelectButtons: () => getNewModelSelectButtons2,
         getRegenerateButton: () => getRegenerateButton2,
         getResponseElementHTMLs: () => getResponseElementHTMLs2,
+        getShareChatButton: () => getShareChatButton2,
         getStopGeneratingButton: () => getStopGeneratingButton2,
         getSubmitButton: () => getSubmitButton2,
         getTextarea: () => getTextarea2,
@@ -146,38 +149,20 @@
           return;
         return textarea.nextElementSibling;
       }
-      function getRegenerateButton2() {
-        const form = document.querySelector("form");
-        if (!form)
-          return;
-        const buttons = form.querySelectorAll("button");
-        const result = Array.from(buttons).find((button) => {
+      function getButton2(text) {
+        return Array.from(document.querySelectorAll('button[as="button"]')).find((button) => {
           var _a;
-          return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("regenerate");
+          return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes(text);
         });
-        return result;
+      }
+      function getRegenerateButton2() {
+        return getButton2("regenerate");
       }
       function getContinueGeneratingButton2() {
-        const form = document.querySelector("form");
-        if (!form)
-          return;
-        const buttons = form.querySelectorAll("button");
-        const result = Array.from(buttons).find((button) => {
-          var _a;
-          return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("continue generating");
-        });
-        return result;
+        return getButton2("continue");
       }
       function getStopGeneratingButton2() {
-        const form = document.querySelector("form");
-        if (!form)
-          return;
-        const buttons = form.querySelectorAll("button");
-        const result = Array.from(buttons).find((button) => {
-          var _a;
-          return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("stop generating");
-        });
-        return result;
+        return getButton2("stop");
       }
       function getResponseElementHTMLs2() {
         return Array.from(document.querySelectorAll(".markdown")).map((m) => m.innerHTML);
@@ -338,6 +323,15 @@
         conversation.classList.remove("flex", "flex-col", "items-center");
         conversation.classList.add("grid", "grid-cols-2", "place-items-center");
       }
+      function getShareChatButton2() {
+        return document.querySelector('button[aria-label="Share chat"]');
+      }
+      function getCopyLinkButton2() {
+        return Array.from(document.querySelectorAll('button[as="button"]')).filter((button) => {
+          var _a;
+          return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("copy link");
+        })[0];
+      }
     }
   });
 
@@ -355,11 +349,13 @@
       __defProp2(target, name, { get: all[name], enumerable: true });
   };
 
-  // ../../packages/chatkit/dist/chunk-APRDSJFS.mjs
+  // ../../packages/chatkit/dist/chunk-7PLVPGZ5.mjs
   var chatgpt_exports = {};
   __export(chatgpt_exports, {
+    getButton: () => getButton,
     getContinueGeneratingButton: () => getContinueGeneratingButton,
     getConversation: () => getConversation,
+    getCopyLinkButton: () => getCopyLinkButton,
     getHistoryBlockTitle: () => getHistoryBlockTitle,
     getHistoryBlocks: () => getHistoryBlocks,
     getHistoryBlocksWithTitle: () => getHistoryBlocksWithTitle,
@@ -370,6 +366,7 @@
     getNewModelSelectButtons: () => getNewModelSelectButtons,
     getRegenerateButton: () => getRegenerateButton,
     getResponseElementHTMLs: () => getResponseElementHTMLs,
+    getShareChatButton: () => getShareChatButton,
     getStopGeneratingButton: () => getStopGeneratingButton,
     getSubmitButton: () => getSubmitButton,
     getTextarea: () => getTextarea,
@@ -423,38 +420,20 @@
       return;
     return textarea.nextElementSibling;
   }
-  function getRegenerateButton() {
-    const form = document.querySelector("form");
-    if (!form)
-      return;
-    const buttons = form.querySelectorAll("button");
-    const result = Array.from(buttons).find((button) => {
+  function getButton(text) {
+    return Array.from(document.querySelectorAll('button[as="button"]')).find((button) => {
       var _a;
-      return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("regenerate");
+      return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes(text);
     });
-    return result;
+  }
+  function getRegenerateButton() {
+    return getButton("regenerate");
   }
   function getContinueGeneratingButton() {
-    const form = document.querySelector("form");
-    if (!form)
-      return;
-    const buttons = form.querySelectorAll("button");
-    const result = Array.from(buttons).find((button) => {
-      var _a;
-      return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("continue generating");
-    });
-    return result;
+    return getButton("continue");
   }
   function getStopGeneratingButton() {
-    const form = document.querySelector("form");
-    if (!form)
-      return;
-    const buttons = form.querySelectorAll("button");
-    const result = Array.from(buttons).find((button) => {
-      var _a;
-      return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("stop generating");
-    });
-    return result;
+    return getButton("stop");
   }
   function getResponseElementHTMLs() {
     return Array.from(document.querySelectorAll(".markdown")).map((m) => m.innerHTML);
@@ -614,6 +593,15 @@
       return;
     conversation.classList.remove("flex", "flex-col", "items-center");
     conversation.classList.add("grid", "grid-cols-2", "place-items-center");
+  }
+  function getShareChatButton() {
+    return document.querySelector('button[aria-label="Share chat"]');
+  }
+  function getCopyLinkButton() {
+    return Array.from(document.querySelectorAll('button[as="button"]')).filter((button) => {
+      var _a;
+      return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("copy link");
+    })[0];
   }
 
   // src/index.ts
