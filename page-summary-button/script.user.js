@@ -2,7 +2,7 @@
 // @name         chatgpt-page-summary-button
 // @description  🍓 let ChatGPT summary the web page you are reading in one click
 // @author       mefengl
-// @version      0.6.6
+// @version      0.6.7
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -3167,13 +3167,13 @@
         willClose: () => {
           const scrollable = document.querySelector(".scrollable");
           if (scrollable) {
-            localStorage.setItem("scrollPos", `${scrollable.scrollTop}`);
+            localStorage.setItem("scrollPos" + window.location.href, `${scrollable.scrollTop}`);
           }
         },
         didOpen: () => {
           const scrollable = document.querySelector(".scrollable");
           if (scrollable) {
-            scrollable.scrollTop = parseInt(localStorage.getItem("scrollPos") || "0");
+            scrollable.scrollTop = parseInt(localStorage.getItem("scrollPos" + window.location.href) || "0");
           }
         }
       });
