@@ -2,7 +2,7 @@
 // @name         bard-page-translate-button
 // @description  🍓 let Bard translate the web page you are reading in one click
 // @author       mefengl
-// @version      0.1.5
+// @version      0.1.6
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=bard.google.com
@@ -13,6 +13,7 @@
 // @grant        GM_registerMenuCommand
 // @grant        GM_unregisterMenuCommand
 // @grant        GM_addValueChangeListener
+// @updateURL    https://github.com/mefengl/chat-scripts/raw/main/bard-page-translate-button/script.user.js
 
 // @name:en      Bard Page Translate Button
 // @description:en 🍓 let Bard translate the web page you are reading in one click
