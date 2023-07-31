@@ -2990,7 +2990,7 @@
     try {
       let docClone = document.cloneNode(true);
       let article = new Readability(docClone).parse();
-      if (article && article.textContent) {
+      if (article == null ? void 0 : article.textContent) {
         const segmenter = new SimpleArticleSegmentation_default(article.textContent);
         const paragraphs = segmenter.segment();
         for (let i = 0; i < paragraphs.length; i++) {
