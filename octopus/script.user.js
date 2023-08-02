@@ -68,7 +68,7 @@
       __defProp(target, name, { get: all[name], enumerable: true });
   };
 
-  // ../../packages/chatkit/dist/chunk-7PLVPGZ5.mjs
+  // ../../packages/chatkit/dist/chunk-QFWOIX3G.mjs
   var chatgpt_exports = {};
   __export(chatgpt_exports, {
     getButton: () => getButton,
@@ -240,7 +240,7 @@
           if (prompt_texts.length > 0) {
             let firstTime = true;
             while (prompt_texts.length > 0) {
-              const waitTime = isLong && !document.hasFocus() ? 30 * 1e3 : 2e3;
+              const waitTime = isLong && !document.hasFocus() ? 20 * 1e3 : 2e3;
               if (!firstTime) {
                 yield new Promise((resolve) => setTimeout(resolve, waitTime));
               }
@@ -471,7 +471,7 @@
     sendButton.addEventListener("mousedown", callback);
   }
 
-  // ../../packages/chatkit/dist/chunk-C57HXSKL.mjs
+  // ../../packages/chatkit/dist/chunk-2WNO362E.mjs
   var bard_exports = {};
   __export(bard_exports, {
     getInputArea: () => getInputArea,
@@ -580,7 +580,7 @@
           if (prompt_texts.length > 0) {
             let firstTime = true;
             while (prompt_texts.length > 0) {
-              const waitTime = isLong && !document.hasFocus() ? 30 * 1e3 : 2e3;
+              const waitTime = isLong && !document.hasFocus() ? 20 * 1e3 : 2e3;
               if (!firstTime) {
                 yield new Promise((resolve) => setTimeout(resolve, waitTime));
               }

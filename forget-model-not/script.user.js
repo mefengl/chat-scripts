@@ -288,7 +288,7 @@
               if (prompt_texts.length > 0) {
                 let firstTime = true;
                 while (prompt_texts.length > 0) {
-                  const waitTime = isLong && !document.hasFocus() ? 30 * 1e3 : 2e3;
+                  const waitTime = isLong && !document.hasFocus() ? 20 * 1e3 : 2e3;
                   if (!firstTime) {
                     yield new Promise((resolve) => setTimeout(resolve, waitTime));
                   }

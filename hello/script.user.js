@@ -250,7 +250,7 @@
               if (prompt_texts.length > 0) {
                 let firstTime = true;
                 while (prompt_texts.length > 0) {
-                  const waitTime = isLong && !document.hasFocus() ? 30 * 1e3 : 2e3;
+                  const waitTime = isLong && !document.hasFocus() ? 20 * 1e3 : 2e3;
                   if (!firstTime) {
                     yield new Promise((resolve) => setTimeout(resolve, waitTime));
                   }
@@ -349,7 +349,7 @@
       __defProp2(target, name, { get: all[name], enumerable: true });
   };
 
-  // ../../packages/chatkit/dist/chunk-7PLVPGZ5.mjs
+  // ../../packages/chatkit/dist/chunk-QFWOIX3G.mjs
   var chatgpt_exports = {};
   __export(chatgpt_exports, {
     getButton: () => getButton,
@@ -521,7 +521,7 @@
           if (prompt_texts.length > 0) {
             let firstTime = true;
             while (prompt_texts.length > 0) {
-              const waitTime = isLong && !document.hasFocus() ? 30 * 1e3 : 2e3;
+              const waitTime = isLong && !document.hasFocus() ? 20 * 1e3 : 2e3;
               if (!firstTime) {
                 yield new Promise((resolve) => setTimeout(resolve, waitTime));
               }
