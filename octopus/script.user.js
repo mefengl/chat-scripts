@@ -68,16 +68,19 @@
       __defProp(target, name, { get: all[name], enumerable: true });
   };
 
-  // ../../packages/chatkit/dist/chunk-QFWOIX3G.mjs
+  // ../../packages/chatkit/dist/chunk-KEGMFR6R.mjs
   var chatgpt_exports = {};
   __export(chatgpt_exports, {
+    clickFollowUpButton: () => clickFollowUpButton,
     getButton: () => getButton,
     getContinueGeneratingButton: () => getContinueGeneratingButton,
     getConversation: () => getConversation,
     getCopyLinkButton: () => getCopyLinkButton,
+    getFollowUpButtons: () => getFollowUpButtons,
     getHistoryBlockTitle: () => getHistoryBlockTitle,
     getHistoryBlocks: () => getHistoryBlocks,
     getHistoryBlocksWithTitle: () => getHistoryBlocksWithTitle,
+    getInitialButtons: () => getInitialButtons,
     getLastResponse: () => getLastResponse,
     getLastResponseElement: () => getLastResponseElement,
     getModelSelectButton: () => getModelSelectButton,
@@ -138,6 +141,24 @@
     if (!textarea)
       return;
     return textarea.nextElementSibling;
+  }
+  function getInitialButtons() {
+    return Array.from(document.querySelectorAll('button[as="button"]')).filter((button) => button.querySelectorAll(".truncate").length === 2);
+  }
+  function getFollowUpButtons() {
+    return Array.from(document.querySelectorAll('button[as="button"]')).filter((button) => {
+      var _a;
+      return (_a = button.textContent) == null ? void 0 : _a.trim().match(/[.!?]$/);
+    });
+  }
+  function clickFollowUpButton(index) {
+    const followUpButtons = getFollowUpButtons();
+    if (followUpButtons.length === 0)
+      return;
+    if (index === void 0 || index < 0 || index >= followUpButtons.length) {
+      index = Math.floor(Math.random() * followUpButtons.length);
+    }
+    followUpButtons[index].click();
   }
   function getButton(text) {
     return Array.from(document.querySelectorAll('button[as="button"]')).find((button) => {
