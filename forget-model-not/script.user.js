@@ -2,7 +2,7 @@
 // @name         ChatGPT Forget-Model-Not 🌺
 // @description  See you again~
 // @author       mefengl
-// @version      0.0.17
+// @version      0.0.18
 // @namespace    https://github.com/mefengl
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @license      MIT

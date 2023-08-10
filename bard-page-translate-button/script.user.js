@@ -2,7 +2,7 @@
 // @name         bard-page-translate-button
 // @description  🍓 let Bard translate the web page you are reading in one click
 // @author       mefengl
-// @version      0.1.6
+// @version      0.1.7
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=bard.google.com
@@ -13,7 +13,7 @@
 // @grant        GM_registerMenuCommand
 // @grant        GM_unregisterMenuCommand
 // @grant        GM_addValueChangeListener
-// @updateURL    https://github.com/mefengl/chat-scripts/raw/main/bard-page-translate-button/script.user.js
+// @updateURL    https://github.com/mefengl/chat-scripts/raw/main/page-buttons/bard-page-translate-button/script.user.js
 
 // @name:en      Bard Page Translate Button
 // @description:en 🍓 let Bard translate the web page you are reading in one click
@@ -84,9 +84,9 @@
     });
   };
 
-  // ../../packages/chatkit/dist/bard/index.js
+  // ../../../packages/chatkit/dist/bard/index.js
   var require_bard = __commonJS({
-    "../../packages/chatkit/dist/bard/index.js"(exports, module) {
+    "../../../packages/chatkit/dist/bard/index.js"(exports, module) {
       "use strict";
       var __defProp2 = Object.defineProperty;
       var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
@@ -233,9 +233,9 @@
     }
   });
 
-  // ../../packages/chatkit/bard.js
+  // ../../../packages/chatkit/bard.js
   var require_bard2 = __commonJS({
-    "../../packages/chatkit/bard.js"(exports, module) {
+    "../../../packages/chatkit/bard.js"(exports, module) {
       module.exports = require_bard();
     }
   });
@@ -243,7 +243,7 @@
   // src/index.ts
   var import_bard = __toESM(require_bard2(), 1);
 
-  // ../../packages/monkit/dist/index.mjs
+  // ../../../packages/monkit/dist/index.mjs
   var MenuManager = class {
     constructor(default_menu_all) {
       this.default_menu_all = default_menu_all;
@@ -422,7 +422,7 @@ Translate below paragraphs:
 
 ${p}${i + 1}/${paras.length}
 
-ps: answer in several paragraphs in ${lang} language`));
+ps: translate in several paragraphs in ${lang} language`));
     (0, import_bard.setPromptListener)("prompt_texts");
     createButton_default(() => __async(void 0, null, function* () {
       return setPrompts(getParagraphs_default());

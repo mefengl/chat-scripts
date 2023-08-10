@@ -2,7 +2,7 @@
 // @name         chatgpt-page-translate-button
 // @description  🍓 let ChatGPT translate the web page you are reading in one click
 // @author       mefengl
-// @version      0.8.10
+// @version      0.8.11
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -13,7 +13,7 @@
 // @grant        GM_registerMenuCommand
 // @grant        GM_unregisterMenuCommand
 // @grant        GM_addValueChangeListener
-// @updateURL    https://github.com/mefengl/chat-scripts/raw/main/page-translate-button/script.user.js
+// @updateURL    https://github.com/mefengl/chat-scripts/raw/main/page-buttons/page-translate-button/script.user.js
 
 // @name:en      ChatGPT Page Translate Button
 // @description:en 🍓 let ChatGPT translate the web page you are reading in one click
@@ -84,9 +84,9 @@
     });
   };
 
-  // ../../packages/chatkit/dist/chatgpt/index.js
+  // ../../../packages/chatkit/dist/chatgpt/index.js
   var require_chatgpt = __commonJS({
-    "../../packages/chatkit/dist/chatgpt/index.js"(exports, module) {
+    "../../../packages/chatkit/dist/chatgpt/index.js"(exports, module) {
       "use strict";
       var __defProp2 = Object.defineProperty;
       var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
@@ -383,16 +383,16 @@
     }
   });
 
-  // ../../packages/chatkit/chatgpt.js
+  // ../../../packages/chatkit/chatgpt.js
   var require_chatgpt2 = __commonJS({
-    "../../packages/chatkit/chatgpt.js"(exports, module) {
+    "../../../packages/chatkit/chatgpt.js"(exports, module) {
       module.exports = require_chatgpt();
     }
   });
 
-  // ../../node_modules/.pnpm/sweetalert2@11.7.18/node_modules/sweetalert2/dist/sweetalert2.all.js
+  // ../../../node_modules/.pnpm/sweetalert2@11.7.18/node_modules/sweetalert2/dist/sweetalert2.all.js
   var require_sweetalert2_all = __commonJS({
-    "../../node_modules/.pnpm/sweetalert2@11.7.18/node_modules/sweetalert2/dist/sweetalert2.all.js"(exports, module) {
+    "../../../node_modules/.pnpm/sweetalert2@11.7.18/node_modules/sweetalert2/dist/sweetalert2.all.js"(exports, module) {
       (function(global, factory) {
         typeof exports === "object" && typeof module !== "undefined" ? module.exports = factory() : typeof define === "function" && define.amd ? define(factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, global.Sweetalert2 = factory());
       })(exports, function() {
@@ -3091,7 +3091,7 @@
   // src/index.ts
   var import_chatgpt = __toESM(require_chatgpt2(), 1);
 
-  // ../../packages/monkit/dist/index.mjs
+  // ../../../packages/monkit/dist/index.mjs
   var MenuManager = class {
     constructor(default_menu_all) {
       this.default_menu_all = default_menu_all;
@@ -3146,7 +3146,7 @@
     return readableLanguage;
   }
 
-  // ../../packages/page-button/dist/index.mjs
+  // ../../../packages/page-button/dist/index.mjs
   var import_sweetalert2 = __toESM(require_sweetalert2_all(), 1);
   function displayHTML(html) {
     return __async(this, null, function* () {
@@ -3324,7 +3324,7 @@ Translate below paragraphs:
 
 ${p}${i + 1}/${paras.length}
 
-ps: answer in several paragraphs in ${lang} language`));
+ps: translate in several paragraphs in ${lang} language`));
     GM_registerMenuCommand("\u{1F4DD} Input", () => {
       import_sweetalert22.default.fire({ title: "Please input the text you want to deal with", input: "text", inputPlaceholder: "Enter your text here" }).then((result) => {
         if (result.value)
