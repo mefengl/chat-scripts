@@ -47,7 +47,8 @@ jobs:
 
     - name: Replace script.user.js
       run: |
-        for app_path in chat-play/apps/*; do
+        find chat-play/apps -name 'package.json' | while read package_file; do
+          app_path=$(dirname "$package_file")
           app_name=$(basename "$app_path")
           if [ -d "$app_path" ]; then
             mkdir -p "chat-scripts/$app_name"
