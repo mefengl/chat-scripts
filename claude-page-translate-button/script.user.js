@@ -2,7 +2,7 @@
 // @name         claude-page-translate-button
 // @description  🍓 let Claude translate the web page you are reading in one click
 // @author       mefengl
-// @version      0.2.9
+// @version      0.2.10
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=claude.ai
@@ -2976,7 +2976,7 @@
             }
           }
         }
-        if (paragraph.length >= MIN_PARAGRAPH_LENGTH) {
+        if (paragraph.length > 0) {
           paragraphs.push(paragraph);
         }
       }

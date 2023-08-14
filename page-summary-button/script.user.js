@@ -2,7 +2,7 @@
 // @name         chatgpt-page-summary-button
 // @description  🍓 let ChatGPT summary the web page you are reading in one click
 // @author       mefengl
-// @version      0.6.10
+// @version      0.6.11
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -3276,7 +3276,7 @@
             }
           }
         }
-        if (paragraph.length >= MIN_PARAGRAPH_LENGTH) {
+        if (paragraph.length > 0) {
           paragraphs.push(paragraph);
         }
       }

@@ -2,7 +2,7 @@
 // @name         bard-page-translate-button
 // @description  🍓 let Bard translate the web page you are reading in one click
 // @author       mefengl
-// @version      0.1.7
+// @version      0.1.8
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=bard.google.com
@@ -374,7 +374,7 @@
             }
           }
         }
-        if (paragraph.length >= MIN_PARAGRAPH_LENGTH) {
+        if (paragraph.length > 0) {
           paragraphs.push(paragraph);
         }
       }
