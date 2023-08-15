@@ -2,7 +2,7 @@
 // @name         chatgpt-page-summary-button
 // @description  🍓 let ChatGPT summary the web page you are reading in one click
 // @author       mefengl
-// @version      0.6.11
+// @version      0.6.12
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -3152,13 +3152,6 @@
     return __async(this, null, function* () {
       let screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
       let swalWidth = screenWidth < 800 ? "80%" : "800px";
-      if (!document.head.querySelector("#LXGWStyle")) {
-        let link = document.createElement("link");
-        link.rel = "stylesheet";
-        link.href = "https://cdnjs.cloudflare.com/ajax/libs/lxgw-wenkai-screen-webfont/1.7.0/style.css";
-        link.id = "LXGWStyle";
-        document.head.appendChild(link);
-      }
       if (!document.head.querySelector("#readModeStyle")) {
         let style = document.createElement("style");
         style.type = "text/css";
@@ -3166,7 +3159,6 @@
         style.innerHTML = `
       .text-left { text-align: left !important; }
       .scrollable { max-height: 90vh; overflow-y: auto; }
-      .swal-font { font-family: "LXGW WenKai Screen", sans-serif; }
   `;
         document.head.appendChild(style);
       }
