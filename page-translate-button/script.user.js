@@ -2,7 +2,7 @@
 // @name         chatgpt-page-translate-button
 // @description  🍓 let ChatGPT translate the web page you are reading in one click
 // @author       mefengl
-// @version      0.8.13
+// @version      0.9.0
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -297,7 +297,7 @@
               const isLong = prompt_texts.length > 60;
               if (prompt_texts.length > 0) {
                 let firstTime = true;
-                while (prompt_texts.length > 0) {
+                while (true) {
                   const waitTime = isLong && !document.hasFocus() ? 20 * 1e3 : 2e3;
                   if (!firstTime) {
                     yield new Promise((resolve) => setTimeout(resolve, waitTime));
@@ -313,6 +313,9 @@
                     continue;
                   }
                   firstTime = false;
+                  if (prompt_texts.length === 0) {
+                    break;
+                  }
                   yield send(prompt_texts.shift() || "");
                 }
               }
@@ -3148,6 +3151,69 @@
 
   // ../../../packages/page-button/dist/index.mjs
   var import_sweetalert2 = __toESM(require_sweetalert2_all(), 1);
+  var MIN_PARAGRAPH_LENGTH = 3200;
+  var MAX_PARAGRAPH_LENGTH = 3600;
+  var TOKEN_LETTER_TO_CHARACTER_RATIO = 0.6;
+  var SimpleArticleSegmentation = class {
+    constructor(text) {
+      this.text = text;
+    }
+    containsAsianCharacters(str) {
+      const regex = /[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}\p{Script=Hangul}]/gu;
+      return regex.test(str);
+    }
+    segment() {
+      const paragraphs = [];
+      if (this.containsAsianCharacters(this.text)) {
+        let i = 0;
+        const maxParagraphLength = Math.floor(MAX_PARAGRAPH_LENGTH * TOKEN_LETTER_TO_CHARACTER_RATIO);
+        while (i < this.text.length) {
+          const paragraph = this.text.substring(i, i + maxParagraphLength);
+          paragraphs.push(paragraph);
+          i += maxParagraphLength;
+        }
+      } else {
+        const sentences = this.text.split(new RegExp("(?<=[.!?])\\s+"));
+        let paragraph = "";
+        for (const sentence of sentences) {
+          if (paragraph.length + sentence.length + 1 <= MAX_PARAGRAPH_LENGTH) {
+            paragraph += (paragraph.length > 0 ? " " : "") + sentence;
+          } else {
+            if (paragraph.length >= MIN_PARAGRAPH_LENGTH) {
+              paragraphs.push(paragraph);
+              paragraph = sentence;
+            } else {
+              paragraph += " " + sentence;
+            }
+          }
+        }
+        if (paragraph.length > 0) {
+          paragraphs.push(paragraph);
+        }
+      }
+      return paragraphs;
+    }
+  };
+  function getParagraphs() {
+    try {
+      let docClone = document.cloneNode(true);
+      let article = new Readability(docClone).parse();
+      if (article == null ? void 0 : article.textContent) {
+        const segmenter = new SimpleArticleSegmentation(article.textContent);
+        const paragraphs = segmenter.segment();
+        for (let i = 0; i < paragraphs.length; i++) {
+          paragraphs[i] = paragraphs[i].trim();
+        }
+        return paragraphs;
+      } else {
+        console.warn("Readability.js could not extract any text content from this page.");
+        return [];
+      }
+    } catch (error) {
+      console.error("An error occurred while using Readability.js:", error);
+      return [];
+    }
+  }
   function displayHTML(html) {
     return __async(this, null, function* () {
       let screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
@@ -3231,75 +3297,6 @@
   }
   var createButton_default = createButton;
 
-  // src/SimpleArticleSegmentation/index.ts
-  var MIN_PARAGRAPH_LENGTH = 3200;
-  var MAX_PARAGRAPH_LENGTH = 3600;
-  var TOKEN_LETTER_TO_CHARACTER_RATIO = 0.6;
-  var SimpleArticleSegmentation = class {
-    constructor(text) {
-      this.text = text;
-    }
-    containsAsianCharacters(str) {
-      const regex = /[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}\p{Script=Hangul}]/gu;
-      return regex.test(str);
-    }
-    segment() {
-      const paragraphs = [];
-      if (this.containsAsianCharacters(this.text)) {
-        let i = 0;
-        const maxParagraphLength = Math.floor(MAX_PARAGRAPH_LENGTH * TOKEN_LETTER_TO_CHARACTER_RATIO);
-        while (i < this.text.length) {
-          const paragraph = this.text.substring(i, i + maxParagraphLength);
-          paragraphs.push(paragraph);
-          i += maxParagraphLength;
-        }
-      } else {
-        const sentences = this.text.split(new RegExp("(?<=[.!?])\\s+"));
-        let paragraph = "";
-        for (const sentence of sentences) {
-          if (paragraph.length + sentence.length + 1 <= MAX_PARAGRAPH_LENGTH) {
-            paragraph += (paragraph.length > 0 ? " " : "") + sentence;
-          } else {
-            if (paragraph.length >= MIN_PARAGRAPH_LENGTH) {
-              paragraphs.push(paragraph);
-              paragraph = sentence;
-            } else {
-              paragraph += " " + sentence;
-            }
-          }
-        }
-        if (paragraph.length > 0) {
-          paragraphs.push(paragraph);
-        }
-      }
-      return paragraphs;
-    }
-  };
-  var SimpleArticleSegmentation_default = SimpleArticleSegmentation;
-
-  // src/getParagraphs/index.ts
-  function getParagraphs() {
-    try {
-      let docClone = document.cloneNode(true);
-      let article = new Readability(docClone).parse();
-      if (article == null ? void 0 : article.textContent) {
-        const segmenter = new SimpleArticleSegmentation_default(article.textContent);
-        const paragraphs = segmenter.segment();
-        for (let i = 0; i < paragraphs.length; i++) {
-          paragraphs[i] = paragraphs[i].trim();
-        }
-        return paragraphs;
-      } else {
-        console.warn("Readability.js could not extract any text content from this page.");
-        return [];
-      }
-    } catch (error) {
-      console.error("An error occurred while using Readability.js:", error);
-      return [];
-    }
-  }
-  var getParagraphs_default = getParagraphs;
-
   // src/index.ts
   function initialize() {
     return __async(this, null, function* () {
@@ -3320,12 +3317,12 @@ ps: translate in several paragraphs in ${lang} language`));
     GM_registerMenuCommand("\u{1F4DD} Input", () => {
       import_sweetalert22.default.fire({ title: "Please input the text you want to deal with", input: "text", inputPlaceholder: "Enter your text here" }).then((result) => {
         if (result.value)
-          setPrompts(new SimpleArticleSegmentation_default(result.value).segment());
+          setPrompts(new SimpleArticleSegmentation(result.value).segment());
       });
     });
     (0, import_chatgpt.setPromptListener)("prompt_texts");
     createButton_default(() => __async(void 0, null, function* () {
-      return setPrompts(getParagraphs_default());
+      return setPrompts(getParagraphs());
     }), navigator.language.startsWith("zh") ? "\u9875\u9762\u7FFB\u8BD1" : "Page Translate");
     function displayReadMode() {
       let html = (0, import_chatgpt.getResponseElementHTMLs)();

@@ -299,7 +299,7 @@
               const isLong = prompt_texts.length > 60;
               if (prompt_texts.length > 0) {
                 let firstTime = true;
-                while (prompt_texts.length > 0) {
+                while (true) {
                   const waitTime = isLong && !document.hasFocus() ? 20 * 1e3 : 2e3;
                   if (!firstTime) {
                     yield new Promise((resolve) => setTimeout(resolve, waitTime));
@@ -315,6 +315,9 @@
                     continue;
                   }
                   firstTime = false;
+                  if (prompt_texts.length === 0) {
+                    break;
+                  }
                   yield send2(prompt_texts.shift() || "");
                 }
               }

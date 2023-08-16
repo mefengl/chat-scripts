@@ -2,7 +2,7 @@
 // @name         chatgpt-read-mode
 // @description  🍞 show a modal for Read
 // @author       mefengl
-// @version      0.0.2
+// @version      0.0.3
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -293,7 +293,7 @@
               const isLong = prompt_texts.length > 60;
               if (prompt_texts.length > 0) {
                 let firstTime = true;
-                while (prompt_texts.length > 0) {
+                while (true) {
                   const waitTime = isLong && !document.hasFocus() ? 20 * 1e3 : 2e3;
                   if (!firstTime) {
                     yield new Promise((resolve) => setTimeout(resolve, waitTime));
@@ -309,6 +309,9 @@
                     continue;
                   }
                   firstTime = false;
+                  if (prompt_texts.length === 0) {
+                    break;
+                  }
                   yield send(prompt_texts.shift() || "");
                 }
               }

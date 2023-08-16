@@ -2,7 +2,7 @@
 // @name         claude-page-translate-button
 // @description  🍓 let Claude translate the web page you are reading in one click
 // @author       mefengl
-// @version      0.2.10
+// @version      0.3.0
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=claude.ai
@@ -1551,7 +1551,7 @@
         const showLoading = (buttonToReplace) => {
           let popup = getPopup();
           if (!popup) {
-            new Swal2();
+            new Swal3();
           }
           popup = getPopup();
           const loader = getLoader();
@@ -2242,11 +2242,11 @@
           return params;
         };
         function fire() {
-          const Swal3 = this;
+          const Swal4 = this;
           for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
             args[_key] = arguments[_key];
           }
-          return new Swal3(...args);
+          return new Swal4(...args);
         }
         function mixin(mixinParams) {
           class MixinSwal extends this {
@@ -2876,9 +2876,9 @@
         });
         SweetAlert.DismissReason = DismissReason;
         SweetAlert.version = "11.7.18";
-        const Swal2 = SweetAlert;
-        Swal2.default = Swal2;
-        return Swal2;
+        const Swal3 = SweetAlert;
+        Swal3.default = Swal3;
+        return Swal3;
       });
       if (typeof exports !== "undefined" && exports.Sweetalert2) {
         exports.swal = exports.sweetAlert = exports.Swal = exports.SweetAlert = exports.Sweetalert2;
@@ -2899,114 +2899,6 @@
 
   // src/index.ts
   var import_claude = __toESM(require_claude2(), 1);
-
-  // src/createButton/index.ts
-  function createButton(callback, buttonText) {
-    if (window.location.href.includes("claude.ai"))
-      return;
-    const hideRight = document.title.match(/[\u4e00-\u9fa5]/) ? "-130px" : "-120px";
-    const button = document.createElement("button");
-    button.innerHTML = buttonText;
-    button.style.position = "fixed";
-    button.style.width = "140px";
-    button.style.top = "240px";
-    button.style.right = hideRight;
-    button.style.zIndex = "999999";
-    button.style.backgroundColor = "#DED7C9";
-    button.style.color = "#fff";
-    button.style.opacity = "0.8";
-    button.style.border = "none";
-    button.style.borderRadius = "4px";
-    button.style.padding = "10px 16px";
-    button.style.fontSize = "18px";
-    button.style.cursor = "pointer";
-    button.style.transition = "right 0.3s";
-    document.body.appendChild(button);
-    button.addEventListener("mouseenter", () => {
-      button.style.right = "-10px";
-    });
-    button.addEventListener("mouseleave", () => {
-      button.style.right = hideRight;
-    });
-    document.addEventListener("fullscreenchange", () => {
-      if (document.fullscreenElement) {
-        button.style.display = "none";
-      } else {
-        button.style.display = "block";
-      }
-    });
-    button.addEventListener("click", callback);
-  }
-  var createButton_default = createButton;
-
-  // src/SimpleArticleSegmentation/index.ts
-  var MIN_PARAGRAPH_LENGTH = 3200;
-  var MAX_PARAGRAPH_LENGTH = 3600;
-  var TOKEN_LETTER_TO_CHARACTER_RATIO = 0.6;
-  var SimpleArticleSegmentation = class {
-    constructor(text) {
-      this.text = text;
-    }
-    containsAsianCharacters(str) {
-      const regex = /[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}\p{Script=Hangul}]/gu;
-      return regex.test(str);
-    }
-    segment() {
-      const paragraphs = [];
-      if (this.containsAsianCharacters(this.text)) {
-        let i = 0;
-        const maxParagraphLength = Math.floor(MAX_PARAGRAPH_LENGTH * TOKEN_LETTER_TO_CHARACTER_RATIO);
-        while (i < this.text.length) {
-          const paragraph = this.text.substring(i, i + maxParagraphLength);
-          paragraphs.push(paragraph);
-          i += maxParagraphLength;
-        }
-      } else {
-        const sentences = this.text.split(new RegExp("(?<=[.!?])\\s+"));
-        let paragraph = "";
-        for (const sentence of sentences) {
-          if (paragraph.length + sentence.length + 1 <= MAX_PARAGRAPH_LENGTH) {
-            paragraph += (paragraph.length > 0 ? " " : "") + sentence;
-          } else {
-            if (paragraph.length >= MIN_PARAGRAPH_LENGTH) {
-              paragraphs.push(paragraph);
-              paragraph = sentence;
-            } else {
-              paragraph += " " + sentence;
-            }
-          }
-        }
-        if (paragraph.length > 0) {
-          paragraphs.push(paragraph);
-        }
-      }
-      return paragraphs;
-    }
-  };
-  var SimpleArticleSegmentation_default = SimpleArticleSegmentation;
-
-  // src/getParagraphs/index.ts
-  function getParagraphs() {
-    try {
-      let docClone = document.cloneNode(true);
-      let article = new Readability(docClone).parse();
-      if (article == null ? void 0 : article.textContent) {
-        const segmenter = new SimpleArticleSegmentation_default(article.textContent);
-        const paragraphs = segmenter.segment();
-        for (let i = 0; i < paragraphs.length; i++) {
-          paragraphs[i] = paragraphs[i].trim();
-        }
-        return paragraphs;
-      } else {
-        console.warn("Readability.js could not extract any text content from this page.");
-        return [];
-      }
-    } catch (error) {
-      console.error("An error occurred while using Readability.js:", error);
-      return [];
-    }
-  }
-  var getParagraphs_default = getParagraphs;
 
   // ../../../packages/monkit/dist/index.mjs
   var MenuManager = class {
@@ -3063,8 +2955,115 @@
     return readableLanguage;
   }
 
-  // src/index.ts
+  // ../../../packages/page-button/dist/index.mjs
   var import_sweetalert2 = __toESM(require_sweetalert2_all(), 1);
+  var MIN_PARAGRAPH_LENGTH = 3200;
+  var MAX_PARAGRAPH_LENGTH = 3600;
+  var TOKEN_LETTER_TO_CHARACTER_RATIO = 0.6;
+  var SimpleArticleSegmentation = class {
+    constructor(text) {
+      this.text = text;
+    }
+    containsAsianCharacters(str) {
+      const regex = /[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}\p{Script=Hangul}]/gu;
+      return regex.test(str);
+    }
+    segment() {
+      const paragraphs = [];
+      if (this.containsAsianCharacters(this.text)) {
+        let i = 0;
+        const maxParagraphLength = Math.floor(MAX_PARAGRAPH_LENGTH * TOKEN_LETTER_TO_CHARACTER_RATIO);
+        while (i < this.text.length) {
+          const paragraph = this.text.substring(i, i + maxParagraphLength);
+          paragraphs.push(paragraph);
+          i += maxParagraphLength;
+        }
+      } else {
+        const sentences = this.text.split(new RegExp("(?<=[.!?])\\s+"));
+        let paragraph = "";
+        for (const sentence of sentences) {
+          if (paragraph.length + sentence.length + 1 <= MAX_PARAGRAPH_LENGTH) {
+            paragraph += (paragraph.length > 0 ? " " : "") + sentence;
+          } else {
+            if (paragraph.length >= MIN_PARAGRAPH_LENGTH) {
+              paragraphs.push(paragraph);
+              paragraph = sentence;
+            } else {
+              paragraph += " " + sentence;
+            }
+          }
+        }
+        if (paragraph.length > 0) {
+          paragraphs.push(paragraph);
+        }
+      }
+      return paragraphs;
+    }
+  };
+  function getParagraphs() {
+    try {
+      let docClone = document.cloneNode(true);
+      let article = new Readability(docClone).parse();
+      if (article == null ? void 0 : article.textContent) {
+        const segmenter = new SimpleArticleSegmentation(article.textContent);
+        const paragraphs = segmenter.segment();
+        for (let i = 0; i < paragraphs.length; i++) {
+          paragraphs[i] = paragraphs[i].trim();
+        }
+        return paragraphs;
+      } else {
+        console.warn("Readability.js could not extract any text content from this page.");
+        return [];
+      }
+    } catch (error) {
+      console.error("An error occurred while using Readability.js:", error);
+      return [];
+    }
+  }
+
+  // src/index.ts
+  var import_sweetalert22 = __toESM(require_sweetalert2_all(), 1);
+
+  // src/createButton/index.ts
+  function createButton(callback, buttonText) {
+    if (window.location.href.includes("claude.ai"))
+      return;
+    const hideRight = document.title.match(/[\u4e00-\u9fa5]/) ? "-130px" : "-120px";
+    const button = document.createElement("button");
+    button.innerHTML = buttonText;
+    button.style.position = "fixed";
+    button.style.width = "140px";
+    button.style.top = "240px";
+    button.style.right = hideRight;
+    button.style.zIndex = "999999";
+    button.style.backgroundColor = "#DED7C9";
+    button.style.color = "#fff";
+    button.style.opacity = "0.8";
+    button.style.border = "none";
+    button.style.borderRadius = "4px";
+    button.style.padding = "10px 16px";
+    button.style.fontSize = "18px";
+    button.style.cursor = "pointer";
+    button.style.transition = "right 0.3s";
+    document.body.appendChild(button);
+    button.addEventListener("mouseenter", () => {
+      button.style.right = "-10px";
+    });
+    button.addEventListener("mouseleave", () => {
+      button.style.right = hideRight;
+    });
+    document.addEventListener("fullscreenchange", () => {
+      if (document.fullscreenElement) {
+        button.style.display = "none";
+      } else {
+        button.style.display = "block";
+      }
+    });
+    button.addEventListener("click", callback);
+  }
+  var createButton_default = createButton;
+
+  // src/index.ts
   function initialize() {
     return __async(this, null, function* () {
       yield new Promise((r) => window.addEventListener("load", r));
@@ -3082,14 +3081,14 @@ ${p}${i + 1}/${paras.length}
 
 ps: translate in several paragraphs in ${lang} language`));
     GM_registerMenuCommand("\u{1F4DD} Input", () => {
-      import_sweetalert2.default.fire({ title: "Please input the text you want to deal with", input: "text", inputPlaceholder: "Enter your text here" }).then((result) => {
+      import_sweetalert22.default.fire({ title: "Please input the text you want to deal with", input: "text", inputPlaceholder: "Enter your text here" }).then((result) => {
         if (result.value)
-          setPrompts(new SimpleArticleSegmentation_default(result.value).segment());
+          setPrompts(new SimpleArticleSegmentation(result.value).segment());
       });
     });
     (0, import_claude.setPromptListener)("prompt_texts");
     createButton_default(() => __async(void 0, null, function* () {
-      return setPrompts(getParagraphs_default());
+      return setPrompts(getParagraphs());
     }), navigator.language.startsWith("zh") ? "\u9875\u9762\u7FFB\u8BD1" : "Page Translate");
   }))();
 })();

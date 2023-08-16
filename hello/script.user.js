@@ -270,7 +270,7 @@
               const isLong = prompt_texts.length > 60;
               if (prompt_texts.length > 0) {
                 let firstTime = true;
-                while (prompt_texts.length > 0) {
+                while (true) {
                   const waitTime = isLong && !document.hasFocus() ? 20 * 1e3 : 2e3;
                   if (!firstTime) {
                     yield new Promise((resolve) => setTimeout(resolve, waitTime));
@@ -286,6 +286,9 @@
                     continue;
                   }
                   firstTime = false;
+                  if (prompt_texts.length === 0) {
+                    break;
+                  }
                   yield send3(prompt_texts.shift() || "");
                 }
               }
@@ -370,7 +373,7 @@
       __defProp2(target, name, { get: all[name], enumerable: true });
   };
 
-  // ../../packages/chatkit/dist/chunk-KEGMFR6R.mjs
+  // ../../packages/chatkit/dist/chunk-C7MURTHQ.mjs
   var chatgpt_exports = {};
   __export(chatgpt_exports, {
     clickFollowUpButton: () => clickFollowUpButton,
@@ -562,7 +565,7 @@
           const isLong = prompt_texts.length > 60;
           if (prompt_texts.length > 0) {
             let firstTime = true;
-            while (prompt_texts.length > 0) {
+            while (true) {
               const waitTime = isLong && !document.hasFocus() ? 20 * 1e3 : 2e3;
               if (!firstTime) {
                 yield new Promise((resolve) => setTimeout(resolve, waitTime));
@@ -578,6 +581,9 @@
                 continue;
               }
               firstTime = false;
+              if (prompt_texts.length === 0) {
+                break;
+              }
               yield send(prompt_texts.shift() || "");
             }
           }
