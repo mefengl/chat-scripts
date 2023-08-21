@@ -2,7 +2,7 @@
 // @name         claude-page-translate-button
 // @description  🍓 let Claude translate the web page you are reading in one click
 // @author       mefengl
-// @version      0.3.0
+// @version      0.4.0
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=claude.ai
@@ -3081,7 +3081,7 @@ ${p}${i + 1}/${paras.length}
 
 ps: translate in several paragraphs in ${lang} language`));
     GM_registerMenuCommand("\u{1F4DD} Input", () => {
-      import_sweetalert22.default.fire({ title: "Please input the text you want to deal with", input: "text", inputPlaceholder: "Enter your text here" }).then((result) => {
+      import_sweetalert22.default.fire({ title: "Please input the text you want to deal with", input: "textarea", inputPlaceholder: "Enter your text here" }).then((result) => {
         if (result.value)
           setPrompts(new SimpleArticleSegmentation(result.value).segment());
       });
