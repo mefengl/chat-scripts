@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         ChatGPT Auto-Continue 🔄
-// @description  ⚡ Automatically click the 'Continue Generating' button in ChatGPT!
+// @description  ⚡ Automatically click the 'Continue Generating' button in ChatGPT, handling errors!
 // @author       mefengl
-// @version      0.0.13
+// @version      1.0.0
 // @namespace    https://github.com/mefengl
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @license      MIT
@@ -10,25 +10,25 @@
 // @grant        none
 
 // @name:en      ChatGPT Auto-Continue 🔄
-// @description:en ⚡ Automatically click the 'Continue Generating' button in ChatGPT!
+// @description:en ⚡ Automatically click the 'Continue Generating' button in ChatGPT, handling errors!
 // @name:zh-CN   ChatGPT 自动继续 🔄
-// @description:zh-CN ⚡ 自动点击ChatGPT中的“继续生成”按钮！
+// @description:zh-CN ⚡ 自动点击ChatGPT中的“继续生成”按钮，处理错误！
 // @name:es      ChatGPT Auto-Continuar 🔄
-// @description:es ⚡ ¡Haz clic automáticamente en el botón 'Continuar generando' en ChatGPT!
+// @description:es ⚡ ¡Haz clic automáticamente en el botón 'Continuar generando' en ChatGPT, manejando errores!
 // @name:hi      ChatGPT स्वचालित जारी रखें 🔄
-// @description:hi ⚡ ChatGPT में 'जारी रखने' बटन पर स्वचालित रूप से क्लिक करें!
+// @description:hi ⚡ ChatGPT में 'जारी रखने' बटन पर स्वचालित रूप से क्लिक करें, त्रुटियों को संभालते हुए!
 // @name:ar      ChatGPT التكميل الآلي 🔄
-// @description:ar ⚡ انقر تلقائيًا على زر 'متابعة التوليد' في ChatGPT!
+// @description:ar ⚡ انقر تلقائيًا على زر 'متابعة التوليد' في ChatGPT ، معالجة الأخطاء!
 // @name:pt      ChatGPT Auto-Continuar 🔄
-// @description:pt ⚡ Clique automaticamente no botão 'Continuar Gerando' no ChatGPT!
+// @description:pt ⚡ Clique automaticamente no botão 'Continuar Gerando' no ChatGPT, tratando erros!
 // @name:ru      ChatGPT Авто-Продолжение 🔄
-// @description:ru ⚡ Автоматически нажимайте на кнопку "Продолжить генерацию" в ChatGPT!
+// @description:ru ⚡ Автоматически нажимайте на кнопку "Продолжить генерацию" в ChatGPT, обрабатывая ошибки!
 // @name:ja      ChatGPT 自動続行 🔄
-// @description:ja ⚡ ChatGPTの「続けて生成」ボタンを自動的にクリックします！
+// @description:ja ⚡ ChatGPTの「続けて生成」ボタンを自動的にクリックし、エラーを処理します！
 // @name:de      ChatGPT Auto-Fortsetzen 🔄
-// @description:de ⚡ Klicken Sie automatisch auf die Schaltfläche "Generierung fortsetzen" in ChatGPT!
+// @description:de ⚡ Klicken Sie automatisch auf die Schaltfläche "Generierung fortsetzen" in ChatGPT, Fehler behandeln!
 // @name:fr      ChatGPT Auto-Continuer 🔄
-// @description:fr ⚡ Cliquez automatiquement sur le bouton 'Continuer à générer' dans ChatGPT!
+// @description:fr ⚡ Cliquez automatiquement sur le bouton 'Continuer à générer' dans ChatGPT, gérer les erreurs!
 // ==/UserScript==
 "use strict";
 (() => {
@@ -116,16 +116,16 @@
         getModelSelectButton: () => getModelSelectButton,
         getNav: () => getNav,
         getNewModelSelectButtons: () => getNewModelSelectButtons,
-        getRegenerateButton: () => getRegenerateButton,
+        getRegenerateButton: () => getRegenerateButton2,
         getResponseElementHTMLs: () => getResponseElementHTMLs,
         getShareChatButton: () => getShareChatButton,
         getStopGeneratingButton: () => getStopGeneratingButton,
         getSubmitButton: () => getSubmitButton,
-        getTextarea: () => getTextarea,
+        getTextarea: () => getTextarea2,
         getTextareaValue: () => getTextareaValue,
         hasNewModelSelectButtons: () => hasNewModelSelectButtons,
         isConversationStarted: () => isConversationStarted,
-        isGenerating: () => isGenerating,
+        isGenerating: () => isGenerating2,
         isHorizontalConversation: () => isHorizontalConversation,
         onSend: () => onSend,
         regenerate: () => regenerate,
@@ -159,7 +159,7 @@
         }));
         return result;
       }
-      function getTextarea() {
+      function getTextarea2() {
         const form = document.querySelector("form");
         if (!form)
           return;
@@ -168,7 +168,7 @@
         return result;
       }
       function getSubmitButton() {
-        const textarea = getTextarea();
+        const textarea = getTextarea2();
         if (!textarea)
           return;
         return textarea.nextElementSibling;
@@ -197,7 +197,7 @@
           return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes(text);
         });
       }
-      function getRegenerateButton() {
+      function getRegenerateButton2() {
         return getButton("regenerate");
       }
       function getContinueGeneratingButton2() {
@@ -222,10 +222,10 @@
       }
       function getTextareaValue() {
         var _a;
-        return ((_a = getTextarea()) == null ? void 0 : _a.value) || "";
+        return ((_a = getTextarea2()) == null ? void 0 : _a.value) || "";
       }
       function setTextarea(message) {
-        const textarea = getTextarea();
+        const textarea = getTextarea2();
         if (!textarea)
           return;
         textarea.value = message;
@@ -234,7 +234,7 @@
       function send(message) {
         return __async(this, null, function* () {
           setTextarea(message);
-          const textarea = getTextarea();
+          const textarea = getTextarea2();
           if (!textarea)
             return;
           while (textarea.value === message) {
@@ -244,13 +244,13 @@
         });
       }
       function regenerate() {
-        const regenerateButton = getRegenerateButton();
+        const regenerateButton = getRegenerateButton2();
         if (!regenerateButton)
           return;
         regenerateButton.click();
       }
       function onSend(callback) {
-        const textarea = getTextarea();
+        const textarea = getTextarea2();
         if (!textarea)
           return;
         textarea.addEventListener("keydown", function(event) {
@@ -263,14 +263,14 @@
           return;
         sendButton.addEventListener("mousedown", callback);
       }
-      function isGenerating() {
+      function isGenerating2() {
         var _a, _b;
         return ((_b = (_a = getSubmitButton()) == null ? void 0 : _a.firstElementChild) == null ? void 0 : _b.childElementCount) === 3;
       }
       function waitForIdle() {
         return new Promise((resolve) => {
           const interval = setInterval(() => {
-            if (!isGenerating()) {
+            if (!isGenerating2()) {
               clearInterval(interval);
               resolve();
             }
@@ -296,14 +296,14 @@
                   if (!firstTime) {
                     yield new Promise((resolve) => setTimeout(resolve, waitTime));
                   }
-                  if (!firstTime && isGenerating()) {
+                  if (!firstTime && isGenerating2()) {
                     continue;
                   } else if (getContinueGeneratingButton2()) {
                     (_a = getContinueGeneratingButton2()) == null ? void 0 : _a.click();
                     continue;
-                  } else if (getRegenerateButton() && !getTextarea()) {
+                  } else if (getRegenerateButton2() && !getTextarea2()) {
                     yield new Promise((resolve) => setTimeout(resolve, 10 * 1e3));
-                    (_b = getRegenerateButton()) == null ? void 0 : _b.click();
+                    (_b = getRegenerateButton2()) == null ? void 0 : _b.click();
                     continue;
                   }
                   firstTime = false;
@@ -398,10 +398,26 @@
   function main() {
     return __async(this, null, function* () {
       yield initialize();
+      let firstTime = true;
       setInterval(() => __async(this, null, function* () {
-        const continueGeneratingButton = (0, import_chatgpt.getContinueGeneratingButton)();
-        if (continueGeneratingButton) {
-          continueGeneratingButton.click();
+        var _a, _b;
+        while (true) {
+          const waitTime = !document.hasFocus() ? 5 * 1e3 : 2e3;
+          if (!firstTime) {
+            yield new Promise((resolve) => setTimeout(resolve, waitTime));
+          }
+          if (!firstTime && (0, import_chatgpt.isGenerating)()) {
+            continue;
+          } else if ((0, import_chatgpt.getContinueGeneratingButton)()) {
+            (_a = (0, import_chatgpt.getContinueGeneratingButton)()) == null ? void 0 : _a.click();
+            continue;
+          } else if ((0, import_chatgpt.getRegenerateButton)() && !(0, import_chatgpt.getTextarea)()) {
+            yield new Promise((resolve) => setTimeout(resolve, 10 * 1e3));
+            (_b = (0, import_chatgpt.getRegenerateButton)()) == null ? void 0 : _b.click();
+            continue;
+          }
+          firstTime = false;
+          break;
         }
       }), 1e3);
     });
