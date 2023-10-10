@@ -2,7 +2,7 @@
 // @name         ChatGPT Auto-Continue 🔄
 // @description  ⚡ Automatically click the 'Continue Generating' button in ChatGPT, handling errors!
 // @author       mefengl
-// @version      1.0.1
+// @version      1.1.0
 // @namespace    https://github.com/mefengl
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @license      MIT
@@ -389,6 +389,9 @@
 
   // src/index.ts
   var import_chatgpt = __toESM(require_chatgpt2(), 1);
+  var retryCount = 0;
+  var maxRetries = 3;
+  var lastRetryTime = null;
   function initialize() {
     return __async(this, null, function* () {
       yield new Promise((resolve) => window.addEventListener("load", resolve));
@@ -401,6 +404,10 @@
       let firstTime = true;
       setInterval(() => __async(this, null, function* () {
         var _a, _b;
+        const currentTime = (/* @__PURE__ */ new Date()).getTime();
+        if (lastRetryTime && currentTime - lastRetryTime >= 60 * 1e3) {
+          retryCount = 0;
+        }
         while (true) {
           const waitTime = !document.hasFocus() ? 20 * 1e3 : 2e3;
           if (!firstTime) {
@@ -412,9 +419,16 @@
             (_a = (0, import_chatgpt.getContinueGeneratingButton)()) == null ? void 0 : _a.click();
             continue;
           } else if ((0, import_chatgpt.getRegenerateButton)() && !(0, import_chatgpt.getTextarea)()) {
-            yield new Promise((resolve) => setTimeout(resolve, 2 * 1e3));
-            (_b = (0, import_chatgpt.getRegenerateButton)()) == null ? void 0 : _b.click();
-            continue;
+            if (retryCount < maxRetries) {
+              yield new Promise((resolve) => setTimeout(resolve, 2 * 1e3));
+              (_b = (0, import_chatgpt.getRegenerateButton)()) == null ? void 0 : _b.click();
+              retryCount++;
+              lastRetryTime = (/* @__PURE__ */ new Date()).getTime();
+              continue;
+            } else {
+              console.error("Failed to regenerate after 3 attempts. Stopping retries.");
+              break;
+            }
           }
           firstTime = false;
           break;
