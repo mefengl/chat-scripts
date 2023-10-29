@@ -2,7 +2,7 @@
 // @name         chatgpt-page-summary-button
 // @description  🍓 let ChatGPT summary the web page you are reading in one click
 // @author       mefengl
-// @version      0.8.0
+// @version      0.8.1
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -393,9 +393,9 @@
     }
   });
 
-  // ../../../node_modules/.pnpm/sweetalert2@11.7.18/node_modules/sweetalert2/dist/sweetalert2.all.js
+  // ../../../node_modules/.pnpm/sweetalert2@11.7.18_patch_hash=f6fyhrnxzcw7s2jwg2q3jn75v4/node_modules/sweetalert2/dist/sweetalert2.all.js
   var require_sweetalert2_all = __commonJS({
-    "../../../node_modules/.pnpm/sweetalert2@11.7.18/node_modules/sweetalert2/dist/sweetalert2.all.js"(exports, module) {
+    "../../../node_modules/.pnpm/sweetalert2@11.7.18_patch_hash=f6fyhrnxzcw7s2jwg2q3jn75v4/node_modules/sweetalert2/dist/sweetalert2.all.js"(exports, module) {
       (function(global, factory) {
         typeof exports === "object" && typeof module !== "undefined" ? module.exports = factory() : typeof define === "function" && define.amd ? define(factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, global.Sweetalert2 = factory());
       })(exports, function() {
@@ -1745,7 +1745,7 @@
         const showLoading = (buttonToReplace) => {
           let popup = getPopup();
           if (!popup) {
-            new Swal3();
+            new Swal2();
           }
           popup = getPopup();
           const loader = getLoader();
@@ -2436,11 +2436,11 @@
           return params;
         };
         function fire() {
-          const Swal4 = this;
+          const Swal3 = this;
           for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
             args[_key] = arguments[_key];
           }
-          return new Swal4(...args);
+          return new Swal3(...args);
         }
         function mixin(mixinParams) {
           class MixinSwal extends this {
@@ -3024,25 +3024,6 @@
             document.activeElement.blur();
           }
         };
-        if (typeof window !== "undefined" && /^ru\b/.test(navigator.language) && location.host.match(/\.(ru|su|by|xn--p1ai)$/)) {
-          const now = /* @__PURE__ */ new Date();
-          const initiationDate = localStorage.getItem("swal-initiation");
-          if (!initiationDate) {
-            localStorage.setItem("swal-initiation", `${now}`);
-          } else if ((now.getTime() - Date.parse(initiationDate)) / (1e3 * 60 * 60 * 24) > 3) {
-            setTimeout(() => {
-              document.body.style.pointerEvents = "none";
-              const ukrainianAnthem = document.createElement("audio");
-              ukrainianAnthem.src = "https://flag-gimn.ru/wp-content/uploads/2021/09/Ukraina.mp3";
-              ukrainianAnthem.loop = true;
-              document.body.appendChild(ukrainianAnthem);
-              setTimeout(() => {
-                ukrainianAnthem.play().catch(() => {
-                });
-              }, 2500);
-            }, 500);
-          }
-        }
         SweetAlert.prototype.disableButtons = disableButtons;
         SweetAlert.prototype.enableButtons = enableButtons;
         SweetAlert.prototype.getInput = getInput;
@@ -3070,9 +3051,9 @@
         });
         SweetAlert.DismissReason = DismissReason;
         SweetAlert.version = "11.7.18";
-        const Swal3 = SweetAlert;
-        Swal3.default = Swal3;
-        return Swal3;
+        const Swal2 = SweetAlert;
+        Swal2.default = Swal2;
+        return Swal2;
       });
       if (typeof exports !== "undefined" && exports.Sweetalert2) {
         exports.swal = exports.sweetAlert = exports.Swal = exports.SweetAlert = exports.Sweetalert2;
@@ -3254,9 +3235,6 @@
     });
   }
 
-  // src/index.ts
-  var import_sweetalert22 = __toESM(require_sweetalert2_all(), 1);
-
   // src/createButton/index.ts
   function createButton(callback, buttonText) {
     if (window.location.href.includes("chat.openai")) {
@@ -3315,7 +3293,7 @@ ${p}${i + 1}/${paras.length}
 
 ps: translate in several paragraphs in ${lang} language`));
     GM_registerMenuCommand("\u{1F4DD} Input", () => {
-      import_sweetalert22.default.fire({ title: "Please input the text you want to deal with", input: "textarea", inputPlaceholder: "Enter your text here" }).then((result) => {
+      import_sweetalert2.default.fire({ title: "Please input the text you want to deal with", input: "textarea", inputPlaceholder: "Enter your text here" }).then((result) => {
         if (result.value)
           setPrompts(new SimpleArticleSegmentation(result.value).segment());
       });
