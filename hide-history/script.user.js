@@ -2,7 +2,7 @@
 // @name         chatgpt-hide-history
 // @description  🙈 Seletively hide chat history in sidebar such as "Today", "Yesterday", "Previous 7 Days", etc.
 // @author       mefengl
-// @version      0.2.14
+// @version      0.2.15
 // @namespace    https://github.com/mefengl
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @license      MIT
@@ -133,6 +133,7 @@
         onSend: () => onSend,
         regenerate: () => regenerate,
         send: () => send,
+        sendArray: () => sendArray,
         setHorizontalConversation: () => setHorizontalConversation,
         setPromptListener: () => setPromptListener,
         setPureConversation: () => setPureConversation,
@@ -244,6 +245,12 @@
             textarea.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
             yield new Promise((resolve) => setTimeout(resolve, 100));
           }
+          for (let i = 0; i < 10; i++) {
+            if (isGenerating()) {
+              break;
+            }
+            yield new Promise((resolve) => setTimeout(resolve, 1e3));
+          }
         });
       }
       function regenerate() {
@@ -280,6 +287,34 @@
           }, 1e3);
         });
       }
+      function sendArray(messages) {
+        return __async(this, null, function* () {
+          var _a, _b;
+          let firstTime = true;
+          const isLong = messages.length > 60;
+          while (messages.length > 0) {
+            const waitTime = isLong && !document.hasFocus() ? 20 * 1e3 : 2e3;
+            if (!firstTime) {
+              yield new Promise((resolve) => setTimeout(resolve, waitTime));
+            }
+            if (isGenerating()) {
+              continue;
+            } else if (getContinueGeneratingButton()) {
+              (_a = getContinueGeneratingButton()) == null ? void 0 : _a.click();
+              continue;
+            } else if (getRegenerateButton() && !getTextarea()) {
+              yield new Promise((resolve) => setTimeout(resolve, 10 * 1e3));
+              (_b = getRegenerateButton()) == null ? void 0 : _b.click();
+              continue;
+            }
+            firstTime = false;
+            if (messages.length === 0) {
+              break;
+            }
+            yield send(messages.shift() || "");
+          }
+        });
+      }
       function setPromptListener(key = "prompt_texts") {
         let last_trigger_time = +/* @__PURE__ */ new Date();
         if (location.href.includes("chat.openai")) {
@@ -289,35 +324,9 @@
             }
             last_trigger_time = +/* @__PURE__ */ new Date();
             setTimeout(() => __async(this, null, function* () {
-              var _a, _b;
-              const prompt_texts = new_value;
-              const isLong = prompt_texts.length > 60;
-              if (prompt_texts.length > 0) {
-                let firstTime = true;
-                while (true) {
-                  const waitTime = isLong && !document.hasFocus() ? 20 * 1e3 : 2e3;
-                  if (!firstTime) {
-                    yield new Promise((resolve) => setTimeout(resolve, waitTime));
-                  }
-                  if (!firstTime && isGenerating()) {
-                    continue;
-                  } else if (getContinueGeneratingButton()) {
-                    (_a = getContinueGeneratingButton()) == null ? void 0 : _a.click();
-                    continue;
-                  } else if (getRegenerateButton() && !getTextarea()) {
-                    yield new Promise((resolve) => setTimeout(resolve, 10 * 1e3));
-                    (_b = getRegenerateButton()) == null ? void 0 : _b.click();
-                    continue;
-                  }
-                  firstTime = false;
-                  if (prompt_texts.length === 0) {
-                    break;
-                  }
-                  yield send(prompt_texts.shift() || "");
-                }
-              }
+              sendArray(new_value);
+              GM_setValue(key, []);
             }), 0);
-            GM_setValue(key, []);
           }));
         }
       }

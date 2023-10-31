@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name chatgpt-hello
 // @namespace https://github.com/mefengl
-// @version 0.0.13
+// @version 0.0.14
 // @description A template for userscript use chat-kit
 // @author chat-kit
 // @match https://chat.openai.com/*
@@ -109,6 +109,7 @@
         onSend: () => onSend2,
         regenerate: () => regenerate2,
         send: () => send3,
+        sendArray: () => sendArray2,
         setHorizontalConversation: () => setHorizontalConversation2,
         setPromptListener: () => setPromptListener2,
         setPureConversation: () => setPureConversation2,
@@ -220,6 +221,12 @@
             textarea.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
             yield new Promise((resolve) => setTimeout(resolve, 100));
           }
+          for (let i = 0; i < 10; i++) {
+            if (isGenerating2()) {
+              break;
+            }
+            yield new Promise((resolve) => setTimeout(resolve, 1e3));
+          }
         });
       }
       function regenerate2() {
@@ -256,6 +263,34 @@
           }, 1e3);
         });
       }
+      function sendArray2(messages) {
+        return __async(this, null, function* () {
+          var _a, _b;
+          let firstTime = true;
+          const isLong = messages.length > 60;
+          while (messages.length > 0) {
+            const waitTime = isLong && !document.hasFocus() ? 20 * 1e3 : 2e3;
+            if (!firstTime) {
+              yield new Promise((resolve) => setTimeout(resolve, waitTime));
+            }
+            if (isGenerating2()) {
+              continue;
+            } else if (getContinueGeneratingButton2()) {
+              (_a = getContinueGeneratingButton2()) == null ? void 0 : _a.click();
+              continue;
+            } else if (getRegenerateButton2() && !getTextarea2()) {
+              yield new Promise((resolve) => setTimeout(resolve, 10 * 1e3));
+              (_b = getRegenerateButton2()) == null ? void 0 : _b.click();
+              continue;
+            }
+            firstTime = false;
+            if (messages.length === 0) {
+              break;
+            }
+            yield send3(messages.shift() || "");
+          }
+        });
+      }
       function setPromptListener2(key = "prompt_texts") {
         let last_trigger_time = +/* @__PURE__ */ new Date();
         if (location.href.includes("chat.openai")) {
@@ -265,35 +300,9 @@
             }
             last_trigger_time = +/* @__PURE__ */ new Date();
             setTimeout(() => __async(this, null, function* () {
-              var _a, _b;
-              const prompt_texts = new_value;
-              const isLong = prompt_texts.length > 60;
-              if (prompt_texts.length > 0) {
-                let firstTime = true;
-                while (true) {
-                  const waitTime = isLong && !document.hasFocus() ? 20 * 1e3 : 2e3;
-                  if (!firstTime) {
-                    yield new Promise((resolve) => setTimeout(resolve, waitTime));
-                  }
-                  if (!firstTime && isGenerating2()) {
-                    continue;
-                  } else if (getContinueGeneratingButton2()) {
-                    (_a = getContinueGeneratingButton2()) == null ? void 0 : _a.click();
-                    continue;
-                  } else if (getRegenerateButton2() && !getTextarea2()) {
-                    yield new Promise((resolve) => setTimeout(resolve, 10 * 1e3));
-                    (_b = getRegenerateButton2()) == null ? void 0 : _b.click();
-                    continue;
-                  }
-                  firstTime = false;
-                  if (prompt_texts.length === 0) {
-                    break;
-                  }
-                  yield send3(prompt_texts.shift() || "");
-                }
-              }
+              sendArray2(new_value);
+              GM_setValue(key, []);
             }), 0);
-            GM_setValue(key, []);
           }));
         }
       }
@@ -373,7 +382,7 @@
       __defProp2(target, name, { get: all[name], enumerable: true });
   };
 
-  // ../../packages/chatkit/dist/chunk-C7MURTHQ.mjs
+  // ../../packages/chatkit/dist/chunk-TTUQC5UY.mjs
   var chatgpt_exports = {};
   __export(chatgpt_exports, {
     clickFollowUpButton: () => clickFollowUpButton,
@@ -405,6 +414,7 @@
     onSend: () => onSend,
     regenerate: () => regenerate,
     send: () => send,
+    sendArray: () => sendArray,
     setHorizontalConversation: () => setHorizontalConversation,
     setPromptListener: () => setPromptListener,
     setPureConversation: () => setPureConversation,
@@ -515,6 +525,12 @@
         textarea.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
         yield new Promise((resolve) => setTimeout(resolve, 100));
       }
+      for (let i = 0; i < 10; i++) {
+        if (isGenerating()) {
+          break;
+        }
+        yield new Promise((resolve) => setTimeout(resolve, 1e3));
+      }
     });
   }
   function regenerate() {
@@ -551,6 +567,34 @@
       }, 1e3);
     });
   }
+  function sendArray(messages) {
+    return __async(this, null, function* () {
+      var _a, _b;
+      let firstTime = true;
+      const isLong = messages.length > 60;
+      while (messages.length > 0) {
+        const waitTime = isLong && !document.hasFocus() ? 20 * 1e3 : 2e3;
+        if (!firstTime) {
+          yield new Promise((resolve) => setTimeout(resolve, waitTime));
+        }
+        if (isGenerating()) {
+          continue;
+        } else if (getContinueGeneratingButton()) {
+          (_a = getContinueGeneratingButton()) == null ? void 0 : _a.click();
+          continue;
+        } else if (getRegenerateButton() && !getTextarea()) {
+          yield new Promise((resolve) => setTimeout(resolve, 10 * 1e3));
+          (_b = getRegenerateButton()) == null ? void 0 : _b.click();
+          continue;
+        }
+        firstTime = false;
+        if (messages.length === 0) {
+          break;
+        }
+        yield send(messages.shift() || "");
+      }
+    });
+  }
   function setPromptListener(key = "prompt_texts") {
     let last_trigger_time = +/* @__PURE__ */ new Date();
     if (location.href.includes("chat.openai")) {
@@ -560,35 +604,9 @@
         }
         last_trigger_time = +/* @__PURE__ */ new Date();
         setTimeout(() => __async(this, null, function* () {
-          var _a, _b;
-          const prompt_texts = new_value;
-          const isLong = prompt_texts.length > 60;
-          if (prompt_texts.length > 0) {
-            let firstTime = true;
-            while (true) {
-              const waitTime = isLong && !document.hasFocus() ? 20 * 1e3 : 2e3;
-              if (!firstTime) {
-                yield new Promise((resolve) => setTimeout(resolve, waitTime));
-              }
-              if (!firstTime && isGenerating()) {
-                continue;
-              } else if (getContinueGeneratingButton()) {
-                (_a = getContinueGeneratingButton()) == null ? void 0 : _a.click();
-                continue;
-              } else if (getRegenerateButton() && !getTextarea()) {
-                yield new Promise((resolve) => setTimeout(resolve, 10 * 1e3));
-                (_b = getRegenerateButton()) == null ? void 0 : _b.click();
-                continue;
-              }
-              firstTime = false;
-              if (prompt_texts.length === 0) {
-                break;
-              }
-              yield send(prompt_texts.shift() || "");
-            }
-          }
+          sendArray(new_value);
+          GM_setValue(key, []);
         }), 0);
-        GM_setValue(key, []);
       }));
     }
   }
