@@ -414,7 +414,7 @@
       setInterval(() => __async(this, null, function* () {
         var _a, _b;
         const currentTime = (/* @__PURE__ */ new Date()).getTime();
-        if (lastRetryTime && currentTime - lastRetryTime >= 60 * 1e3) {
+        if (lastRetryTime && currentTime - lastRetryTime >= 5 * 60 * 1e3) {
           retryCount = 0;
         }
         while (true) {
