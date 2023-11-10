@@ -2,7 +2,7 @@
 // @name         claude-page-translate-button
 // @description  🍓 let Claude translate the web page you are reading in one click
 // @author       mefengl
-// @version      0.4.4
+// @version      0.4.5
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=claude.ai
@@ -174,6 +174,9 @@
                 let firstTime = true;
                 while (prompt_texts.length > 0) {
                   const waitTime = isLong && !document.hasFocus() ? 20 * 1e3 : 2e3;
+                  if (firstTime) {
+                    yield new Promise((resolve) => setTimeout(resolve, 2e3));
+                  }
                   if (!firstTime) {
                     yield new Promise((resolve) => setTimeout(resolve, waitTime));
                   }
