@@ -2,7 +2,7 @@
 // @name         ChatGPT Auto-Continue 🔄
 // @description  ⚡ Automatically click the 'Continue Generating' button in ChatGPT, handling errors!
 // @author       mefengl
-// @version      1.1.2
+// @version      1.1.3
 // @namespace    https://github.com/mefengl
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @license      MIT
@@ -168,7 +168,13 @@
         const result = textareas[0];
         return result;
       }
+      function getNewSubmitButton() {
+        return document.querySelector('button[data-testid="send-button"]');
+      }
       function getSubmitButton() {
+        if (getNewSubmitButton()) {
+          return getNewSubmitButton();
+        }
         const textarea = getTextarea2();
         if (!textarea)
           return;
@@ -204,8 +210,11 @@
       function getContinueGeneratingButton2() {
         return getButton("continue");
       }
+      function getNewStopGeneratingButton() {
+        return document.querySelector('button[aria-label="Stop generating"]');
+      }
       function getStopGeneratingButton() {
-        return getButton("stop");
+        return getNewStopGeneratingButton() || getButton("stop");
       }
       function getResponseElementHTMLs() {
         return Array.from(document.querySelectorAll(".markdown")).map((m) => m.innerHTML);
@@ -272,6 +281,9 @@
       }
       function isGenerating2() {
         var _a, _b;
+        if (getNewStopGeneratingButton()) {
+          return true;
+        }
         return ((_b = (_a = getSubmitButton()) == null ? void 0 : _a.firstElementChild) == null ? void 0 : _b.childElementCount) === 3;
       }
       function waitForIdle() {

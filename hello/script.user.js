@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name chatgpt-hello
 // @namespace https://github.com/mefengl
-// @version 0.0.15
+// @version 0.0.16
 // @description A template for userscript use chat-kit
 // @author chat-kit
 // @match https://chat.openai.com/*
@@ -147,7 +147,13 @@
         const result = textareas[0];
         return result;
       }
+      function getNewSubmitButton2() {
+        return document.querySelector('button[data-testid="send-button"]');
+      }
       function getSubmitButton2() {
+        if (getNewSubmitButton2()) {
+          return getNewSubmitButton2();
+        }
         const textarea = getTextarea2();
         if (!textarea)
           return;
@@ -183,8 +189,11 @@
       function getContinueGeneratingButton2() {
         return getButton2("continue");
       }
+      function getNewStopGeneratingButton2() {
+        return document.querySelector('button[aria-label="Stop generating"]');
+      }
       function getStopGeneratingButton2() {
-        return getButton2("stop");
+        return getNewStopGeneratingButton2() || getButton2("stop");
       }
       function getResponseElementHTMLs2() {
         return Array.from(document.querySelectorAll(".markdown")).map((m) => m.innerHTML);
@@ -251,6 +260,9 @@
       }
       function isGenerating2() {
         var _a, _b;
+        if (getNewStopGeneratingButton2()) {
+          return true;
+        }
         return ((_b = (_a = getSubmitButton2()) == null ? void 0 : _a.firstElementChild) == null ? void 0 : _b.childElementCount) === 3;
       }
       function waitForIdle2() {
@@ -382,7 +394,7 @@
       __defProp2(target, name, { get: all[name], enumerable: true });
   };
 
-  // ../../packages/chatkit/dist/chunk-TTUQC5UY.mjs
+  // ../../packages/chatkit/dist/chunk-NDFQ63YR.mjs
   var chatgpt_exports = {};
   __export(chatgpt_exports, {
     clickFollowUpButton: () => clickFollowUpButton,
@@ -451,7 +463,13 @@
     const result = textareas[0];
     return result;
   }
+  function getNewSubmitButton() {
+    return document.querySelector('button[data-testid="send-button"]');
+  }
   function getSubmitButton() {
+    if (getNewSubmitButton()) {
+      return getNewSubmitButton();
+    }
     const textarea = getTextarea();
     if (!textarea)
       return;
@@ -487,8 +505,11 @@
   function getContinueGeneratingButton() {
     return getButton("continue");
   }
+  function getNewStopGeneratingButton() {
+    return document.querySelector('button[aria-label="Stop generating"]');
+  }
   function getStopGeneratingButton() {
-    return getButton("stop");
+    return getNewStopGeneratingButton() || getButton("stop");
   }
   function getResponseElementHTMLs() {
     return Array.from(document.querySelectorAll(".markdown")).map((m) => m.innerHTML);
@@ -555,6 +576,9 @@
   }
   function isGenerating() {
     var _a, _b;
+    if (getNewStopGeneratingButton()) {
+      return true;
+    }
     return ((_b = (_a = getSubmitButton()) == null ? void 0 : _a.firstElementChild) == null ? void 0 : _b.childElementCount) === 3;
   }
   function waitForIdle() {

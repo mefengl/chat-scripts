@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         chatgpt-infinite
 // @namespace    https://github.com/mefengl
-// @version      0.5.11
+// @version      0.5.12
 // @description  Infinite auto ask for chatgpt
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @author       mefengl
@@ -168,7 +168,13 @@
         const result = textareas[0];
         return result;
       }
+      function getNewSubmitButton() {
+        return document.querySelector('button[data-testid="send-button"]');
+      }
       function getSubmitButton() {
+        if (getNewSubmitButton()) {
+          return getNewSubmitButton();
+        }
         const textarea = getTextarea();
         if (!textarea)
           return;
@@ -204,8 +210,11 @@
       function getContinueGeneratingButton() {
         return getButton("continue");
       }
+      function getNewStopGeneratingButton() {
+        return document.querySelector('button[aria-label="Stop generating"]');
+      }
       function getStopGeneratingButton() {
-        return getButton("stop");
+        return getNewStopGeneratingButton() || getButton("stop");
       }
       function getResponseElementHTMLs() {
         return Array.from(document.querySelectorAll(".markdown")).map((m) => m.innerHTML);
@@ -272,6 +281,9 @@
       }
       function isGenerating() {
         var _a, _b;
+        if (getNewStopGeneratingButton()) {
+          return true;
+        }
         return ((_b = (_a = getSubmitButton()) == null ? void 0 : _a.firstElementChild) == null ? void 0 : _b.childElementCount) === 3;
       }
       function waitForIdle2() {
