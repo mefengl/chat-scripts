@@ -2,7 +2,7 @@
 // @name         chatgpt-page-summary-button
 // @description  🍓 let ChatGPT summary the web page you are reading in one click
 // @author       mefengl
-// @version      0.8.6
+// @version      0.9.0
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -3232,7 +3232,7 @@
       }
       import_sweetalert2.default.fire({
         title: "",
-        html: html.join("<br />"),
+        html,
         width: swalWidth,
         padding: "0em",
         background: "#fff",
@@ -3324,11 +3324,11 @@ ps: translate in several paragraphs in ${lang} language`));
       return setPrompts(getParagraphs());
     }), navigator.language.startsWith("zh") ? "\u9875\u9762\u6458\u8981" : "Page Summary");
     function displayReadMode() {
-      let html = (0, import_chatgpt.getResponseElementHTMLs)();
-      if (html.length === 0) {
-        html = ["<p>No responses available.</p>"];
+      let elements = (0, import_chatgpt.getResponseElementHTMLs)();
+      if (elements.length === 0) {
+        elements = ["<p>No responses available.</p>"];
       }
-      displayHTML(html);
+      displayHTML(`<div class="relative p-2 markdown prose w-full break-words dark:prose-invert light">${elements.join("")}</div>`);
     }
     GM_registerMenuCommand("\u{1F4D6} Read Mode", displayReadMode);
   }))();
