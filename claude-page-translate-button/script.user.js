@@ -2,7 +2,7 @@
 // @name         claude-page-translate-button
 // @description  🍓 let Claude translate the web page you are reading in one click
 // @author       mefengl
-// @version      0.4.7
+// @version      0.5.0
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=claude.ai
@@ -108,6 +108,8 @@
       var claude_exports = {};
       __export(claude_exports, {
         getFieldset: () => getFieldset,
+        getPromptElementHTMLs: () => getPromptElementHTMLs,
+        getResponseElementHTMLs: () => getResponseElementHTMLs2,
         getSubmitButton: () => getSubmitButton,
         getTextarea: () => getTextarea,
         isGenerating: () => isGenerating,
@@ -135,6 +137,12 @@
       function getSubmitButton() {
         const fieldset = getFieldset();
         return fieldset.querySelector("button");
+      }
+      function getPromptElementHTMLs() {
+        return Array.from(document.querySelectorAll(".ReactMarkdown.place-self-end > .contents")).map((m) => m.innerHTML);
+      }
+      function getResponseElementHTMLs2() {
+        return Array.from(document.querySelectorAll(".ReactMarkdown.place-self-start > .contents")).map((m) => m.innerHTML);
       }
       function isGenerating() {
         var _a;
@@ -3004,6 +3012,45 @@
       return [];
     }
   }
+  function displayHTML(html) {
+    return __async(this, null, function* () {
+      let screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+      let swalWidth = screenWidth < 800 ? "80%" : "800px";
+      if (!document.head.querySelector("#readModeStyle")) {
+        let style = document.createElement("style");
+        style.type = "text/css";
+        style.id = "readModeStyle";
+        style.innerHTML = `
+      .text-left { text-align: left !important; }
+      .scrollable { max-height: 90vh; overflow-y: auto; }
+  `;
+        document.head.appendChild(style);
+      }
+      import_sweetalert2.default.fire({
+        title: "",
+        html,
+        width: swalWidth,
+        padding: "0em",
+        background: "#fff",
+        backdrop: "rgba(128,128,128,0.4)",
+        showConfirmButton: false,
+        showClass: { popup: "", backdrop: "" },
+        customClass: { htmlContainer: "text-left scrollable swal-font" },
+        willClose: () => {
+          const scrollable = document.querySelector(".scrollable");
+          if (scrollable) {
+            localStorage.setItem("scrollPos" + window.location.href, `${scrollable.scrollTop}`);
+          }
+        },
+        didOpen: () => {
+          const scrollable = document.querySelector(".scrollable");
+          if (scrollable) {
+            scrollable.scrollTop = parseInt(localStorage.getItem("scrollPos" + window.location.href) || "0");
+          }
+        }
+      });
+    });
+  }
 
   // src/createButton/index.ts
   function createButton(callback, buttonText) {
@@ -3071,6 +3118,14 @@ ps: translate in several paragraphs in ${lang} language`));
     createButton_default(() => __async(void 0, null, function* () {
       return setPrompts(getParagraphs());
     }), navigator.language.startsWith("zh") ? "\u9875\u9762\u7FFB\u8BD1" : "Page Translate");
+    function displayReadMode() {
+      let elements = (0, import_claude.getResponseElementHTMLs)();
+      if (elements.length === 0) {
+        elements = ["<p>No responses available.</p>"];
+      }
+      displayHTML(`<div class="ReactMarkdown break-words text-stone-900 gap-3 grid">${elements.join("")}</div>`);
+    }
+    GM_registerMenuCommand("\u{1F4D6} Read Mode", displayReadMode);
   }))();
 })();
 /*! Bundled license information:

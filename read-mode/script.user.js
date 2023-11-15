@@ -1,13 +1,14 @@
 // ==UserScript==
 // @name         chatgpt-read-mode
-// @description  🍞 show a modal for Read
+// @description  🍞 show a modal for Read, also support Claude
 // @author       mefengl
-// @version      0.1.0
+// @version      0.2.0
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @license      MIT
-// @match        *://*/*
+// @match        https://chat.openai.com/*
+// @match        https://claude.ai/*
 // @grant        GM_registerMenuCommand
 // @updateURL    https://github.com/mefengl/chat-scripts/raw/main/read-mode/script.user.js
 
@@ -79,336 +80,6 @@
       step((generator = generator.apply(__this, __arguments)).next());
     });
   };
-
-  // ../../packages/chatkit/dist/chatgpt/index.js
-  var require_chatgpt = __commonJS({
-    "../../packages/chatkit/dist/chatgpt/index.js"(exports, module) {
-      "use strict";
-      var __defProp2 = Object.defineProperty;
-      var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
-      var __getOwnPropNames2 = Object.getOwnPropertyNames;
-      var __hasOwnProp2 = Object.prototype.hasOwnProperty;
-      var __export = (target, all) => {
-        for (var name in all)
-          __defProp2(target, name, { get: all[name], enumerable: true });
-      };
-      var __copyProps2 = (to, from, except, desc) => {
-        if (from && typeof from === "object" || typeof from === "function") {
-          for (let key of __getOwnPropNames2(from))
-            if (!__hasOwnProp2.call(to, key) && key !== except)
-              __defProp2(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc2(from, key)) || desc.enumerable });
-        }
-        return to;
-      };
-      var __toCommonJS = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
-      var chatgpt_exports = {};
-      __export(chatgpt_exports, {
-        clickFollowUpButton: () => clickFollowUpButton,
-        getButton: () => getButton,
-        getContinueGeneratingButton: () => getContinueGeneratingButton,
-        getConversation: () => getConversation,
-        getCopyLinkButton: () => getCopyLinkButton,
-        getFollowUpButtons: () => getFollowUpButtons,
-        getHistoryBlockTitle: () => getHistoryBlockTitle,
-        getHistoryBlocks: () => getHistoryBlocks,
-        getHistoryBlocksWithTitle: () => getHistoryBlocksWithTitle,
-        getInitialButtons: () => getInitialButtons,
-        getLastResponse: () => getLastResponse,
-        getLastResponseElement: () => getLastResponseElement,
-        getModelSelectButton: () => getModelSelectButton,
-        getNav: () => getNav,
-        getNewModelSelectButtons: () => getNewModelSelectButtons,
-        getRegenerateButton: () => getRegenerateButton,
-        getResponseElementHTMLs: () => getResponseElementHTMLs2,
-        getShareChatButton: () => getShareChatButton,
-        getStopGeneratingButton: () => getStopGeneratingButton,
-        getSubmitButton: () => getSubmitButton,
-        getTextarea: () => getTextarea,
-        getTextareaValue: () => getTextareaValue,
-        hasNewModelSelectButtons: () => hasNewModelSelectButtons,
-        isConversationStarted: () => isConversationStarted,
-        isGenerating: () => isGenerating,
-        isHorizontalConversation: () => isHorizontalConversation,
-        onSend: () => onSend,
-        regenerate: () => regenerate,
-        send: () => send,
-        sendArray: () => sendArray,
-        setHorizontalConversation: () => setHorizontalConversation,
-        setPromptListener: () => setPromptListener,
-        setPureConversation: () => setPureConversation,
-        setTextarea: () => setTextarea,
-        waitForIdle: () => waitForIdle
-      });
-      module.exports = __toCommonJS(chatgpt_exports);
-      function getNav() {
-        return document.querySelector("nav");
-      }
-      function getHistoryBlocks() {
-        const nav = getNav();
-        if (!nav)
-          return [];
-        const result = Array.from(nav.querySelectorAll("ol")).map((ol) => ol.parentElement);
-        return result;
-      }
-      function getHistoryBlockTitle(historyBlock) {
-        var _a;
-        return ((_a = historyBlock.querySelector("h3")) == null ? void 0 : _a.textContent) || "";
-      }
-      function getHistoryBlocksWithTitle() {
-        const historyBlocks = getHistoryBlocks();
-        const result = historyBlocks.map((historyBlock) => ({
-          block: historyBlock,
-          title: getHistoryBlockTitle(historyBlock)
-        }));
-        return result;
-      }
-      function getTextarea() {
-        const form = document.querySelector("form");
-        if (!form)
-          return;
-        const textareas = form.querySelectorAll("textarea");
-        const result = textareas[0];
-        return result;
-      }
-      function getNewSubmitButton() {
-        return document.querySelector('button[data-testid="send-button"]');
-      }
-      function getSubmitButton() {
-        if (getNewSubmitButton()) {
-          return getNewSubmitButton();
-        }
-        const textarea = getTextarea();
-        if (!textarea)
-          return;
-        return textarea.nextElementSibling;
-      }
-      function getInitialButtons() {
-        return Array.from(document.querySelectorAll('button[as="button"]')).filter((button) => button.querySelectorAll(".truncate").length === 2);
-      }
-      function getFollowUpButtons() {
-        return Array.from(document.querySelectorAll('button[as="button"]')).filter((button) => {
-          var _a;
-          return (_a = button.textContent) == null ? void 0 : _a.trim().match(/[.!?]$/);
-        });
-      }
-      function clickFollowUpButton(index) {
-        const followUpButtons = getFollowUpButtons();
-        if (followUpButtons.length === 0)
-          return;
-        if (index === void 0 || index < 0 || index >= followUpButtons.length) {
-          index = Math.floor(Math.random() * followUpButtons.length);
-        }
-        followUpButtons[index].click();
-      }
-      function getButton(text) {
-        return Array.from(document.querySelectorAll('button[as="button"]')).find((button) => {
-          var _a;
-          return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes(text);
-        });
-      }
-      function getRegenerateButton() {
-        return getButton("regenerate");
-      }
-      function getContinueGeneratingButton() {
-        return getButton("continue");
-      }
-      function getNewStopGeneratingButton() {
-        return document.querySelector('button[aria-label="Stop generating"]');
-      }
-      function getStopGeneratingButton() {
-        return getNewStopGeneratingButton() || getButton("stop");
-      }
-      function getResponseElementHTMLs2() {
-        return Array.from(document.querySelectorAll(".markdown")).map((m) => m.innerHTML);
-      }
-      function getLastResponseElement() {
-        const responseElements = document.querySelectorAll(".group.w-full");
-        return responseElements[responseElements.length - 1];
-      }
-      function getLastResponse() {
-        const lastResponseElement = getLastResponseElement();
-        if (!lastResponseElement)
-          return;
-        const lastResponse = lastResponseElement.textContent;
-        return lastResponse;
-      }
-      function getTextareaValue() {
-        var _a;
-        return ((_a = getTextarea()) == null ? void 0 : _a.value) || "";
-      }
-      function setTextarea(message) {
-        const textarea = getTextarea();
-        if (!textarea)
-          return;
-        textarea.value = message;
-        textarea.dispatchEvent(new Event("input", { bubbles: true }));
-      }
-      function send(message) {
-        return __async(this, null, function* () {
-          setTextarea(message);
-          const textarea = getTextarea();
-          if (!textarea)
-            return;
-          while (textarea.value === message) {
-            textarea.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
-            yield new Promise((resolve) => setTimeout(resolve, 100));
-          }
-          for (let i = 0; i < 10; i++) {
-            if (isGenerating()) {
-              break;
-            }
-            yield new Promise((resolve) => setTimeout(resolve, 1e3));
-          }
-        });
-      }
-      function regenerate() {
-        const regenerateButton = getRegenerateButton();
-        if (!regenerateButton)
-          return;
-        regenerateButton.click();
-      }
-      function onSend(callback) {
-        const textarea = getTextarea();
-        if (!textarea)
-          return;
-        textarea.addEventListener("keydown", function(event) {
-          if (event.key === "Enter" && !event.shiftKey) {
-            callback();
-          }
-        });
-        const sendButton = getSubmitButton();
-        if (!sendButton)
-          return;
-        sendButton.addEventListener("mousedown", callback);
-      }
-      function isGenerating() {
-        var _a, _b;
-        if (getNewStopGeneratingButton()) {
-          return true;
-        }
-        return ((_b = (_a = getSubmitButton()) == null ? void 0 : _a.firstElementChild) == null ? void 0 : _b.childElementCount) === 3;
-      }
-      function waitForIdle() {
-        return new Promise((resolve) => {
-          const interval = setInterval(() => {
-            if (!isGenerating()) {
-              clearInterval(interval);
-              resolve();
-            }
-          }, 1e3);
-        });
-      }
-      function sendArray(messages) {
-        return __async(this, null, function* () {
-          var _a, _b;
-          let firstTime = true;
-          const isLong = messages.length > 60;
-          while (messages.length > 0) {
-            const waitTime = isLong && !document.hasFocus() ? 20 * 1e3 : 2e3;
-            if (!firstTime) {
-              yield new Promise((resolve) => setTimeout(resolve, waitTime));
-            }
-            if (isGenerating()) {
-              continue;
-            } else if (getContinueGeneratingButton()) {
-              (_a = getContinueGeneratingButton()) == null ? void 0 : _a.click();
-              continue;
-            } else if (getRegenerateButton() && !getTextarea()) {
-              yield new Promise((resolve) => setTimeout(resolve, 10 * 1e3));
-              (_b = getRegenerateButton()) == null ? void 0 : _b.click();
-              continue;
-            }
-            firstTime = false;
-            if (messages.length === 0) {
-              break;
-            }
-            yield send(messages.shift() || "");
-          }
-        });
-      }
-      function setPromptListener(key = "prompt_texts") {
-        let last_trigger_time = +/* @__PURE__ */ new Date();
-        if (location.href.includes("chat.openai")) {
-          GM_addValueChangeListener(key, (name, old_value, new_value) => __async(this, null, function* () {
-            if (+/* @__PURE__ */ new Date() - last_trigger_time < 500) {
-              return;
-            }
-            last_trigger_time = +/* @__PURE__ */ new Date();
-            setTimeout(() => __async(this, null, function* () {
-              sendArray(new_value);
-              GM_setValue(key, []);
-            }), 0);
-          }));
-        }
-      }
-      function getConversation() {
-        var _a, _b;
-        return (_b = (_a = document.querySelector('div[class^="react-scroll-to-bottom"]')) == null ? void 0 : _a.firstChild) == null ? void 0 : _b.firstChild;
-      }
-      function getModelSelectButton() {
-        const conversation = getConversation();
-        if (!conversation)
-          return;
-        return Array.from(conversation.querySelectorAll("button")).find((button) => {
-          var _a;
-          return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("model");
-        });
-      }
-      function getNewModelSelectButtons() {
-        return Array.from(document.querySelectorAll("[class^='group/button']"));
-      }
-      function hasNewModelSelectButtons() {
-        return getNewModelSelectButtons().length > 0;
-      }
-      function isConversationStarted() {
-        return !getModelSelectButton();
-      }
-      function setPureConversation() {
-        const conversation = getConversation();
-        if (!conversation)
-          return;
-        const firstChild = conversation.firstChild;
-        if (!firstChild)
-          return;
-        const newDiv = document.createElement("div");
-        conversation.insertBefore(newDiv, firstChild.nextSibling);
-      }
-      function isHorizontalConversation() {
-        const conversation = getConversation();
-        if (!conversation)
-          return true;
-        if (!isConversationStarted())
-          return true;
-        return conversation.classList.contains("grid");
-      }
-      function setHorizontalConversation() {
-        if (isHorizontalConversation())
-          return;
-        setPureConversation();
-        const conversation = getConversation();
-        if (!conversation)
-          return;
-        conversation.classList.remove("flex", "flex-col", "items-center");
-        conversation.classList.add("grid", "grid-cols-2", "place-items-center");
-      }
-      function getShareChatButton() {
-        return document.querySelector('button[aria-label="Share chat"]');
-      }
-      function getCopyLinkButton() {
-        return Array.from(document.querySelectorAll('button[as="button"]')).filter((button) => {
-          var _a;
-          return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("copy link");
-        })[0];
-      }
-    }
-  });
-
-  // ../../packages/chatkit/chatgpt.js
-  var require_chatgpt2 = __commonJS({
-    "../../packages/chatkit/chatgpt.js"(exports, module) {
-      module.exports = require_chatgpt();
-    }
-  });
 
   // ../../node_modules/.pnpm/sweetalert2@11.7.18_patch_hash=f6fyhrnxzcw7s2jwg2q3jn75v4/node_modules/sweetalert2/dist/sweetalert2.all.js
   var require_sweetalert2_all = __commonJS({
@@ -3089,8 +2760,408 @@
     }
   });
 
-  // src/index.ts
-  var import_chatgpt = __toESM(require_chatgpt2(), 1);
+  // ../../packages/chatkit/dist/chunk-XT4TKGC2.mjs
+  var __defProp2 = Object.defineProperty;
+  var __export = (target, all) => {
+    for (var name in all)
+      __defProp2(target, name, { get: all[name], enumerable: true });
+  };
+
+  // ../../packages/chatkit/dist/chunk-NDFQ63YR.mjs
+  var chatgpt_exports = {};
+  __export(chatgpt_exports, {
+    clickFollowUpButton: () => clickFollowUpButton,
+    getButton: () => getButton,
+    getContinueGeneratingButton: () => getContinueGeneratingButton,
+    getConversation: () => getConversation,
+    getCopyLinkButton: () => getCopyLinkButton,
+    getFollowUpButtons: () => getFollowUpButtons,
+    getHistoryBlockTitle: () => getHistoryBlockTitle,
+    getHistoryBlocks: () => getHistoryBlocks,
+    getHistoryBlocksWithTitle: () => getHistoryBlocksWithTitle,
+    getInitialButtons: () => getInitialButtons,
+    getLastResponse: () => getLastResponse,
+    getLastResponseElement: () => getLastResponseElement,
+    getModelSelectButton: () => getModelSelectButton,
+    getNav: () => getNav,
+    getNewModelSelectButtons: () => getNewModelSelectButtons,
+    getRegenerateButton: () => getRegenerateButton,
+    getResponseElementHTMLs: () => getResponseElementHTMLs,
+    getShareChatButton: () => getShareChatButton,
+    getStopGeneratingButton: () => getStopGeneratingButton,
+    getSubmitButton: () => getSubmitButton,
+    getTextarea: () => getTextarea,
+    getTextareaValue: () => getTextareaValue,
+    hasNewModelSelectButtons: () => hasNewModelSelectButtons,
+    isConversationStarted: () => isConversationStarted,
+    isGenerating: () => isGenerating,
+    isHorizontalConversation: () => isHorizontalConversation,
+    onSend: () => onSend,
+    regenerate: () => regenerate,
+    send: () => send,
+    sendArray: () => sendArray,
+    setHorizontalConversation: () => setHorizontalConversation,
+    setPromptListener: () => setPromptListener,
+    setPureConversation: () => setPureConversation,
+    setTextarea: () => setTextarea,
+    waitForIdle: () => waitForIdle
+  });
+  function getNav() {
+    return document.querySelector("nav");
+  }
+  function getHistoryBlocks() {
+    const nav = getNav();
+    if (!nav)
+      return [];
+    const result = Array.from(nav.querySelectorAll("ol")).map((ol) => ol.parentElement);
+    return result;
+  }
+  function getHistoryBlockTitle(historyBlock) {
+    var _a;
+    return ((_a = historyBlock.querySelector("h3")) == null ? void 0 : _a.textContent) || "";
+  }
+  function getHistoryBlocksWithTitle() {
+    const historyBlocks = getHistoryBlocks();
+    const result = historyBlocks.map((historyBlock) => ({
+      block: historyBlock,
+      title: getHistoryBlockTitle(historyBlock)
+    }));
+    return result;
+  }
+  function getTextarea() {
+    const form = document.querySelector("form");
+    if (!form)
+      return;
+    const textareas = form.querySelectorAll("textarea");
+    const result = textareas[0];
+    return result;
+  }
+  function getNewSubmitButton() {
+    return document.querySelector('button[data-testid="send-button"]');
+  }
+  function getSubmitButton() {
+    if (getNewSubmitButton()) {
+      return getNewSubmitButton();
+    }
+    const textarea = getTextarea();
+    if (!textarea)
+      return;
+    return textarea.nextElementSibling;
+  }
+  function getInitialButtons() {
+    return Array.from(document.querySelectorAll('button[as="button"]')).filter((button) => button.querySelectorAll(".truncate").length === 2);
+  }
+  function getFollowUpButtons() {
+    return Array.from(document.querySelectorAll('button[as="button"]')).filter((button) => {
+      var _a;
+      return (_a = button.textContent) == null ? void 0 : _a.trim().match(/[.!?]$/);
+    });
+  }
+  function clickFollowUpButton(index) {
+    const followUpButtons = getFollowUpButtons();
+    if (followUpButtons.length === 0)
+      return;
+    if (index === void 0 || index < 0 || index >= followUpButtons.length) {
+      index = Math.floor(Math.random() * followUpButtons.length);
+    }
+    followUpButtons[index].click();
+  }
+  function getButton(text) {
+    return Array.from(document.querySelectorAll('button[as="button"]')).find((button) => {
+      var _a;
+      return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes(text);
+    });
+  }
+  function getRegenerateButton() {
+    return getButton("regenerate");
+  }
+  function getContinueGeneratingButton() {
+    return getButton("continue");
+  }
+  function getNewStopGeneratingButton() {
+    return document.querySelector('button[aria-label="Stop generating"]');
+  }
+  function getStopGeneratingButton() {
+    return getNewStopGeneratingButton() || getButton("stop");
+  }
+  function getResponseElementHTMLs() {
+    return Array.from(document.querySelectorAll(".markdown")).map((m) => m.innerHTML);
+  }
+  function getLastResponseElement() {
+    const responseElements = document.querySelectorAll(".group.w-full");
+    return responseElements[responseElements.length - 1];
+  }
+  function getLastResponse() {
+    const lastResponseElement = getLastResponseElement();
+    if (!lastResponseElement)
+      return;
+    const lastResponse = lastResponseElement.textContent;
+    return lastResponse;
+  }
+  function getTextareaValue() {
+    var _a;
+    return ((_a = getTextarea()) == null ? void 0 : _a.value) || "";
+  }
+  function setTextarea(message) {
+    const textarea = getTextarea();
+    if (!textarea)
+      return;
+    textarea.value = message;
+    textarea.dispatchEvent(new Event("input", { bubbles: true }));
+  }
+  function send(message) {
+    return __async(this, null, function* () {
+      setTextarea(message);
+      const textarea = getTextarea();
+      if (!textarea)
+        return;
+      while (textarea.value === message) {
+        textarea.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+        yield new Promise((resolve) => setTimeout(resolve, 100));
+      }
+      for (let i = 0; i < 10; i++) {
+        if (isGenerating()) {
+          break;
+        }
+        yield new Promise((resolve) => setTimeout(resolve, 1e3));
+      }
+    });
+  }
+  function regenerate() {
+    const regenerateButton = getRegenerateButton();
+    if (!regenerateButton)
+      return;
+    regenerateButton.click();
+  }
+  function onSend(callback) {
+    const textarea = getTextarea();
+    if (!textarea)
+      return;
+    textarea.addEventListener("keydown", function(event) {
+      if (event.key === "Enter" && !event.shiftKey) {
+        callback();
+      }
+    });
+    const sendButton = getSubmitButton();
+    if (!sendButton)
+      return;
+    sendButton.addEventListener("mousedown", callback);
+  }
+  function isGenerating() {
+    var _a, _b;
+    if (getNewStopGeneratingButton()) {
+      return true;
+    }
+    return ((_b = (_a = getSubmitButton()) == null ? void 0 : _a.firstElementChild) == null ? void 0 : _b.childElementCount) === 3;
+  }
+  function waitForIdle() {
+    return new Promise((resolve) => {
+      const interval = setInterval(() => {
+        if (!isGenerating()) {
+          clearInterval(interval);
+          resolve();
+        }
+      }, 1e3);
+    });
+  }
+  function sendArray(messages) {
+    return __async(this, null, function* () {
+      var _a, _b;
+      let firstTime = true;
+      const isLong = messages.length > 60;
+      while (messages.length > 0) {
+        const waitTime = isLong && !document.hasFocus() ? 20 * 1e3 : 2e3;
+        if (!firstTime) {
+          yield new Promise((resolve) => setTimeout(resolve, waitTime));
+        }
+        if (isGenerating()) {
+          continue;
+        } else if (getContinueGeneratingButton()) {
+          (_a = getContinueGeneratingButton()) == null ? void 0 : _a.click();
+          continue;
+        } else if (getRegenerateButton() && !getTextarea()) {
+          yield new Promise((resolve) => setTimeout(resolve, 10 * 1e3));
+          (_b = getRegenerateButton()) == null ? void 0 : _b.click();
+          continue;
+        }
+        firstTime = false;
+        if (messages.length === 0) {
+          break;
+        }
+        yield send(messages.shift() || "");
+      }
+    });
+  }
+  function setPromptListener(key = "prompt_texts") {
+    let last_trigger_time = +/* @__PURE__ */ new Date();
+    if (location.href.includes("chat.openai")) {
+      GM_addValueChangeListener(key, (name, old_value, new_value) => __async(this, null, function* () {
+        if (+/* @__PURE__ */ new Date() - last_trigger_time < 500) {
+          return;
+        }
+        last_trigger_time = +/* @__PURE__ */ new Date();
+        setTimeout(() => __async(this, null, function* () {
+          sendArray(new_value);
+          GM_setValue(key, []);
+        }), 0);
+      }));
+    }
+  }
+  function getConversation() {
+    var _a, _b;
+    return (_b = (_a = document.querySelector('div[class^="react-scroll-to-bottom"]')) == null ? void 0 : _a.firstChild) == null ? void 0 : _b.firstChild;
+  }
+  function getModelSelectButton() {
+    const conversation = getConversation();
+    if (!conversation)
+      return;
+    return Array.from(conversation.querySelectorAll("button")).find((button) => {
+      var _a;
+      return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("model");
+    });
+  }
+  function getNewModelSelectButtons() {
+    return Array.from(document.querySelectorAll("[class^='group/button']"));
+  }
+  function hasNewModelSelectButtons() {
+    return getNewModelSelectButtons().length > 0;
+  }
+  function isConversationStarted() {
+    return !getModelSelectButton();
+  }
+  function setPureConversation() {
+    const conversation = getConversation();
+    if (!conversation)
+      return;
+    const firstChild = conversation.firstChild;
+    if (!firstChild)
+      return;
+    const newDiv = document.createElement("div");
+    conversation.insertBefore(newDiv, firstChild.nextSibling);
+  }
+  function isHorizontalConversation() {
+    const conversation = getConversation();
+    if (!conversation)
+      return true;
+    if (!isConversationStarted())
+      return true;
+    return conversation.classList.contains("grid");
+  }
+  function setHorizontalConversation() {
+    if (isHorizontalConversation())
+      return;
+    setPureConversation();
+    const conversation = getConversation();
+    if (!conversation)
+      return;
+    conversation.classList.remove("flex", "flex-col", "items-center");
+    conversation.classList.add("grid", "grid-cols-2", "place-items-center");
+  }
+  function getShareChatButton() {
+    return document.querySelector('button[aria-label="Share chat"]');
+  }
+  function getCopyLinkButton() {
+    return Array.from(document.querySelectorAll('button[as="button"]')).filter((button) => {
+      var _a;
+      return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes("copy link");
+    })[0];
+  }
+
+  // ../../packages/chatkit/dist/chunk-RFRANKSD.mjs
+  var claude_exports = {};
+  __export(claude_exports, {
+    getFieldset: () => getFieldset,
+    getPromptElementHTMLs: () => getPromptElementHTMLs,
+    getResponseElementHTMLs: () => getResponseElementHTMLs2,
+    getSubmitButton: () => getSubmitButton2,
+    getTextarea: () => getTextarea2,
+    isGenerating: () => isGenerating2,
+    send: () => send2,
+    setPromptListener: () => setPromptListener2,
+    setTextarea: () => setTextarea2
+  });
+  function getFieldset() {
+    const fieldsets = document.querySelectorAll("fieldset");
+    return fieldsets[fieldsets.length - 1];
+  }
+  function getTextarea2() {
+    const fieldset = getFieldset();
+    if (!fieldset)
+      return;
+    return fieldset.querySelector("p");
+  }
+  function setTextarea2(message) {
+    const textarea = getTextarea2();
+    if (!textarea)
+      return;
+    textarea.textContent = message;
+  }
+  function getSubmitButton2() {
+    const fieldset = getFieldset();
+    return fieldset.querySelector("button");
+  }
+  function getPromptElementHTMLs() {
+    return Array.from(document.querySelectorAll(".ReactMarkdown.place-self-end > .contents")).map((m) => m.innerHTML);
+  }
+  function getResponseElementHTMLs2() {
+    return Array.from(document.querySelectorAll(".ReactMarkdown.place-self-start > .contents")).map((m) => m.innerHTML);
+  }
+  function isGenerating2() {
+    var _a;
+    return (_a = getSubmitButton2()) == null ? void 0 : _a.hasAttribute("disabled");
+  }
+  function send2(message) {
+    return __async(this, null, function* () {
+      var _a;
+      setTextarea2(message);
+      const textarea = getTextarea2();
+      if (!textarea)
+        return;
+      while (textarea.textContent === message) {
+        yield new Promise((resolve) => setTimeout(resolve, 100));
+        (_a = getSubmitButton2()) == null ? void 0 : _a.click();
+      }
+      for (let i = 0; i < 10; i++) {
+        if (isGenerating2()) {
+          return;
+        }
+        yield new Promise((resolve) => setTimeout(resolve, 1e3));
+      }
+    });
+  }
+  function setPromptListener2(key = "prompt_texts") {
+    let last_trigger_time = +/* @__PURE__ */ new Date();
+    if (location.href.includes("claude.ai")) {
+      GM_addValueChangeListener(key, (name, old_value, new_value) => __async(this, null, function* () {
+        if (+/* @__PURE__ */ new Date() - last_trigger_time < 500) {
+          return;
+        }
+        last_trigger_time = +/* @__PURE__ */ new Date();
+        setTimeout(() => __async(this, null, function* () {
+          const prompt_texts = new_value;
+          const isLong = prompt_texts.length > 60;
+          if (prompt_texts.length > 0) {
+            let firstTime = true;
+            while (prompt_texts.length > 0) {
+              const waitTime = isLong && !document.hasFocus() ? 20 * 1e3 : 2e3;
+              if (firstTime) {
+                yield new Promise((resolve) => setTimeout(resolve, 2e3));
+              }
+              if (!firstTime) {
+                yield new Promise((resolve) => setTimeout(resolve, waitTime));
+              }
+              if (!firstTime && isGenerating2()) {
+                continue;
+              }
+              firstTime = false;
+              yield send2(prompt_texts.shift() || "");
+            }
+          }
+        }), 0);
+        GM_setValue(key, []);
+      }));
+    }
+  }
 
   // ../../packages/page-button/dist/index.mjs
   var import_sweetalert2 = __toESM(require_sweetalert2_all(), 1);
@@ -3144,11 +3215,20 @@
   (() => __async(void 0, null, function* () {
     yield initialize();
     function displayReadMode() {
-      let elements = (0, import_chatgpt.getResponseElementHTMLs)();
-      if (elements.length === 0) {
-        elements = ["<p>No responses available.</p>"];
+      if (window.location.href.includes("chat.openai.com")) {
+        let elements = chatgpt_exports.getResponseElementHTMLs();
+        if (elements.length === 0) {
+          elements = ["<p>No responses available.</p>"];
+        }
+        displayHTML(`<div class="relative p-2 markdown prose w-full break-words dark:prose-invert light">${elements.join("")}</div>`);
       }
-      displayHTML(`<div class="relative p-2 markdown prose w-full break-words dark:prose-invert light">${elements.join("")}</div>`);
+      if (window.location.href.includes("claude.ai")) {
+        let elements = claude_exports.getResponseElementHTMLs();
+        if (elements.length === 0) {
+          elements = ["<p>No responses available.</p>"];
+        }
+        displayHTML(`<div class="ReactMarkdown break-words text-stone-900 gap-3 grid">${elements.join("")}</div>`);
+      }
     }
     GM_registerMenuCommand("\u{1F4D6} Read Mode", displayReadMode);
   }))();
