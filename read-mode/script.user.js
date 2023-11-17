@@ -2,7 +2,7 @@
 // @name         chatgpt-read-mode
 // @description  🍞 show a modal for Read, also support Claude
 // @author       mefengl
-// @version      0.2.0
+// @version      0.2.1
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
