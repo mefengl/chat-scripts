@@ -2,7 +2,7 @@
 // @name         Midjourney Click All
 // @description  Click all the buttons in a row at once when you're in Discord with Midjourney bot open! 😊
 // @author       mefengl
-// @version      0.3.2
+// @version      0.3.3
 // @namespace    https://github.com/mefengl
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=midjourney.com
 // @license      MIT

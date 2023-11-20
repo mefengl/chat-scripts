@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         chatgpt sensible
 // @namespace    https://github.com/mefengl
-// @version      0.7.18
+// @version      0.7.19
 // @description  sensible to me
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @author       mefengl
