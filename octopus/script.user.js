@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         chat-octopus
 // @namespace    https://github.com/mefengl
-// @version      0.2.33
+// @version      0.2.34
 // @description  🐙 let octopus send multiple messages for you
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @author       mefengl
@@ -516,7 +516,7 @@
     sendButton.addEventListener("mousedown", callback);
   }
 
-  // ../../packages/chatkit/dist/chunk-2WNO362E.mjs
+  // ../../packages/chatkit/dist/chunk-IIKLOTF4.mjs
   var bard_exports = {};
   __export(bard_exports, {
     getInputArea: () => getInputArea,
@@ -548,13 +548,13 @@
   }
   function getTextarea3() {
     const inputArea = getInputArea();
-    return inputArea ? inputArea.querySelector("textarea") : null;
+    return inputArea ? inputArea.querySelector(".textarea") : null;
   }
   function setTextarea2(message) {
     const textarea = getTextarea3();
     if (!textarea)
       return;
-    textarea.value = message;
+    textarea.textContent = message;
     textarea.dispatchEvent(new Event("input", { bubbles: true }));
   }
   function getRegenerateButton3() {
@@ -585,7 +585,7 @@
       const textarea = getTextarea3();
       if (!textarea)
         return;
-      while (textarea.value === message) {
+      while (textarea.textContent === message) {
         yield new Promise((resolve) => setTimeout(resolve, 100));
         (_a = getSubmitButton3()) == null ? void 0 : _a.click();
       }

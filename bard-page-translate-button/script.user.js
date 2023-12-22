@@ -2,7 +2,7 @@
 // @name         bard-page-translate-button
 // @description  🍓 let Bard translate the web page you are reading in one click
 // @author       mefengl
-// @version      0.4.4
+// @version      0.4.5
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=bard.google.com
@@ -137,13 +137,13 @@
       }
       function getTextarea() {
         const inputArea = getInputArea();
-        return inputArea ? inputArea.querySelector("textarea") : null;
+        return inputArea ? inputArea.querySelector(".textarea") : null;
       }
       function setTextarea(message) {
         const textarea = getTextarea();
         if (!textarea)
           return;
-        textarea.value = message;
+        textarea.textContent = message;
         textarea.dispatchEvent(new Event("input", { bubbles: true }));
       }
       function getRegenerateButton() {
@@ -174,7 +174,7 @@
           const textarea = getTextarea();
           if (!textarea)
             return;
-          while (textarea.value === message) {
+          while (textarea.textContent === message) {
             yield new Promise((resolve) => setTimeout(resolve, 100));
             (_a = getSubmitButton()) == null ? void 0 : _a.click();
           }

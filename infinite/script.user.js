@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         chatgpt-infinite
 // @namespace    https://github.com/mefengl
-// @version      0.5.16
+// @version      0.5.17
 // @description  Infinite auto ask for chatgpt
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @author       mefengl
