@@ -2,7 +2,7 @@
 // @name         ChatGPT Auto-Continue 🔄
 // @description  ⚡ Automatically click the 'Continue Generating' button in ChatGPT, handling errors!
 // @author       mefengl
-// @version      1.1.7
+// @version      1.1.8
 // @namespace    https://github.com/mefengl
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @license      MIT
@@ -243,12 +243,14 @@
       }
       function send(message) {
         return __async(this, null, function* () {
+          var _a;
           setTextarea(message);
           const textarea = getTextarea2();
           if (!textarea)
             return;
           while (textarea.value === message) {
             textarea.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+            (_a = getSubmitButton()) == null ? void 0 : _a.click();
             yield new Promise((resolve) => setTimeout(resolve, 100));
           }
           for (let i = 0; i < 10; i++) {

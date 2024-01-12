@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         chatgpt sensible
 // @namespace    https://github.com/mefengl
-// @version      0.7.20
+// @version      0.7.21
 // @description  sensible to me
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @author       mefengl
@@ -243,12 +243,14 @@
       }
       function send(message) {
         return __async(this, null, function* () {
+          var _a;
           setTextarea(message);
           const textarea = getTextarea();
           if (!textarea)
             return;
           while (textarea.value === message) {
             textarea.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+            (_a = getSubmitButton()) == null ? void 0 : _a.click();
             yield new Promise((resolve) => setTimeout(resolve, 100));
           }
           for (let i = 0; i < 10; i++) {

@@ -2,7 +2,7 @@
 // @name         chatgpt-page-summary-button
 // @description  🍓 let ChatGPT summary the web page you are reading in one click
 // @author       mefengl
-// @version      0.9.5
+// @version      0.9.6
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -249,12 +249,14 @@
       }
       function send(message) {
         return __async(this, null, function* () {
+          var _a;
           setTextarea(message);
           const textarea = getTextarea();
           if (!textarea)
             return;
           while (textarea.value === message) {
             textarea.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+            (_a = getSubmitButton()) == null ? void 0 : _a.click();
             yield new Promise((resolve) => setTimeout(resolve, 100));
           }
           for (let i = 0; i < 10; i++) {

@@ -2,7 +2,7 @@
 // @name         ChatGPT Forget-Model-Not 🌺
 // @description  See you again~
 // @author       mefengl
-// @version      0.0.25
+// @version      0.0.26
 // @namespace    https://github.com/mefengl
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @license      MIT
@@ -260,12 +260,14 @@
       }
       function send(message) {
         return __async(this, null, function* () {
+          var _a;
           setTextarea(message);
           const textarea = getTextarea();
           if (!textarea)
             return;
           while (textarea.value === message) {
             textarea.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+            (_a = getSubmitButton()) == null ? void 0 : _a.click();
             yield new Promise((resolve) => setTimeout(resolve, 100));
           }
           for (let i = 0; i < 10; i++) {
