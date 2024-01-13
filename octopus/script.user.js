@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         chat-octopus
 // @namespace    https://github.com/mefengl
-// @version      0.2.35
+// @version      0.2.36
 // @description  🐙 let octopus send multiple messages for you
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @author       mefengl
@@ -68,7 +68,7 @@
       __defProp(target, name, { get: all[name], enumerable: true });
   };
 
-  // ../../packages/chatkit/dist/chunk-QPNJIRN7.mjs
+  // ../../packages/chatkit/dist/chunk-Q3XFL5H7.mjs
   var chatgpt_exports = {};
   __export(chatgpt_exports, {
     clickFollowUpButton: () => clickFollowUpButton,
@@ -217,9 +217,12 @@
       const textarea = getTextarea();
       if (!textarea)
         return;
-      while (textarea.value === message) {
-        textarea.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+      for (let i = 0; i < 10 && textarea.value === message; i++) {
         (_a = getSubmitButton()) == null ? void 0 : _a.click();
+        yield new Promise((resolve) => setTimeout(resolve, 100));
+      }
+      for (let i = 0; i < 10 && textarea.value === message; i++) {
+        textarea.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
         yield new Promise((resolve) => setTimeout(resolve, 100));
       }
       for (let i = 0; i < 10; i++) {
