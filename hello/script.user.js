@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name chatgpt-hello
 // @namespace https://github.com/mefengl
-// @version 0.0.21
+// @version 0.0.22
 // @description A template for userscript use chat-kit
 // @author chat-kit
 // @match https://chat.openai.com/*
@@ -285,7 +285,9 @@
           var _a, _b;
           let firstTime = true;
           const isLong = messages.length > 60;
-          while (messages.length > 0) {
+          let stop = false;
+          while (messages.length > 0 || stop) {
+            stop = false;
             const waitTime = isLong && !document.hasFocus() ? 20 * 1e3 : 2e3;
             if (!firstTime) {
               yield new Promise((resolve) => setTimeout(resolve, waitTime));
@@ -294,10 +296,12 @@
               continue;
             } else if (getContinueGeneratingButton2()) {
               (_a = getContinueGeneratingButton2()) == null ? void 0 : _a.click();
+              stop = true;
               continue;
             } else if (getRegenerateButton2() && !getTextarea2()) {
               yield new Promise((resolve) => setTimeout(resolve, 10 * 1e3));
               (_b = getRegenerateButton2()) == null ? void 0 : _b.click();
+              stop = true;
               continue;
             }
             firstTime = false;
@@ -399,7 +403,7 @@
       __defProp2(target, name, { get: all[name], enumerable: true });
   };
 
-  // ../../packages/chatkit/dist/chunk-3AFLDOHH.mjs
+  // ../../packages/chatkit/dist/chunk-XCTYWPHF.mjs
   var chatgpt_exports = {};
   __export(chatgpt_exports, {
     clickFollowUpButton: () => clickFollowUpButton,
@@ -606,7 +610,9 @@
       var _a, _b;
       let firstTime = true;
       const isLong = messages.length > 60;
-      while (messages.length > 0) {
+      let stop = false;
+      while (messages.length > 0 || stop) {
+        stop = false;
         const waitTime = isLong && !document.hasFocus() ? 20 * 1e3 : 2e3;
         if (!firstTime) {
           yield new Promise((resolve) => setTimeout(resolve, waitTime));
@@ -615,10 +621,12 @@
           continue;
         } else if (getContinueGeneratingButton()) {
           (_a = getContinueGeneratingButton()) == null ? void 0 : _a.click();
+          stop = true;
           continue;
         } else if (getRegenerateButton() && !getTextarea()) {
           yield new Promise((resolve) => setTimeout(resolve, 10 * 1e3));
           (_b = getRegenerateButton()) == null ? void 0 : _b.click();
+          stop = true;
           continue;
         }
         firstTime = false;

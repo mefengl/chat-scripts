@@ -2,7 +2,7 @@
 // @name         chatgpt-read-mode
 // @description  🍞 show a modal for Read, also support Claude
 // @author       mefengl
-// @version      0.2.6
+// @version      0.2.7
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -2767,7 +2767,7 @@
       __defProp2(target, name, { get: all[name], enumerable: true });
   };
 
-  // ../../packages/chatkit/dist/chunk-3AFLDOHH.mjs
+  // ../../packages/chatkit/dist/chunk-XCTYWPHF.mjs
   var chatgpt_exports = {};
   __export(chatgpt_exports, {
     clickFollowUpButton: () => clickFollowUpButton,
@@ -2974,7 +2974,9 @@
       var _a, _b;
       let firstTime = true;
       const isLong = messages.length > 60;
-      while (messages.length > 0) {
+      let stop = false;
+      while (messages.length > 0 || stop) {
+        stop = false;
         const waitTime = isLong && !document.hasFocus() ? 20 * 1e3 : 2e3;
         if (!firstTime) {
           yield new Promise((resolve) => setTimeout(resolve, waitTime));
@@ -2983,10 +2985,12 @@
           continue;
         } else if (getContinueGeneratingButton()) {
           (_a = getContinueGeneratingButton()) == null ? void 0 : _a.click();
+          stop = true;
           continue;
         } else if (getRegenerateButton() && !getTextarea()) {
           yield new Promise((resolve) => setTimeout(resolve, 10 * 1e3));
           (_b = getRegenerateButton()) == null ? void 0 : _b.click();
+          stop = true;
           continue;
         }
         firstTime = false;

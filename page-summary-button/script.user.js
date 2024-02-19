@@ -2,7 +2,7 @@
 // @name         chatgpt-page-summary-button
 // @description  🍓 let ChatGPT summary the web page you are reading in one click
 // @author       mefengl
-// @version      0.9.8
+// @version      0.9.9
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -312,7 +312,9 @@
           var _a, _b;
           let firstTime = true;
           const isLong = messages.length > 60;
-          while (messages.length > 0) {
+          let stop = false;
+          while (messages.length > 0 || stop) {
+            stop = false;
             const waitTime = isLong && !document.hasFocus() ? 20 * 1e3 : 2e3;
             if (!firstTime) {
               yield new Promise((resolve) => setTimeout(resolve, waitTime));
@@ -321,10 +323,12 @@
               continue;
             } else if (getContinueGeneratingButton()) {
               (_a = getContinueGeneratingButton()) == null ? void 0 : _a.click();
+              stop = true;
               continue;
             } else if (getRegenerateButton() && !getTextarea()) {
               yield new Promise((resolve) => setTimeout(resolve, 10 * 1e3));
               (_b = getRegenerateButton()) == null ? void 0 : _b.click();
+              stop = true;
               continue;
             }
             firstTime = false;
