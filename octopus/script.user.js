@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         chat-octopus
 // @namespace    https://github.com/mefengl
-// @version      0.2.38
+// @version      0.2.39
 // @description  🐙 let octopus send multiple messages for you
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @author       mefengl
@@ -68,7 +68,7 @@
       __defProp(target, name, { get: all[name], enumerable: true });
   };
 
-  // ../../packages/chatkit/dist/chunk-XCTYWPHF.mjs
+  // ../../packages/chatkit/dist/chunk-XKAAZEKM.mjs
   var chatgpt_exports = {};
   __export(chatgpt_exports, {
     clickFollowUpButton: () => clickFollowUpButton,
@@ -282,6 +282,7 @@
         if (!firstTime) {
           yield new Promise((resolve) => setTimeout(resolve, waitTime));
         }
+        firstTime = false;
         if (isGenerating()) {
           continue;
         } else if (getContinueGeneratingButton()) {
@@ -294,7 +295,6 @@
           stop = true;
           continue;
         }
-        firstTime = false;
         if (messages.length === 0) {
           break;
         }

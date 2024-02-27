@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name chatgpt-init
 // @namespace https://github.com/mefengl
-// @version 0.1.22
+// @version 0.1.23
 // @description Init ChatGPT with prompt from internet
 // @author mefengl
 // @match https://chat.openai.com/*
@@ -292,6 +292,7 @@
             if (!firstTime) {
               yield new Promise((resolve) => setTimeout(resolve, waitTime));
             }
+            firstTime = false;
             if (isGenerating()) {
               continue;
             } else if (getContinueGeneratingButton()) {
@@ -304,7 +305,6 @@
               stop = true;
               continue;
             }
-            firstTime = false;
             if (messages.length === 0) {
               break;
             }

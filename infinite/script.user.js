@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         chatgpt-infinite
 // @namespace    https://github.com/mefengl
-// @version      0.5.21
+// @version      0.5.22
 // @description  Infinite auto ask for chatgpt
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @author       mefengl
@@ -313,6 +313,7 @@
             if (!firstTime) {
               yield new Promise((resolve) => setTimeout(resolve, waitTime));
             }
+            firstTime = false;
             if (isGenerating()) {
               continue;
             } else if (getContinueGeneratingButton()) {
@@ -325,7 +326,6 @@
               stop = true;
               continue;
             }
-            firstTime = false;
             if (messages.length === 0) {
               break;
             }

@@ -2,7 +2,7 @@
 // @name         chatgpt-read-mode
 // @description  🍞 show a modal for Read, also support Claude
 // @author       mefengl
-// @version      0.2.7
+// @version      0.2.8
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -2767,7 +2767,7 @@
       __defProp2(target, name, { get: all[name], enumerable: true });
   };
 
-  // ../../packages/chatkit/dist/chunk-XCTYWPHF.mjs
+  // ../../packages/chatkit/dist/chunk-XKAAZEKM.mjs
   var chatgpt_exports = {};
   __export(chatgpt_exports, {
     clickFollowUpButton: () => clickFollowUpButton,
@@ -2981,6 +2981,7 @@
         if (!firstTime) {
           yield new Promise((resolve) => setTimeout(resolve, waitTime));
         }
+        firstTime = false;
         if (isGenerating()) {
           continue;
         } else if (getContinueGeneratingButton()) {
@@ -2993,7 +2994,6 @@
           stop = true;
           continue;
         }
-        firstTime = false;
         if (messages.length === 0) {
           break;
         }

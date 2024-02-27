@@ -2,7 +2,7 @@
 // @name         chatgpt-horizon
 // @description  Horizontal the conversation in ChatGPT
 // @author       mefengl
-// @version      0.2.25
+// @version      0.2.26
 // @namespace    https://github.com/mefengl
 // @require
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
@@ -317,6 +317,7 @@
             if (!firstTime) {
               yield new Promise((resolve) => setTimeout(resolve, waitTime));
             }
+            firstTime = false;
             if (isGenerating()) {
               continue;
             } else if (getContinueGeneratingButton()) {
@@ -329,7 +330,6 @@
               stop = true;
               continue;
             }
-            firstTime = false;
             if (messages.length === 0) {
               break;
             }

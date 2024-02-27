@@ -2,7 +2,7 @@
 // @name         chatgpt-hide-history
 // @description  🙈 Seletively hide chat history in sidebar such as "Today", "Yesterday", "Previous 7 Days", etc.
 // @author       mefengl
-// @version      0.2.26
+// @version      0.2.27
 // @namespace    https://github.com/mefengl
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @license      MIT
@@ -316,6 +316,7 @@
             if (!firstTime) {
               yield new Promise((resolve) => setTimeout(resolve, waitTime));
             }
+            firstTime = false;
             if (isGenerating()) {
               continue;
             } else if (getContinueGeneratingButton()) {
@@ -328,7 +329,6 @@
               stop = true;
               continue;
             }
-            firstTime = false;
             if (messages.length === 0) {
               break;
             }

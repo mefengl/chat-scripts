@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name chat-smart
 // @namespace https://github.com/mefengl
-// @version 0.0.22
+// @version 0.0.23
 // @description Just an implementation of an Idea of "SmartGPT"
 // @author mefengl
 // @match https://chat.openai.com/*
@@ -292,6 +292,7 @@
             if (!firstTime) {
               yield new Promise((resolve) => setTimeout(resolve, waitTime));
             }
+            firstTime = false;
             if (isGenerating()) {
               continue;
             } else if (getContinueGeneratingButton()) {
@@ -304,7 +305,6 @@
               stop = true;
               continue;
             }
-            firstTime = false;
             if (messages.length === 0) {
               break;
             }

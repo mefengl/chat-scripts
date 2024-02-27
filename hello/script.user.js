@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name chatgpt-hello
 // @namespace https://github.com/mefengl
-// @version 0.0.22
+// @version 0.0.23
 // @description A template for userscript use chat-kit
 // @author chat-kit
 // @match https://chat.openai.com/*
@@ -292,6 +292,7 @@
             if (!firstTime) {
               yield new Promise((resolve) => setTimeout(resolve, waitTime));
             }
+            firstTime = false;
             if (isGenerating2()) {
               continue;
             } else if (getContinueGeneratingButton2()) {
@@ -304,7 +305,6 @@
               stop = true;
               continue;
             }
-            firstTime = false;
             if (messages.length === 0) {
               break;
             }
@@ -403,7 +403,7 @@
       __defProp2(target, name, { get: all[name], enumerable: true });
   };
 
-  // ../../packages/chatkit/dist/chunk-XCTYWPHF.mjs
+  // ../../packages/chatkit/dist/chunk-XKAAZEKM.mjs
   var chatgpt_exports = {};
   __export(chatgpt_exports, {
     clickFollowUpButton: () => clickFollowUpButton,
@@ -617,6 +617,7 @@
         if (!firstTime) {
           yield new Promise((resolve) => setTimeout(resolve, waitTime));
         }
+        firstTime = false;
         if (isGenerating()) {
           continue;
         } else if (getContinueGeneratingButton()) {
@@ -629,7 +630,6 @@
           stop = true;
           continue;
         }
-        firstTime = false;
         if (messages.length === 0) {
           break;
         }
