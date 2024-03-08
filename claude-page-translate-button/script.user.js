@@ -2,7 +2,7 @@
 // @name         claude-page-translate-button
 // @description  🍓 let Claude translate the web page you are reading in one click
 // @author       mefengl
-// @version      0.5.8
+// @version      0.5.9
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=claude.ai
@@ -2949,56 +2949,38 @@
 
   // ../../../packages/page-button/dist/index.mjs
   var import_sweetalert2 = __toESM(require_sweetalert2_all(), 1);
-  var MIN_PARAGRAPH_LENGTH = 3200;
-  var MAX_PARAGRAPH_LENGTH = 3600;
-  var TOKEN_LETTER_TO_CHARACTER_RATIO = 0.6;
-  var SimpleArticleSegmentation = class {
-    constructor(text) {
-      this.text = text;
-    }
-    containsAsianCharacters(str) {
-      const regex = /[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}\p{Script=Hangul}]/gu;
-      return regex.test(str);
-    }
-    segment() {
-      const paragraphs = [];
-      if (this.containsAsianCharacters(this.text)) {
-        let i = 0;
-        const maxParagraphLength = Math.floor(MAX_PARAGRAPH_LENGTH * TOKEN_LETTER_TO_CHARACTER_RATIO);
-        while (i < this.text.length) {
-          const paragraph = this.text.substring(i, i + maxParagraphLength);
-          paragraphs.push(paragraph);
-          i += maxParagraphLength;
-        }
-      } else {
-        const sentences = this.text.split(new RegExp("(?<=[.!?])\\s+"));
-        let paragraph = "";
-        for (const sentence of sentences) {
-          if (paragraph.length + sentence.length + 1 <= MAX_PARAGRAPH_LENGTH) {
-            paragraph += (paragraph.length > 0 ? " " : "") + sentence;
-          } else {
-            if (paragraph.length >= MIN_PARAGRAPH_LENGTH) {
-              paragraphs.push(paragraph);
-              paragraph = sentence;
-            } else {
-              paragraph += " " + sentence;
-            }
-          }
-        }
-        if (paragraph.length > 0) {
-          paragraphs.push(paragraph);
+  function segmentText(text, baseLength = 3600) {
+    const paras = [];
+    const minLen = baseLength * 0.9;
+    const maxLen = baseLength * 1.1;
+    const tokenRatio = 0.6;
+    const hasAsianChars = (str) => /[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}\p{Script=Hangul}]/gu.test(str);
+    const maxParaLen = hasAsianChars(text) ? Math.floor(maxLen * tokenRatio) : maxLen;
+    if (hasAsianChars(text)) {
+      for (let i = 0; i < text.length; i += maxParaLen)
+        paras.push(text.substring(i, i + maxParaLen));
+    } else {
+      let para = "";
+      for (const sentence of text.split(new RegExp("(?<=[.!?])(\\s+)"))) {
+        if (para.length + sentence.length + 1 <= maxLen) {
+          para += (para ? " " : "") + sentence;
+        } else {
+          if (para.length >= minLen)
+            paras.push(para);
+          para = sentence;
         }
       }
-      return paragraphs;
+      if (para)
+        paras.push(para);
     }
-  };
+    return paras;
+  }
   function getParagraphs() {
     try {
       let docClone = document.cloneNode(true);
       let article = new Readability(docClone).parse();
       if (article == null ? void 0 : article.textContent) {
-        const segmenter = new SimpleArticleSegmentation(article.textContent);
-        const paragraphs = segmenter.segment();
+        const paragraphs = segmentText(article.textContent);
         for (let i = 0; i < paragraphs.length; i++) {
           paragraphs[i] = paragraphs[i].trim();
         }
@@ -3111,7 +3093,7 @@ ps: translate in several paragraphs in ${lang} language`));
     GM_registerMenuCommand("\u{1F4DD} Input", () => {
       import_sweetalert2.default.fire({ title: "Please input the text you want to deal with", input: "textarea", inputPlaceholder: "Enter your text here" }).then((result) => {
         if (result.value)
-          setPrompts(new SimpleArticleSegmentation(result.value).segment());
+          setPrompts(segmentText(result.value));
       });
     });
     (0, import_claude.setPromptListener)("prompt_texts");
