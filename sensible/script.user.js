@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         chatgpt sensible
 // @namespace    https://github.com/mefengl
-// @version      0.7.25
+// @version      0.7.26
 // @description  sensible to me
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @author       mefengl
@@ -250,11 +250,11 @@
             return;
           for (let i = 0; i < 5 && textarea.value === message; i++) {
             (_a = getSubmitButton()) == null ? void 0 : _a.click();
-            yield new Promise((resolve) => setTimeout(resolve, 400));
+            yield new Promise((resolve) => setTimeout(resolve, 800));
           }
           for (let i = 0; i < 5 && textarea.value === message; i++) {
             textarea.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
-            yield new Promise((resolve) => setTimeout(resolve, 400));
+            yield new Promise((resolve) => setTimeout(resolve, 800));
           }
           for (let i = 0; i < 10; i++) {
             if (isGenerating()) {
@@ -434,10 +434,8 @@
   }
   function main() {
     return __async(this, null, function* () {
-      var _a, _b;
       yield initialize();
       autoCopyWhenSend();
-      (_b = (_a = document.querySelector("a.underline[href$='release-notes']")) == null ? void 0 : _a.parentElement) == null ? void 0 : _b.remove();
     });
   }
   (function() {

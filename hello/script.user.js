@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name chatgpt-hello
 // @namespace https://github.com/mefengl
-// @version 0.0.23
+// @version 0.0.24
 // @description A template for userscript use chat-kit
 // @author chat-kit
 // @match https://chat.openai.com/*
@@ -229,11 +229,11 @@
             return;
           for (let i = 0; i < 5 && textarea.value === message; i++) {
             (_a = getSubmitButton2()) == null ? void 0 : _a.click();
-            yield new Promise((resolve) => setTimeout(resolve, 400));
+            yield new Promise((resolve) => setTimeout(resolve, 800));
           }
           for (let i = 0; i < 5 && textarea.value === message; i++) {
             textarea.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
-            yield new Promise((resolve) => setTimeout(resolve, 400));
+            yield new Promise((resolve) => setTimeout(resolve, 800));
           }
           for (let i = 0; i < 10; i++) {
             if (isGenerating2()) {
@@ -403,7 +403,7 @@
       __defProp2(target, name, { get: all[name], enumerable: true });
   };
 
-  // ../../packages/chatkit/dist/chunk-XKAAZEKM.mjs
+  // ../../packages/chatkit/dist/chunk-IKOIPMIU.mjs
   var chatgpt_exports = {};
   __export(chatgpt_exports, {
     clickFollowUpButton: () => clickFollowUpButton,
@@ -554,11 +554,11 @@
         return;
       for (let i = 0; i < 5 && textarea.value === message; i++) {
         (_a = getSubmitButton()) == null ? void 0 : _a.click();
-        yield new Promise((resolve) => setTimeout(resolve, 400));
+        yield new Promise((resolve) => setTimeout(resolve, 800));
       }
       for (let i = 0; i < 5 && textarea.value === message; i++) {
         textarea.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
-        yield new Promise((resolve) => setTimeout(resolve, 400));
+        yield new Promise((resolve) => setTimeout(resolve, 800));
       }
       for (let i = 0; i < 10; i++) {
         if (isGenerating()) {
