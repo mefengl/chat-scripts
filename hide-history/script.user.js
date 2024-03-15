@@ -2,7 +2,7 @@
 // @name         chatgpt-hide-history
 // @description  🙈 Seletively hide chat history in sidebar such as "Today", "Yesterday", "Previous 7 Days", etc.
 // @author       mefengl
-// @version      0.2.28
+// @version      0.2.29
 // @namespace    https://github.com/mefengl
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @license      MIT
@@ -253,10 +253,6 @@
             return;
           for (let i = 0; i < 5 && textarea.value === message; i++) {
             (_a = getSubmitButton()) == null ? void 0 : _a.click();
-            yield new Promise((resolve) => setTimeout(resolve, 800));
-          }
-          for (let i = 0; i < 5 && textarea.value === message; i++) {
-            textarea.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
             yield new Promise((resolve) => setTimeout(resolve, 800));
           }
           for (let i = 0; i < 10; i++) {
