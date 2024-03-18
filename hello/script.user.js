@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name chatgpt-hello
 // @namespace https://github.com/mefengl
-// @version 0.0.25
+// @version 0.0.27
 // @description A template for userscript use chat-kit
 // @author chat-kit
 // @match https://chat.openai.com/*
@@ -227,10 +227,7 @@
           const textarea = getTextarea2();
           if (!textarea)
             return;
-          for (let i = 0; i < 5 && textarea.value === message; i++) {
-            (_a = getSubmitButton2()) == null ? void 0 : _a.click();
-            yield new Promise((resolve) => setTimeout(resolve, 800));
-          }
+          (_a = getSubmitButton2()) == null ? void 0 : _a.click();
           for (let i = 0; i < 10; i++) {
             if (isGenerating2()) {
               break;
@@ -399,7 +396,7 @@
       __defProp2(target, name, { get: all[name], enumerable: true });
   };
 
-  // ../../packages/chatkit/dist/chunk-MLTGDVJC.mjs
+  // ../../packages/chatkit/dist/chunk-XMSCK47Z.mjs
   var chatgpt_exports = {};
   __export(chatgpt_exports, {
     clickFollowUpButton: () => clickFollowUpButton,
@@ -548,10 +545,7 @@
       const textarea = getTextarea();
       if (!textarea)
         return;
-      for (let i = 0; i < 5 && textarea.value === message; i++) {
-        (_a = getSubmitButton()) == null ? void 0 : _a.click();
-        yield new Promise((resolve) => setTimeout(resolve, 800));
-      }
+      (_a = getSubmitButton()) == null ? void 0 : _a.click();
       for (let i = 0; i < 10; i++) {
         if (isGenerating()) {
           break;

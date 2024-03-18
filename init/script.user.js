@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name chatgpt-init
 // @namespace https://github.com/mefengl
-// @version 0.1.25
+// @version 0.1.27
 // @description Init ChatGPT with prompt from internet
 // @author mefengl
 // @match https://chat.openai.com/*
@@ -227,10 +227,7 @@
           const textarea = getTextarea();
           if (!textarea)
             return;
-          for (let i = 0; i < 5 && textarea.value === message; i++) {
-            (_a = getSubmitButton()) == null ? void 0 : _a.click();
-            yield new Promise((resolve) => setTimeout(resolve, 800));
-          }
+          (_a = getSubmitButton()) == null ? void 0 : _a.click();
           for (let i = 0; i < 10; i++) {
             if (isGenerating()) {
               break;

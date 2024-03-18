@@ -2,7 +2,7 @@
 // @name         ChatGPT Forget-Model-Not 🌺
 // @description  See you again~
 // @author       mefengl
-// @version      0.0.32
+// @version      0.0.34
 // @namespace    https://github.com/mefengl
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @license      MIT
@@ -265,10 +265,7 @@
           const textarea = getTextarea();
           if (!textarea)
             return;
-          for (let i = 0; i < 5 && textarea.value === message; i++) {
-            (_a = getSubmitButton()) == null ? void 0 : _a.click();
-            yield new Promise((resolve) => setTimeout(resolve, 800));
-          }
+          (_a = getSubmitButton()) == null ? void 0 : _a.click();
           for (let i = 0; i < 10; i++) {
             if (isGenerating()) {
               break;
