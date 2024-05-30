@@ -2,13 +2,12 @@
 // @name         chatgpt-read-mode
 // @description  🍞 show a modal for Read, also support Claude
 // @author       mefengl
-// @version      0.2.13
+// @version      0.2.16
 // @namespace    https://github.com/mefengl
 // @require      https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.3/Readability.min.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @license      MIT
-// @match        https://chat.openai.com/*
-// @match        https://claude.ai/*
+// @match        https://chatgpt.com/*
 // @grant        GM_registerMenuCommand
 // @updateURL    https://github.com/mefengl/chat-scripts/raw/main/read-mode/script.user.js
 
@@ -2767,7 +2766,7 @@
       __defProp2(target, name, { get: all[name], enumerable: true });
   };
 
-  // ../../packages/chatkit/dist/chunk-XMSCK47Z.mjs
+  // ../../packages/chatkit/dist/chunk-OO65UF7B.mjs
   var chatgpt_exports = {};
   __export(chatgpt_exports, {
     clickFollowUpButton: () => clickFollowUpButton,
@@ -2837,7 +2836,7 @@
     return result;
   }
   function getNewSubmitButton() {
-    return document.querySelector('button[data-testid="send-button"]');
+    return document.querySelector('button[data-testid$="send-button"]');
   }
   function getSubmitButton() {
     if (getNewSubmitButton()) {
@@ -2867,19 +2866,48 @@
     followUpButtons[index].click();
   }
   function getButton(text) {
-    return Array.from(document.querySelectorAll('button[as="button"]')).find((button) => {
+    const button = Array.from(document.querySelectorAll('button[data-testid$="button"]')).find((button2) => {
       var _a;
-      return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes(text);
+      return (_a = button2.getAttribute("data-testid")) == null ? void 0 : _a.includes(text);
+    });
+    if (button)
+      return button;
+    return Array.from(document.querySelectorAll('button[as="button"]')).find((button2) => {
+      var _a;
+      return (_a = button2.textContent) == null ? void 0 : _a.trim().toLowerCase().includes(text);
     });
   }
   function getRegenerateButton() {
     return getButton("regenerate");
   }
   function getContinueGeneratingButton() {
-    return getButton("continue");
+    const buttonInWideScreen = getButton("continue");
+    if (buttonInWideScreen)
+      return buttonInWideScreen;
+    function getNthGenerationDescendants(element, generation) {
+      const descendants = [];
+      function findDescendants(node, currentDepth) {
+        if (currentDepth === generation) {
+          descendants.push(node);
+          return;
+        }
+        node.childNodes.forEach((child) => findDescendants(child, currentDepth + 1));
+      }
+      findDescendants(element, 0);
+      return descendants;
+    }
+    const form = document.querySelector("form");
+    if (!form)
+      return;
+    const seventhGenerationDescendants = getNthGenerationDescendants(form, 7);
+    if (seventhGenerationDescendants.length === 0 || seventhGenerationDescendants[0].nodeName !== "BUTTON")
+      return;
+    return seventhGenerationDescendants[0];
   }
   function getNewStopGeneratingButton() {
-    return document.querySelector('button[aria-label="Stop generating"]');
+    const stopButtonNotLogin = document.querySelector('button[aria-label="Stop generating"]');
+    const stopButton = document.querySelector('button[data-testid$="stop-button"]');
+    return stopButtonNotLogin || stopButton;
   }
   function getStopGeneratingButton() {
     return getNewStopGeneratingButton() || getButton("stop");
@@ -2996,7 +3024,7 @@
   }
   function setPromptListener(key = "prompt_texts") {
     let last_trigger_time = +/* @__PURE__ */ new Date();
-    if (location.href.includes("chat.openai")) {
+    if (location.href.includes("chatgpt.com")) {
       GM_addValueChangeListener(key, (name, old_value, new_value) => __async(this, null, function* () {
         if (+/* @__PURE__ */ new Date() - last_trigger_time < 500) {
           return;
@@ -3217,7 +3245,7 @@
   (() => __async(void 0, null, function* () {
     yield initialize();
     function displayReadMode() {
-      if (window.location.href.includes("chat.openai.com")) {
+      if (window.location.href.includes("chatgpt.com")) {
         let elements = chatgpt_exports.getResponseElementHTMLs();
         if (elements.length === 0) {
           elements = ["<p>No responses available.</p>"];

@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         chat-octopus
 // @namespace    https://github.com/mefengl
-// @version      0.2.43
+// @version      0.2.45
 // @description  🐙 let octopus send multiple messages for you
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=openai.com
 // @author       mefengl
-// @match        https://chat.openai.com/*
+// @match        https://chatgpt.com/*
 // @match        https://bard.google.com/*
 // @match        https://www.bing.com/search?q=Bing+AI*
 // @require      https://cdn.staticfile.org/jquery/3.6.1/jquery.min.js
@@ -68,7 +68,7 @@
       __defProp(target, name, { get: all[name], enumerable: true });
   };
 
-  // ../../packages/chatkit/dist/chunk-XMSCK47Z.mjs
+  // ../../packages/chatkit/dist/chunk-OO65UF7B.mjs
   var chatgpt_exports = {};
   __export(chatgpt_exports, {
     clickFollowUpButton: () => clickFollowUpButton,
@@ -138,7 +138,7 @@
     return result;
   }
   function getNewSubmitButton() {
-    return document.querySelector('button[data-testid="send-button"]');
+    return document.querySelector('button[data-testid$="send-button"]');
   }
   function getSubmitButton() {
     if (getNewSubmitButton()) {
@@ -168,19 +168,48 @@
     followUpButtons[index].click();
   }
   function getButton(text) {
-    return Array.from(document.querySelectorAll('button[as="button"]')).find((button) => {
+    const button = Array.from(document.querySelectorAll('button[data-testid$="button"]')).find((button2) => {
       var _a;
-      return (_a = button.textContent) == null ? void 0 : _a.trim().toLowerCase().includes(text);
+      return (_a = button2.getAttribute("data-testid")) == null ? void 0 : _a.includes(text);
+    });
+    if (button)
+      return button;
+    return Array.from(document.querySelectorAll('button[as="button"]')).find((button2) => {
+      var _a;
+      return (_a = button2.textContent) == null ? void 0 : _a.trim().toLowerCase().includes(text);
     });
   }
   function getRegenerateButton() {
     return getButton("regenerate");
   }
   function getContinueGeneratingButton() {
-    return getButton("continue");
+    const buttonInWideScreen = getButton("continue");
+    if (buttonInWideScreen)
+      return buttonInWideScreen;
+    function getNthGenerationDescendants(element, generation) {
+      const descendants = [];
+      function findDescendants(node, currentDepth) {
+        if (currentDepth === generation) {
+          descendants.push(node);
+          return;
+        }
+        node.childNodes.forEach((child) => findDescendants(child, currentDepth + 1));
+      }
+      findDescendants(element, 0);
+      return descendants;
+    }
+    const form = document.querySelector("form");
+    if (!form)
+      return;
+    const seventhGenerationDescendants = getNthGenerationDescendants(form, 7);
+    if (seventhGenerationDescendants.length === 0 || seventhGenerationDescendants[0].nodeName !== "BUTTON")
+      return;
+    return seventhGenerationDescendants[0];
   }
   function getNewStopGeneratingButton() {
-    return document.querySelector('button[aria-label="Stop generating"]');
+    const stopButtonNotLogin = document.querySelector('button[aria-label="Stop generating"]');
+    const stopButton = document.querySelector('button[data-testid$="stop-button"]');
+    return stopButtonNotLogin || stopButton;
   }
   function getStopGeneratingButton() {
     return getNewStopGeneratingButton() || getButton("stop");
@@ -297,7 +326,7 @@
   }
   function setPromptListener(key = "prompt_texts") {
     let last_trigger_time = +/* @__PURE__ */ new Date();
-    if (location.href.includes("chat.openai")) {
+    if (location.href.includes("chatgpt.com")) {
       GM_addValueChangeListener(key, (name, old_value, new_value) => __async(this, null, function* () {
         if (+/* @__PURE__ */ new Date() - last_trigger_time < 500) {
           return;
@@ -650,7 +679,7 @@
     const default_menu_all = {};
     const menu_all = GM_getValue("menu_all", default_menu_all);
     const menus = [
-      { checker: () => location.href.includes("chat.openai"), name: "openai", value: true },
+      { checker: () => location.href.includes("chatgpt.com"), name: "openai", value: true },
       { checker: () => location.href.includes("bard.google"), name: "bard", value: true },
       { checker: () => location.href.includes("Bing+AI"), name: "bing", value: true }
     ];
@@ -689,7 +718,7 @@
     update_menu();
     let chatgpt_last_prompt = "";
     $(() => {
-      if (menu_all.openai && location.href.includes("chat.openai")) {
+      if (menu_all.openai && location.href.includes("chatgpt.com")) {
         chatgpt_exports.onSend(() => {
           const textarea = chatgpt_exports.getTextarea();
           if (!textarea) {
@@ -704,7 +733,7 @@
     });
     let last_trigger_time = +/* @__PURE__ */ new Date();
     $(() => {
-      if (location.href.includes("chat.openai")) {
+      if (location.href.includes("chatgpt.com")) {
         GM_addValueChangeListener("chatgpt_prompt_texts", (name, old_value, new_value) => {
           if (+/* @__PURE__ */ new Date() - last_trigger_time < 500) {
             return;
